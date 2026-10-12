@@ -106,4 +106,25 @@ describe("FormularioOrden", () => {
     await userEvent.click(screen.getByRole("button", { name: /^Comprar/ }));
     expect(await screen.findByRole("alert")).toHaveTextContent("El monto debe ser mayor que 0");
   });
+
+  it("avisa lo que ya está en la cola y sigue el estado de la orden creada", async () => {
+    let ordenes = [{ ...ORDEN, id: 3, monto: 100 }];
+    servidorFalso({
+      "GET /api/cartera": { estado: 200, cuerpo: CARTERA },
+      "GET /api/ordenes": () => ({ estado: 200, cuerpo: { cantidad: ordenes.length, ordenes } }),
+      "POST /api/ordenes": () => {
+        ordenes = [{ ...ORDEN, estado: "EJECUTADA" }];
+        return { estado: 201, cuerpo: ORDEN };
+      },
+    });
+    renderizar(<FormularioOrden />);
+    expect(
+      await screen.findByText("100,00 USDT ya están en órdenes de compra en la cola."),
+    ).toBeInTheDocument();
+    await userEvent.type(screen.getByLabelText("USDT a gastar (comisión incluida)"), "50");
+    await userEvent.click(screen.getByRole("button", { name: /^Comprar/ }));
+    // Tras crear se recarga la lista: la orden #7 ya aparece ejecutada.
+    expect(await screen.findByText("Ejecutada")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Orden #7");
+  });
 });

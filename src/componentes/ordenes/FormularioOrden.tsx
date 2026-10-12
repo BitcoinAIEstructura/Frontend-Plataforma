@@ -7,9 +7,18 @@ import { Campo } from "@/componentes/ui/Campo";
 import { Segmentado } from "@/componentes/ui/Segmentado";
 import { Tarjeta } from "@/componentes/ui/Tarjeta";
 import { btc, usdt } from "@/lib/formato";
-import { useAccionesOrdenes, useCartera, usePrecio } from "@/lib/hooks/useDatos";
+import { useAccionesOrdenes, useCartera, useOrdenes, usePrecio } from "@/lib/hooks/useDatos";
 
-import { disponible, leerMonto, montoRapido, validarMonto, vistaPrevia, type Tipo } from "./calculos";
+import {
+  disponible,
+  leerMonto,
+  montoRapido,
+  reservado,
+  validarMonto,
+  vistaPrevia,
+  type Tipo,
+} from "./calculos";
+import { EtiquetaEstado } from "./textos";
 
 const TIPOS = [
   { valor: "COMPRA" as const, etiqueta: "▲ Comprar" },
@@ -31,7 +40,11 @@ export function FormularioOrden() {
   const [creada, setCreada] = useState<number | null>(null);
   const cartera = useCartera();
   const precio = usePrecio();
+  const ordenes = useOrdenes();
   const { crear } = useAccionesOrdenes();
+  const enCola = reservado(tipo, ordenes.data ?? []);
+  // La orden recién creada, con su estado al día (pasa de la cola al registro).
+  const ultima = creada === null ? undefined : ordenes.data?.find((o) => o.id === creada);
 
   const c = cartera.data;
   const monto = todo && c ? disponible("VENTA", c) : leerMonto(texto);
@@ -100,6 +113,11 @@ export function FormularioOrden() {
               ? `Disponible: ${usdt(c.saldoUsdt)} USDT`
               : `Tienes ${btc(c.btc)} BTC (≈ ${usdt(c.valorBtc)} USDT)`
             : "Cargando tu cartera…"}
+          {enCola > 0 && (
+            <span className="block text-texto-atenuado">
+              {usdt(enCola)} USDT ya están en órdenes de {tipo === "COMPRA" ? "compra" : "venta"} en la cola.
+            </span>
+          )}
         </p>
 
         <Campo
@@ -164,12 +182,17 @@ export function FormularioOrden() {
             {crear.error.message}
           </p>
         )}
-        {creada !== null && (
-          <p role="status" className="text-sm text-exito">
-            ✓ Orden #{creada} en la cola. Se ejecuta en orden de llegada: usa «Ejecutar siguiente» o deja que
-            lo haga el bot.
-          </p>
-        )}
+        {creada !== null &&
+          (!ultima || ultima.estado === "PENDIENTE" ? (
+            <p role="status" className="text-sm text-exito">
+              ✓ Orden #{creada} en la cola. Se ejecuta en orden de llegada: usa «Ejecutar siguiente» o deja
+              que lo haga el bot.
+            </p>
+          ) : (
+            <p role="status" className="flex flex-wrap items-center gap-2 text-sm text-texto-secundario">
+              Orden #{creada} <EtiquetaEstado estado={ultima.estado} />
+            </p>
+          ))}
       </form>
     </Tarjeta>
   );

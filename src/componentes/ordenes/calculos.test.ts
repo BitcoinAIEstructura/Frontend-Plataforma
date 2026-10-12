@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { Cartera, Orden } from "@/lib/api/simulacion";
 
-import { leerMonto, montoRapido, separarOrdenes, validarMonto, vistaPrevia } from "./calculos";
+import { leerMonto, montoRapido, reservado, separarOrdenes, validarMonto, vistaPrevia } from "./calculos";
 
 const CARTERA: Cartera = {
   precioActual: 80_000,
@@ -80,5 +80,21 @@ describe("separarOrdenes", () => {
     ]);
     expect(cola.map((x) => x.id)).toEqual([4, 5]);
     expect(registro.map((x) => x.id)).toEqual([3, 2, 1]);
+  });
+});
+
+describe("reservado", () => {
+  it("suma los montos de ese tipo que siguen en la cola", () => {
+    const o = (tipo: Orden["tipo"], estado: Orden["estado"], monto: number | null) =>
+      ({ tipo, estado, monto }) as Orden;
+    const ordenes = [
+      o("COMPRA", "PENDIENTE", 100),
+      o("COMPRA", "PROCESANDO", 50),
+      o("COMPRA", "EJECUTADA", 999),
+      o("VENTA", "PENDIENTE", 30),
+      o("VENTA", "PENDIENTE", null),
+    ];
+    expect(reservado("COMPRA", ordenes)).toBe(150);
+    expect(reservado("VENTA", ordenes)).toBe(30);
   });
 });

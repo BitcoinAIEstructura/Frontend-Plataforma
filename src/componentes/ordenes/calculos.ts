@@ -72,3 +72,13 @@ export function separarOrdenes(ordenes: readonly Orden[]): { cola: Orden[]; regi
     registro: ordenes.filter((o) => !enCola(o)).sort((a, b) => b.id - a.id),
   };
 }
+
+/**
+ * USDT ya comprometidos en órdenes de ese tipo que esperan en la cola (las de "todo"
+ * no suman: se calculan al ejecutarse). El backend revisa el saldo al ejecutar, no al crear.
+ */
+export function reservado(tipo: Tipo, ordenes: readonly Orden[]): number {
+  return ordenes
+    .filter((o) => o.tipo === tipo && (o.estado === "PENDIENTE" || o.estado === "PROCESANDO"))
+    .reduce((suma, o) => suma + (o.monto ?? 0), 0);
+}
