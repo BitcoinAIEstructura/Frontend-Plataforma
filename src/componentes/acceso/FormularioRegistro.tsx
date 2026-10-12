@@ -95,7 +95,7 @@ export function FormularioRegistro() {
           Crea tu cuenta <span className="texto-oro">Nexabit</span>
         </h1>
         <p className="text-texto-secundario">
-          Recibe <strong className="cifra text-oro">10 000 USDT</strong> de práctica y empieza a invertir hoy.
+          Recibe <strong className="cifra text-oro">10.000 USDT</strong> de práctica y empieza a invertir hoy.
         </p>
       </header>
 

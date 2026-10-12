@@ -142,7 +142,7 @@ export function FormularioInicio() {
       <p className="text-center text-sm text-texto-secundario">
         ¿Primera vez en Nexabit?{" "}
         <Link href="/registro" className="font-semibold text-oro hover:underline">
-          Crea tu cuenta y recibe 10 000 USDT de práctica
+          Crea tu cuenta y recibe 10.000 USDT de práctica
         </Link>
       </p>
     </form>

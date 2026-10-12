@@ -6,7 +6,7 @@ import { AvisoSimulacion } from "@/componentes/ui/AvisoSimulacion";
 import { InterruptorTema } from "@/componentes/ui/InterruptorTema";
 
 const BENEFICIOS = [
-  { icono: "◆", texto: "10 000 USDT de práctica al crear tu cuenta" },
+  { icono: "◆", texto: "10.000 USDT de práctica al crear tu cuenta" },
   { icono: "✦", texto: "Una IA que te explica cada señal del mercado" },
   { icono: "⬢", texto: "Cuenta protegida: datos cifrados y verificación en dos pasos" },
 ];

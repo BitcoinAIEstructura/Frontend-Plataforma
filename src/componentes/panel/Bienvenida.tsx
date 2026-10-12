@@ -25,7 +25,7 @@ export function Bienvenida() {
         <p className="max-w-2xl text-texto-secundario">
           {nuevo ? (
             <>
-              Tienes <strong className="cifra text-texto">10 000 USDT</strong> de práctica para invertir en
+              Tienes <strong className="cifra text-texto">10.000 USDT</strong> de práctica para invertir en
               Bitcoin con ayuda de la IA, sin arriesgar dinero real.
             </>
           ) : (

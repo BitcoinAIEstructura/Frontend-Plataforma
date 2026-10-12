@@ -20,7 +20,7 @@ describe("Bienvenida", () => {
   it("saluda por el nombre y recuerda el saldo de práctica", () => {
     renderizar(<Bienvenida />, { cliente: conUsuario(true) });
     expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Hola, Ana");
-    expect(screen.getByText("10 000 USDT")).toBeInTheDocument();
+    expect(screen.getByText("10.000 USDT")).toBeInTheDocument();
   });
 
   it("si es nuevo invita a la primera orden; si ya operó, resume", () => {

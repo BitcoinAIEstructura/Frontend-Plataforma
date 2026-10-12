@@ -8,11 +8,11 @@ describe("Tarjeta", () => {
   it("es una sección con su título como encabezado", () => {
     render(
       <Tarjeta titulo="Tu cartera" extra={<span>+2,4 %</span>}>
-        10 000 USDT
+        10.000 USDT
       </Tarjeta>,
     );
     const seccion = screen.getByRole("region", { name: "Tu cartera" });
-    expect(seccion).toHaveTextContent("10 000 USDT");
+    expect(seccion).toHaveTextContent("10.000 USDT");
     expect(screen.getByRole("heading", { level: 2, name: "Tu cartera" })).toBeInTheDocument();
     expect(screen.getByText("+2,4 %")).toBeInTheDocument();
   });
