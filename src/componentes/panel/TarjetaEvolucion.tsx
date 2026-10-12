@@ -62,8 +62,8 @@ export function TarjetaEvolucion() {
             Aquí verás cómo crece (o baja) tu cartera cuando hagas tu primera orden. Puedes empezar con poco:
             es dinero de práctica.
           </p>
-          <Link href="/ordenes" className={clasesBoton("dorado")}>
-            Hacer mi primera orden
+          <Link href="/ordenes" className={clasesBoton("contorno")}>
+            Ir a Órdenes
           </Link>
         </div>
       ) : ordenes.isError || velas.isError ? (

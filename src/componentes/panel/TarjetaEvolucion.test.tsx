@@ -84,10 +84,7 @@ describe("TarjetaEvolucion", () => {
   it("sin órdenes ejecutadas invita a la primera, sin gráfica plana", async () => {
     servidor([{ ...EJECUTADA, estado: "PENDIENTE", ejecutadaEn: null }]);
     renderizar(<TarjetaEvolucion />);
-    expect(await screen.findByRole("link", { name: "Hacer mi primera orden" })).toHaveAttribute(
-      "href",
-      "/ordenes",
-    );
+    expect(await screen.findByRole("link", { name: "Ir a Órdenes" })).toHaveAttribute("href", "/ordenes");
     expect(screen.queryByTestId("evolucion")).toBeNull();
     expect(screen.queryByRole("radiogroup")).toBeNull();
   });
