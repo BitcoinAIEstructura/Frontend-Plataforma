@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, type ReactNode } from "react";
 
+import { PaletaBusqueda } from "@/componentes/busqueda/PaletaBusqueda";
 import { Logo, SimboloNexabit } from "@/componentes/marca/Logo";
 import { AvisoSimulacion } from "@/componentes/ui/AvisoSimulacion";
 import { Boton } from "@/componentes/ui/Boton";
@@ -65,6 +66,7 @@ export function MarcoApp({ children }: { children: ReactNode }) {
               <h1 className="text-xl font-semibold sm:text-2xl">{titulo}</h1>
             </div>
             <div className="flex items-center gap-1">
+              <PaletaBusqueda />
               <InterruptorTema />
               <MenuUsuario usuario={usuario} />
             </div>
