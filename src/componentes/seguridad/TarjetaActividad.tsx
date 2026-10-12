@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { Tarjeta } from "@/componentes/ui/Tarjeta";
 import { obtenerActividad } from "@/lib/api/cuentas";
-import { fechaHora, haceCuanto } from "@/lib/formato";
+import { describirAgente, fechaHora, haceCuanto } from "@/lib/formato";
 
 export const CLAVE_ACTIVIDAD = ["cuentas", "actividad"] as const;
 
@@ -15,6 +15,15 @@ const ALERTAS = new Set([
   "DOS_PASOS_DESACTIVADA",
   "CODIGO_RESPALDO_USADO",
 ]);
+
+const SEGUNDO_PASO = "(con verificación en dos pasos)";
+
+/** Si el detalle es un User-Agent, lo resume ("Chrome en Android"); si no, lo deja igual. */
+export function detalleLegible(detalle: string): string {
+  if (!/^Mozilla\/|^[\w.-]+\/[\d.]+/.test(detalle)) return detalle;
+  const conSegundoPaso = detalle.includes(SEGUNDO_PASO);
+  return `${describirAgente(detalle)}${conSegundoPaso ? ` ${SEGUNDO_PASO}` : ""}`;
+}
 
 export function TarjetaActividad() {
   const consulta = useQuery({ queryKey: CLAVE_ACTIVIDAD, queryFn: () => obtenerActividad(20) });
@@ -50,7 +59,7 @@ export function TarjetaActividad() {
                     {haceCuanto(e.momento)}
                   </time>{" "}
                   · <span className="cifra">{e.ip}</span>
-                  {e.detalle && ` · ${e.detalle}`}
+                  {e.detalle && ` · ${detalleLegible(e.detalle)}`}
                 </p>
               </div>
             </li>
