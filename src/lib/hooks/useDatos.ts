@@ -1,0 +1,135 @@
+"use client";
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import {
+  obtenerIndicador,
+  obtenerPrecio,
+  obtenerSenal,
+  obtenerVelas,
+  type Intervalo,
+  type NombreIndicador,
+} from "@/lib/api/mercado";
+import {
+  cancelarOrden,
+  crearOrden,
+  deshacerUltima,
+  detenerBot,
+  iniciarBot,
+  obtenerBot,
+  obtenerCartera,
+  obtenerHistorial,
+  obtenerOrdenes,
+  procesarSiguiente,
+  type ConfiguracionBot,
+  type NuevaOrden,
+} from "@/lib/api/simulacion";
+import { CLAVES } from "@/lib/tiempoReal";
+
+/** Cada cuánto refrescar las velas según su intervalo (las de 1 minuto cambian rápido). */
+export const REFRESCO_VELAS: Record<Intervalo, number> = {
+  "1m": 15_000,
+  "5m": 30_000,
+  "15m": 60_000,
+  "1h": 120_000,
+  "4h": 300_000,
+  "1d": 600_000,
+};
+
+// ---------- mercado ----------
+
+/** Precio actual: lo trae el tiempo real cada 5 s; si la conexión se corta, se pide cada 30 s. */
+export function usePrecio() {
+  return useQuery({
+    queryKey: CLAVES.precio,
+    queryFn: ({ signal }) => obtenerPrecio(signal),
+    refetchInterval: 30_000,
+  });
+}
+
+export function useVelas(intervalo: Intervalo, cantidad = 300) {
+  return useQuery({
+    queryKey: ["mercado", "velas", intervalo, cantidad],
+    queryFn: ({ signal }) => obtenerVelas(intervalo, cantidad, signal),
+    refetchInterval: REFRESCO_VELAS[intervalo],
+    placeholderData: (anterior) => anterior, // al cambiar de intervalo, sin parpadeo
+  });
+}
+
+export function useIndicador(
+  indicador: NombreIndicador,
+  intervalo: Intervalo,
+  cantidad = 300,
+  parametros: Record<string, number> = {},
+  activo = true,
+) {
+  return useQuery({
+    queryKey: ["mercado", "indicador", indicador, intervalo, cantidad, parametros],
+    queryFn: ({ signal }) => obtenerIndicador(indicador, intervalo, cantidad, parametros, signal),
+    refetchInterval: REFRESCO_VELAS[intervalo],
+    enabled: activo,
+    placeholderData: (anterior) => anterior,
+  });
+}
+
+export function useSenal(intervalo: Intervalo = "1h") {
+  return useQuery({
+    queryKey: ["mercado", "senal", intervalo],
+    queryFn: ({ signal }) => obtenerSenal(intervalo, signal),
+    refetchInterval: 60_000,
+  });
+}
+
+// ---------- simulación ----------
+
+export function useCartera() {
+  return useQuery({
+    queryKey: CLAVES.cartera,
+    queryFn: ({ signal }) => obtenerCartera(signal),
+    refetchInterval: 30_000,
+  });
+}
+
+export function useOrdenes() {
+  return useQuery({ queryKey: CLAVES.ordenes, queryFn: obtenerOrdenes });
+}
+
+export function useHistorial(limite = 50) {
+  return useQuery({ queryKey: [...CLAVES.historial, limite], queryFn: () => obtenerHistorial(limite) });
+}
+
+export function useBot() {
+  return useQuery({ queryKey: CLAVES.bot, queryFn: obtenerBot, refetchInterval: 15_000 });
+}
+
+/** Recarga todo lo de la simulación después de una acción del usuario. */
+function useRecargarSimulacion() {
+  const cliente = useQueryClient();
+  return () =>
+    Promise.all(
+      [CLAVES.ordenes, CLAVES.cartera, CLAVES.historial, CLAVES.bot].map((queryKey) =>
+        cliente.invalidateQueries({ queryKey }),
+      ),
+    );
+}
+
+export function useAccionesOrdenes() {
+  const recargar = useRecargarSimulacion();
+  return {
+    crear: useMutation({ mutationFn: (orden: NuevaOrden) => crearOrden(orden), onSettled: recargar }),
+    procesar: useMutation({ mutationFn: procesarSiguiente, onSettled: recargar }),
+    deshacer: useMutation({ mutationFn: deshacerUltima, onSettled: recargar }),
+    cancelar: useMutation({ mutationFn: (id: number) => cancelarOrden(id), onSettled: recargar }),
+  };
+}
+
+export function useAccionesBot() {
+  const recargar = useRecargarSimulacion();
+  return {
+    iniciar: useMutation({
+      mutationFn: (configuracion: Partial<ConfiguracionBot>) => iniciarBot(configuracion),
+      onSettled: recargar,
+    }),
+    detener: useMutation({ mutationFn: detenerBot, onSettled: recargar }),
+  };
+}
