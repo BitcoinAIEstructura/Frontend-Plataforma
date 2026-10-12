@@ -34,8 +34,15 @@ Proyecto universitario de Estructuras de Datos. El backend (Python + FastAPI, co
 - **Cartera:** reparto USDT/BTC, costo promedio, ganancias realizada y no realizada, y el historial como línea de tiempo.
 - **Bot:** se configura la frecuencia, las velas, el riesgo, el stop-loss y el take-profit; se enciende y se apaga, y se ven sus decisiones en vivo.
 - **Tiempo real:** una sola conexión SSE trae el precio, la cartera, las órdenes y las decisiones del bot.
+- **Cómo funciona:** una sección por estructura de datos del backend (cola, pila, montículo, árbol AVL, tabla hash, cola circular y trie). Cada una tiene:
+  - Su uso real en Nexabit y su complejidad.
+  - Lo que guarda **ahora** con tus datos.
+  - Un laboratorio que corre el código del backend paso a paso: rotaciones del AVL, rehash de la tabla, el anillo que pisa al más viejo.
+- **Liga de inversores:** los 10 mejores por rentabilidad, cada uno con un alias (nadie ve tu nombre), y tu puesto.
+- **¿Y si hubiera invertido?:** cuánto valdría hoy una compra hecha en una fecha del pasado, con el mejor y el peor momento para vender.
+- **Búsqueda Ctrl + K:** páginas, acciones, indicadores y conceptos mientras escribes. La responde un trie del backend.
 
-Las predicciones de la IA y la sección "Cómo funciona" llegan en las próximas fases.
+Las predicciones de la IA llegan en la próxima fase.
 
 ## Seguridad en el navegador
 
@@ -87,7 +94,9 @@ npm run build
 | `src/componentes/marco` | Navegación, menú del usuario y guardia de sesión |
 | `src/componentes/seguridad` | Centro de seguridad |
 | `src/componentes/graficas` | Velas, osciladores y evolución (Lightweight Charts) |
-| `src/componentes/panel`, `mercado`, `ordenes`, `cartera`, `bot` | Las pantallas de la plataforma |
+| `src/componentes/panel`, `mercado`, `ordenes`, `cartera`, `bot`, `liga` | Las pantallas de la plataforma |
+| `src/componentes/estructuras` | "Cómo funciona": dibujos de árboles, vistas de cada estructura y el laboratorio |
+| `src/componentes/busqueda` | La búsqueda Ctrl + K |
 | `src/componentes/ui` | Botón, Campo, Tarjeta, Segmentado, tema y Aviso |
 | `src/lib/api` | Cliente de la API y esquemas zod |
 | `src/lib/hooks` | Datos con TanStack Query (sesión, mercado y simulación) |
