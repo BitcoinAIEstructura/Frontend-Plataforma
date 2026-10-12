@@ -1,6 +1,6 @@
 # Nexabit · frontend
 
-Plataforma web de **trading simulado de Bitcoin con inteligencia artificial**: se practica con 10 000 USDT ficticios y datos reales del mercado.
+Plataforma web de **trading simulado de Bitcoin con inteligencia artificial**: se practica con 10.000 USDT ficticios y datos reales del mercado.
 
 > **Todo es simulado.** No hay dinero real ni conexión a ningún exchange, y nada de lo que muestra es asesoría financiera.
 
@@ -20,9 +20,22 @@ Proyecto universitario de Estructuras de Datos. El backend (Python + FastAPI, co
 - **Centro de seguridad:** dispositivos con sesión abierta (se pueden cerrar), actividad reciente con alertas y cambio de contraseña.
 - **Diseño de lujo:**
   - Ónix, oro champán y naranja Bitcoin, con tarjetas de vidrio y fondo de aurora.
-  - Funciona en teléfono y portátil, con tema oscuro y contraste WCAG comprobado por una prueba automática.
+  - Funciona en teléfono y portátil, con tema oscuro o claro y contraste WCAG comprobado por una prueba automática.
+  - Gráficas con una paleta validada para daltonismo: lo que sube y lo que baja nunca se distingue solo por color (vela hueca o rellena, ▲▼ en los textos).
+- **Panel:**
+  - Cifras de la cartera (valor, ganancia con ▲▼, USDT y BTC), precio en vivo y la variación de 24 h.
+  - Medidor de confianza de la señal de la IA, con el porqué.
+  - Evolución de la cartera reconstruida con tus órdenes y las velas (24 h, 7 días o 30 días).
+- **Mercado:** velas de BTCUSDT (de 1 minuto a 1 día) con volumen, SMA, EMA y bandas de Bollinger encima, y RSI o MACD debajo. Cada gráfica tiene vista de tabla.
+- **Órdenes:**
+  - Comprar o vender en USDT, con botones de 25 %, 50 % y Todo y una vista previa con la comisión.
+  - La cola de pendientes (FIFO) se ejecuta en orden. Cada orden se puede cancelar, y **Ctrl + Z** deshace la última (una pila).
+  - Registro con filtro por estado.
+- **Cartera:** reparto USDT/BTC, costo promedio, ganancias realizada y no realizada, y el historial como línea de tiempo.
+- **Bot:** se configura la frecuencia, las velas, el riesgo, el stop-loss y el take-profit; se enciende y se apaga, y se ven sus decisiones en vivo.
+- **Tiempo real:** una sola conexión SSE trae el precio, la cartera, las órdenes y las decisiones del bot.
 
-Las gráficas en vivo, las órdenes, el bot, las predicciones de la IA y la sección "Cómo funciona" llegan en las próximas fases.
+Las predicciones de la IA y la sección "Cómo funciona" llegan en las próximas fases.
 
 ## Seguridad en el navegador
 
@@ -73,9 +86,13 @@ npm run build
 | `src/componentes/moneda3d` | La moneda 3D (Three.js), su versión fija y la detección de calidad |
 | `src/componentes/marco` | Navegación, menú del usuario y guardia de sesión |
 | `src/componentes/seguridad` | Centro de seguridad |
-| `src/componentes/ui` | Botón, Campo, Tarjeta y Aviso |
+| `src/componentes/graficas` | Velas, osciladores y evolución (Lightweight Charts) |
+| `src/componentes/panel`, `mercado`, `ordenes`, `cartera`, `bot` | Las pantallas de la plataforma |
+| `src/componentes/ui` | Botón, Campo, Tarjeta, Segmentado, tema y Aviso |
 | `src/lib/api` | Cliente de la API y esquemas zod |
+| `src/lib/hooks` | Datos con TanStack Query (sesión, mercado y simulación) |
+| `src/lib/tiempoReal.tsx` | La conexión SSE que mantiene la caché al día |
 | `src/lib/validacion` | Reglas de registro y contraseña (iguales a las del backend) |
 | `src/proxy.ts` | Protección de las páginas privadas |
 
-Hecho con Next.js 16, React 19, TypeScript estricto, Tailwind CSS 4, TanStack Query, zod, React Three Fiber y Vitest.
+Hecho con Next.js 16, React 19, TypeScript estricto, Tailwind CSS 4, TanStack Query, zod, React Three Fiber, Lightweight Charts y Vitest.
