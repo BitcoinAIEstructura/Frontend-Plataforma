@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { CLAVES } from "@/lib/tiempoReal";
 import { renderizarGancho, servidorFalso } from "@/test/utilidades";
 
-import { REFRESCO_VELAS, useAccionesOrdenes, usePrecio } from "./useDatos";
+import { REFRESCO_VELAS, useAccionesOrdenes, useLiga, usePrecio, usePreciosRecientes } from "./useDatos";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -17,6 +17,17 @@ describe("ganchos de datos", () => {
     await waitFor(() => expect(result.current.data?.precio).toBe(84000));
     act(() => cliente.setQueryData(CLAVES.precio, { simbolo: "BTCUSDT", precio: 85000, momento: 2 }));
     await waitFor(() => expect(result.current.data?.precio).toBe(85000));
+  });
+
+  it("liga y precios recientes traen sus datos", async () => {
+    servidorFalso({
+      "GET /api/liga": { estado: 200, cuerpo: { precio: 1, participantes: 3, mejores: [], tu: null } },
+      "GET /api/precio/recientes": { estado: 200, cuerpo: { capacidad: 120, cantidad: 0, precios: [] } },
+    });
+    const liga = renderizarGancho(useLiga);
+    const recientes = renderizarGancho(usePreciosRecientes);
+    await waitFor(() => expect(liga.result.current.data?.participantes).toBe(3));
+    await waitFor(() => expect(recientes.result.current.data?.capacidad).toBe(120));
   });
 
   it("las velas de 1 minuto se refrescan más seguido que las diarias", () => {

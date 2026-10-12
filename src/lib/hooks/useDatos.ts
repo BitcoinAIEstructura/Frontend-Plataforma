@@ -2,9 +2,12 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { obtenerEstructuras } from "@/lib/api/estructuras";
+import { obtenerLiga } from "@/lib/api/liga";
 import {
   obtenerIndicador,
   obtenerPrecio,
+  obtenerPreciosRecientes,
   obtenerSenal,
   obtenerVelas,
   type Intervalo,
@@ -76,6 +79,34 @@ export function useSenal(intervalo: Intervalo = "1h") {
   return useQuery({
     queryKey: ["mercado", "senal", intervalo],
     queryFn: ({ signal }) => obtenerSenal(intervalo, signal),
+    refetchInterval: 60_000,
+  });
+}
+
+/** Los últimos precios de la cola circular del servidor. */
+export function usePreciosRecientes() {
+  return useQuery({
+    queryKey: ["mercado", "recientes"],
+    queryFn: ({ signal }) => obtenerPreciosRecientes(signal),
+    refetchInterval: 10_000,
+  });
+}
+
+// ---------- estructuras y liga ----------
+
+/** Foto de las estructuras reales (tu cola, tus pilas y las del servidor). */
+export function useEstructuras() {
+  return useQuery({
+    queryKey: ["estructuras"],
+    queryFn: ({ signal }) => obtenerEstructuras(signal),
+    refetchInterval: 10_000,
+  });
+}
+
+export function useLiga() {
+  return useQuery({
+    queryKey: ["liga"],
+    queryFn: ({ signal }) => obtenerLiga(signal),
     refetchInterval: 60_000,
   });
 }
