@@ -4,11 +4,12 @@ import { z } from "zod";
 import { ErrorApi, pedir } from "./cliente";
 
 function responder(estado: number, cuerpo?: unknown, encabezados: Record<string, string> = {}) {
-  const fetchFalso = vi.fn(async () =>
-    new Response(cuerpo === undefined ? null : JSON.stringify(cuerpo), {
-      status: estado,
-      headers: { "Content-Type": "application/json", ...encabezados },
-    }),
+  const fetchFalso = vi.fn(
+    async () =>
+      new Response(cuerpo === undefined ? null : JSON.stringify(cuerpo), {
+        status: estado,
+        headers: { "Content-Type": "application/json", ...encabezados },
+      }),
   );
   vi.stubGlobal("fetch", fetchFalso);
   return fetchFalso;
@@ -63,7 +64,10 @@ describe("pedir", () => {
   it("204 sin cuerpo y sin conexión", async () => {
     responder(204);
     await expect(pedir("/api/sesion", null, { metodo: "DELETE" })).resolves.toBeUndefined();
-    vi.stubGlobal("fetch", vi.fn(async () => Promise.reject(new TypeError("Failed to fetch"))));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => Promise.reject(new TypeError("Failed to fetch"))),
+    );
     await expect(pedir("/api/precio", esquema)).rejects.toMatchObject({ codigo: 0 });
   });
 });

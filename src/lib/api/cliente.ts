@@ -45,7 +45,12 @@ async function leerError(respuesta: Response): Promise<ErrorApi> {
     // el cuerpo no era JSON: basta con el código
   }
   const espera = Number(respuesta.headers.get("Retry-After"));
-  return new ErrorApi(respuesta.status, mensaje, campo, Number.isFinite(espera) && espera > 0 ? espera : undefined);
+  return new ErrorApi(
+    respuesta.status,
+    mensaje,
+    campo,
+    Number.isFinite(espera) && espera > 0 ? espera : undefined,
+  );
 }
 
 /**
@@ -57,13 +62,20 @@ async function leerError(respuesta: Response): Promise<ErrorApi> {
  */
 export async function pedir<T>(ruta: string, esquema: ZodType<T>, opciones?: Opciones): Promise<T>;
 export async function pedir(ruta: string, esquema: null, opciones?: Opciones): Promise<void>;
-export async function pedir<T>(ruta: string, esquema: ZodType<T> | null, opciones: Opciones = {}): Promise<T | void> {
+export async function pedir<T>(
+  ruta: string,
+  esquema: ZodType<T> | null,
+  opciones: Opciones = {},
+): Promise<T | void> {
   const { metodo = "GET", cuerpo, senal } = opciones;
   let respuesta: Response;
   try {
     respuesta = await fetch(ruta, {
       method: metodo,
-      headers: { Accept: "application/json", ...(cuerpo !== undefined ? { "Content-Type": "application/json" } : {}) },
+      headers: {
+        Accept: "application/json",
+        ...(cuerpo !== undefined ? { "Content-Type": "application/json" } : {}),
+      },
       body: cuerpo !== undefined ? JSON.stringify(cuerpo) : undefined,
       credentials: "same-origin",
       cache: "no-store",

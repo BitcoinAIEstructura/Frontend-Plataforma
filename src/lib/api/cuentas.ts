@@ -73,7 +73,8 @@ export function iniciarSesion(correo: string, contrasena: string): Promise<Resul
 }
 
 export async function enviarCodigo(codigo: string): Promise<Usuario> {
-  return (await pedir("/api/sesion/codigo", esquemaConUsuario, { metodo: "POST", cuerpo: { codigo } })).usuario;
+  return (await pedir("/api/sesion/codigo", esquemaConUsuario, { metodo: "POST", cuerpo: { codigo } }))
+    .usuario;
 }
 
 export function cerrarSesion(): Promise<void> {
@@ -119,15 +120,22 @@ export function cerrarSesionPorId(id: number): Promise<void> {
 }
 
 export async function cerrarOtrasSesiones(): Promise<number> {
-  return (await pedir("/api/cuentas/sesiones/cerrar-otras", z.object({ cerradas: z.number() }), { metodo: "POST" }))
-    .cerradas;
+  return (
+    await pedir("/api/cuentas/sesiones/cerrar-otras", z.object({ cerradas: z.number() }), { metodo: "POST" })
+  ).cerradas;
 }
 
 export async function obtenerActividad(limite = 50): Promise<EventoActividad[]> {
-  const r = await pedir(`/api/cuentas/actividad?limite=${limite}`, z.object({ eventos: z.array(esquemaEventoActividad) }));
+  const r = await pedir(
+    `/api/cuentas/actividad?limite=${limite}`,
+    z.object({ eventos: z.array(esquemaEventoActividad) }),
+  );
   return r.eventos;
 }
 
 export function cambiarContrasena(contrasenaActual: string, contrasenaNueva: string): Promise<void> {
-  return pedir("/api/cuentas/contrasena", null, { metodo: "POST", cuerpo: { contrasenaActual, contrasenaNueva } });
+  return pedir("/api/cuentas/contrasena", null, {
+    metodo: "POST",
+    cuerpo: { contrasenaActual, contrasenaNueva },
+  });
 }

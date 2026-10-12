@@ -29,7 +29,17 @@ function colores(tema: "oscuro" | "claro"): Record<string, string> {
   return resultado;
 }
 
-const TEXTOS = ["texto", "texto-secundario", "texto-atenuado", "oro", "bitcoin", "violeta", "sube", "baja", "error"];
+const TEXTOS = [
+  "texto",
+  "texto-secundario",
+  "texto-atenuado",
+  "oro",
+  "bitcoin",
+  "violeta",
+  "sube",
+  "baja",
+  "error",
+];
 const FONDOS = ["fondo", "superficie", "superficie-alta"];
 
 describe.each(["oscuro", "claro"] as const)("tema %s", (tema) => {
