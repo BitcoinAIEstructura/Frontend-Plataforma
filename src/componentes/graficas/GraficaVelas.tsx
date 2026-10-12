@@ -18,6 +18,7 @@ import type { Punto, Vela } from "@/lib/api/mercado";
 import { btc, fechaHora, usdt, variacion } from "@/lib/formato";
 
 import {
+  INTERACCION,
   aLineaGrafica,
   aTiempoGrafica,
   aVelasGrafica,
@@ -92,6 +93,7 @@ export function GraficaVelas({ velas, capas = [], alto = 420, titulo }: Props) {
     const c = leerColoresGrafica();
     const nueva = createChart(contenedor.current, {
       autoSize: true,
+      ...INTERACCION,
       ...opcionesTema(c),
       rightPriceScale: { borderVisible: false },
       timeScale: { borderVisible: false, timeVisible: true, secondsVisible: false },

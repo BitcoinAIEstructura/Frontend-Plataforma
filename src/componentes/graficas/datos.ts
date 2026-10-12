@@ -92,3 +92,12 @@ export function conAlfa(hex: string, alfa: number): string {
     .toString(16)
     .padStart(2, "0")}`;
 }
+
+/**
+ * La rueda del ratón baja la página en vez de hacer zoom (si no, la gráfica "atrapa"
+ * el scroll). El zoom sigue con pellizco o arrastrando el eje.
+ */
+export const INTERACCION = {
+  handleScroll: { mouseWheel: false, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: false },
+  handleScale: { mouseWheel: false, pinch: true, axisPressedMouseMove: true },
+} as const;
