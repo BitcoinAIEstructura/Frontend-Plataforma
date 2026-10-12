@@ -66,8 +66,7 @@ export const esquemaBot = z.object({
 export type EstadoBot = z.infer<typeof esquemaBot>;
 
 export type NuevaOrden =
-  | { tipo: "COMPRA"; monto: number; motivo?: string }
-  | { tipo: "VENTA"; monto: number; motivo?: string }
+  | { tipo: "COMPRA" | "VENTA"; monto: number; motivo?: string }
   | { tipo: "VENTA"; todo: true; motivo?: string };
 
 // ---------- órdenes ----------
