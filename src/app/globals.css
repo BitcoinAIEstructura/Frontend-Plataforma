@@ -109,3 +109,75 @@ body {
   outline: 2px solid var(--oro);
   outline-offset: 2px;
 }
+
+/* ---------- efectos de lujo ---------- */
+
+/* Tarjeta de vidrio: superficie translúcida con desenfoque y un filo de luz arriba. */
+@utility vidrio {
+  background: color-mix(in oklab, var(--superficie) 72%, transparent);
+  border: 1px solid color-mix(in oklab, var(--oro) 18%, var(--borde));
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--oro-claro) 14%, transparent),
+    0 24px 60px -24px rgb(0 0 0 / 0.55);
+  backdrop-filter: blur(18px) saturate(1.2);
+}
+
+/* Texto con degradado dorado (para títulos y cifras destacadas). */
+@utility texto-oro {
+  background: linear-gradient(100deg, var(--oro-profundo), var(--oro-claro) 45%, var(--oro) 70%, var(--bitcoin));
+  background-clip: text;
+  color: transparent;
+}
+
+/* Borde dorado en degradado (con un pseudo-elemento, para no tapar el contenido). */
+@utility borde-oro {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--oro-claro), transparent 40%, transparent 60%, var(--bitcoin));
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+/* Fondo de aurora: halos dorado, violeta y naranja muy suaves sobre el ónix. */
+@utility fondo-aurora {
+  background:
+    radial-gradient(60rem 40rem at 10% -10%, color-mix(in oklab, var(--violeta) 22%, transparent), transparent 60%),
+    radial-gradient(50rem 35rem at 110% 10%, color-mix(in oklab, var(--oro) 16%, transparent), transparent 60%),
+    radial-gradient(40rem 30rem at 50% 120%, color-mix(in oklab, var(--bitcoin) 12%, transparent), transparent 60%),
+    var(--fondo);
+}
+
+/* Destello que recorre los botones dorados. */
+@keyframes destello {
+  from {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  to {
+    transform: translateX(220%) skewX(-20deg);
+  }
+}
+
+@utility animar-destello {
+  animation: destello 2.8s ease-in-out infinite;
+}
+
+/* Quien pidió menos movimiento en su sistema no ve animaciones decorativas. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
