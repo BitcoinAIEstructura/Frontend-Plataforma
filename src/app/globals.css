@@ -206,6 +206,26 @@ body {
   animation: destello 2.8s ease-in-out infinite;
 }
 
+/* "Latido" del precio cuando cambia: un destello breve del color de la subida o la bajada. */
+@keyframes latido-sube {
+  from {
+    color: var(--sube);
+    text-shadow: 0 0 18px color-mix(in oklab, var(--sube) 55%, transparent);
+  }
+}
+@keyframes latido-baja {
+  from {
+    color: var(--baja);
+    text-shadow: 0 0 18px color-mix(in oklab, var(--baja) 55%, transparent);
+  }
+}
+@utility latido-sube {
+  animation: latido-sube 1.2s ease-out;
+}
+@utility latido-baja {
+  animation: latido-baja 1.2s ease-out;
+}
+
 /* Quien pidió menos movimiento en su sistema no ve animaciones decorativas. */
 @media (prefers-reduced-motion: reduce) {
   *,
