@@ -91,3 +91,15 @@ export function obtenerIndicador(
 export function obtenerSenal(intervalo: Intervalo = "1h", senal?: AbortSignal): Promise<Senal> {
   return pedir(`/api/senal?estrategia=combinada&intervalo=${intervalo}`, esquemaSenal, { senal });
 }
+
+const esquemaRecientes = z.object({
+  capacidad: z.number(),
+  cantidad: z.number(),
+  precios: z.array(z.object({ momento: z.number(), precio: z.number() })),
+});
+export type PreciosRecientes = z.infer<typeof esquemaRecientes>;
+
+/** Los últimos precios que guardó el servidor en su cola circular (unos 10 minutos). */
+export function obtenerPreciosRecientes(senal?: AbortSignal): Promise<PreciosRecientes> {
+  return pedir("/api/precio/recientes", esquemaRecientes, { senal });
+}
