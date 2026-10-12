@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+/*
+ * Tema de Nexabit: lujo y glamour.
+ * Ónix profundo con oro champán como color principal, naranja Bitcoin para las
+ * acciones y violeta real para los detalles.
+ *
+ * Contrastes comprobados (WCAG) sobre "fondo" y "superficie":
+ * - textos (texto, texto-secundario, texto-atenuado, oro, bitcoin, violeta, sube, baja, error) ≥ 4,5:1;
+ * - "sobre-oro" sobre "oro" ≥ 4,5:1 (texto de los botones dorados; en el tema oscuro, más de 9:1).
+ * Sube = turquesa y baja = rosa; además siempre llevan icono o texto (daltonismo).
+ */
+:root,
+[data-theme="oscuro"] {
+  color-scheme: dark;
+  --fondo: #07060b;
+  --superficie: #12101a;
+  --superficie-alta: #1b1826;
+  --borde: #2a2638;
+  --borde-fuerte: #4a4360;
+  --texto: #f5f1e8;
+  --texto-secundario: #c9c1b0;
+  --texto-atenuado: #9a927f;
+  --oro: #d9b65c;
+  --oro-claro: #f3dc9a;
+  --oro-profundo: #a8822e;
+  --sobre-oro: #1a1406;
+  --bitcoin: #f7931a;
+  --violeta: #9b7dff;
+  --sube: #4fd1c5;
+  --baja: #ff8095;
+  --error: #ff7b7b;
+  --exito: #4fd1c5;
+}
+
+[data-theme="claro"] {
+  color-scheme: light;
+  --fondo: #fbf8f1;
+  --superficie: #ffffff;
+  --superficie-alta: #f4efe3;
+  --borde: #e6dfcd;
+  --borde-fuerte: #b3a88c;
+  --texto: #17130a;
+  --texto-secundario: #4a4336;
+  --texto-atenuado: #635b49;
+  --oro: #765a17;
+  --oro-claro: #b8912f;
+  --oro-profundo: #6b5015;
+  --sobre-oro: #fffaf0;
+  --bitcoin: #a85600;
+  --violeta: #5b3cc4;
+  --sube: #0f766e;
+  --baja: #b42340;
+  --error: #b42318;
+  --exito: #0f766e;
+}
+
+@theme inline {
+  --color-fondo: var(--fondo);
+  --color-superficie: var(--superficie);
+  --color-superficie-alta: var(--superficie-alta);
+  --color-borde: var(--borde);
+  --color-borde-fuerte: var(--borde-fuerte);
+  --color-texto: var(--texto);
+  --color-texto-secundario: var(--texto-secundario);
+  --color-texto-atenuado: var(--texto-atenuado);
+  --color-oro: var(--oro);
+  --color-oro-claro: var(--oro-claro);
+  --color-oro-profundo: var(--oro-profundo);
+  --color-sobre-oro: var(--sobre-oro);
+  --color-bitcoin: var(--bitcoin);
+  --color-violeta: var(--violeta);
+  --color-sube: var(--sube);
+  --color-baja: var(--baja);
+  --color-error: var(--error);
+  --color-exito: var(--exito);
+}
+
+html {
+  background: var(--fondo);
+  color: var(--texto);
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--fondo);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--oro);
+  outline-offset: 2px;
+}
