@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
-import { Bienvenida } from "@/componentes/panel/Bienvenida";
+import { PantallaPanel } from "@/componentes/panel/PantallaPanel";
 
 export const metadata: Metadata = { title: "Panel · Nexabit" };
 
 export default function PaginaPanel() {
-  return <Bienvenida />;
+  return <PantallaPanel />;
 }
