@@ -11,5 +11,8 @@ export default defineConfig({
     setupFiles: ["./src/test/preparacion.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
     css: false,
+    // Las pruebas de formularios escriben letra por letra (como una persona) y tardan
+    // unos 5 s; con el límite por defecto (5 s) fallaban a veces en equipos cargados.
+    testTimeout: 15_000,
   },
 });
