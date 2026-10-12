@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { Vela } from "@/lib/api/mercado";
 import type { Orden } from "@/lib/api/simulacion";
 
-import { aplicarOrden, evolucionCartera, tieneMovimientos } from "./evolucion";
+import { aplicarOrden, conValorActual, evolucionCartera, tieneMovimientos } from "./evolucion";
 
 function orden(parcial: Partial<Orden>): Orden {
   return {
@@ -89,5 +89,20 @@ describe("tieneMovimientos", () => {
   it("solo cuentan las órdenes ejecutadas", () => {
     expect(tieneMovimientos([orden({ estado: "PENDIENTE" })])).toBe(false);
     expect(tieneMovimientos([orden({})])).toBe(true);
+  });
+});
+
+describe("conValorActual", () => {
+  it("cambia solo el último punto", () => {
+    const puntos = [
+      { tiempo: 0, valor: 1 },
+      { tiempo: 1, valor: 2 },
+    ];
+    expect(conValorActual(puntos, 5)).toEqual([
+      { tiempo: 0, valor: 1 },
+      { tiempo: 1, valor: 5 },
+    ]);
+    expect(conValorActual(puntos, undefined)).toBe(puntos);
+    expect(conValorActual([], 5)).toEqual([]);
   });
 });

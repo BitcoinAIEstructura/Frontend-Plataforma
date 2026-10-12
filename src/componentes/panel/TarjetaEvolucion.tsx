@@ -10,7 +10,7 @@ import { Tarjeta } from "@/componentes/ui/Tarjeta";
 import type { Intervalo } from "@/lib/api/mercado";
 import { useCartera, useOrdenes, useVelas } from "@/lib/hooks/useDatos";
 
-import { evolucionCartera, tieneMovimientos } from "./evolucion";
+import { conValorActual, evolucionCartera, tieneMovimientos } from "./evolucion";
 
 type Rango = "24h" | "7d" | "30d";
 
@@ -34,12 +34,13 @@ export function TarjetaEvolucion() {
   const velas = useVelas(intervalo, cantidad);
 
   const saldoInicial = cartera.data?.saldoInicial;
+  const valorActual = cartera.data?.valorTotal;
   const puntos = useMemo(
     () =>
       saldoInicial !== undefined && ordenes.data && velas.data
-        ? evolucionCartera(saldoInicial, ordenes.data, velas.data)
+        ? conValorActual(evolucionCartera(saldoInicial, ordenes.data, velas.data), valorActual)
         : [],
-    [saldoInicial, ordenes.data, velas.data],
+    [saldoInicial, valorActual, ordenes.data, velas.data],
   );
 
   const sinMovimientos = ordenes.data !== undefined && !tieneMovimientos(ordenes.data);

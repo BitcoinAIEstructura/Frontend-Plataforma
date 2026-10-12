@@ -49,6 +49,15 @@ export function evolucionCartera(
   });
 }
 
+/**
+ * La última vela sigue abierta: su cierre es un precio de hace un rato. El último punto
+ * toma el valor de `/api/cartera` (precio de ahora) para que coincida con las cifras.
+ */
+export function conValorActual(puntos: Punto[], valorActual: number | undefined): Punto[] {
+  if (valorActual === undefined || puntos.length === 0) return puntos;
+  return [...puntos.slice(0, -1), { ...puntos.at(-1)!, valor: valorActual }];
+}
+
 /** ¿Hay al menos una orden ejecutada? Sin ellas la línea es plana y no dice nada. */
 export function tieneMovimientos(ordenes: readonly Orden[]): boolean {
   return ordenes.some((o) => o.estado === "EJECUTADA");
