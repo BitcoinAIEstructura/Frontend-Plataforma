@@ -11,7 +11,7 @@ export interface Seccion {
 export const SECCIONES: readonly Seccion[] = [
   { ruta: "/panel", titulo: "Panel", icono: "◈", lista: true, enTelefono: true },
   { ruta: "/mercado", titulo: "Mercado", icono: "⌁", lista: true, enTelefono: true },
-  { ruta: "/ordenes", titulo: "Órdenes", icono: "⇅", lista: false, enTelefono: true },
+  { ruta: "/ordenes", titulo: "Órdenes", icono: "⇅", lista: true, enTelefono: true },
   { ruta: "/cartera", titulo: "Cartera", icono: "◎", lista: false, enTelefono: false },
   { ruta: "/bot", titulo: "Bot", icono: "⚙", lista: false, enTelefono: false },
   { ruta: "/ia", titulo: "Predicciones IA", icono: "✦", lista: false, enTelefono: true },
