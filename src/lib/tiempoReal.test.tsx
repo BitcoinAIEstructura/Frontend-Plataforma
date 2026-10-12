@@ -82,6 +82,23 @@ describe("aplicarEvento", () => {
     expect(invalidar).toHaveBeenCalledWith({ queryKey: CLAVES.ordenes });
   });
 
+  it("una decisión del bot guarda la señal y recarga el bot y el historial", () => {
+    const cliente = clienteDePrueba();
+    const invalidar = vi.spyOn(cliente, "invalidateQueries");
+    const decision = {
+      tiempo: 1,
+      senal: "MANTENER",
+      precio: 80000,
+      confianza: 0.25,
+      motivo: "gana MANTENER",
+    };
+    expect(aplicarEvento(cliente, "senal", JSON.stringify(decision))).toBe(true);
+    expect(cliente.getQueryData(CLAVES.senalBot)).toMatchObject({ senal: "MANTENER" });
+    expect(invalidar).toHaveBeenCalledWith({ queryKey: CLAVES.bot });
+    // La decisión queda como DECISION_BOT en el historial: "Lo que ha hecho el bot" la debe ver.
+    expect(invalidar).toHaveBeenCalledWith({ queryKey: CLAVES.historial });
+  });
+
   it("ignora eventos inválidos o desconocidos", () => {
     const cliente = clienteDePrueba();
     expect(aplicarEvento(cliente, "precio", "no es json")).toBe(false);

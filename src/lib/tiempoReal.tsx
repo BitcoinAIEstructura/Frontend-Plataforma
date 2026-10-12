@@ -53,6 +53,7 @@ export function aplicarEvento(cliente: QueryClient, tipo: string, texto: string)
       if (r.success) {
         cliente.setQueryData(CLAVES.senalBot, r.data);
         void cliente.invalidateQueries({ queryKey: CLAVES.bot });
+        void cliente.invalidateQueries({ queryKey: CLAVES.historial });
       }
       return r.success;
     }
