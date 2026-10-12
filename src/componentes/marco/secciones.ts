@@ -14,6 +14,7 @@ export const SECCIONES: readonly Seccion[] = [
   { ruta: "/ordenes", titulo: "Órdenes", icono: "⇅", lista: true, enTelefono: true },
   { ruta: "/cartera", titulo: "Cartera", icono: "◎", lista: true, enTelefono: false },
   { ruta: "/bot", titulo: "Bot", icono: "⚙", lista: true, enTelefono: false },
+  { ruta: "/liga", titulo: "Liga", icono: "♛", lista: true, enTelefono: false },
   { ruta: "/ia", titulo: "Predicciones IA", icono: "✦", lista: false, enTelefono: true },
   { ruta: "/como-funciona", titulo: "Cómo funciona", icono: "⬡", lista: true, enTelefono: false },
   { ruta: "/seguridad", titulo: "Seguridad", icono: "⛨", lista: true, enTelefono: true },
