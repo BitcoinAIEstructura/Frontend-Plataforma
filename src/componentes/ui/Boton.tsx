@@ -12,6 +12,15 @@ const VARIANTES: Record<VarianteBoton, string> = {
   peligro: "border border-error/60 text-error hover:bg-error/10",
 };
 
+/** Clases de un botón, para que un enlace (`<Link>`) se vea igual que un `<Boton>`. */
+export function clasesBoton(variante: VarianteBoton = "dorado", anchoCompleto = false): string {
+  return (
+    "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 font-semibold " +
+    "transition disabled:cursor-not-allowed disabled:opacity-55 " +
+    `${VARIANTES[variante]} ${anchoCompleto ? "w-full" : ""}`
+  );
+}
+
 export interface PropsBoton extends ButtonHTMLAttributes<HTMLButtonElement> {
   variante?: VarianteBoton;
   /** Muestra un indicador y deshabilita el botón mientras se espera al servidor. */
@@ -36,11 +45,7 @@ export function Boton({
       type={type}
       disabled={disabled || cargando}
       aria-busy={cargando || undefined}
-      className={
-        "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 font-semibold " +
-        "transition disabled:cursor-not-allowed disabled:opacity-55 " +
-        `${VARIANTES[variante]} ${anchoCompleto ? "w-full" : ""} ${className}`
-      }
+      className={`${clasesBoton(variante, anchoCompleto)} ${className}`}
       {...resto}
     >
       {variante === "dorado" && (

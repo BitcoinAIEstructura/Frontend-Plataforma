@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { Boton } from "./Boton";
+import { Boton, clasesBoton } from "./Boton";
 
 describe("Boton", () => {
   it("es un botón normal (no envía formularios por accidente) y responde al clic", async () => {
@@ -31,5 +31,14 @@ describe("Boton", () => {
   it("puede enviar un formulario si se le pide", () => {
     render(<Boton type="submit">Crear cuenta</Boton>);
     expect(screen.getByRole("button")).toHaveAttribute("type", "submit");
+  });
+
+  it("un enlace puede verse igual que un botón", () => {
+    render(
+      <a href="/ordenes" className={clasesBoton("contorno", true)}>
+        Ir
+      </a>,
+    );
+    expect(screen.getByRole("link")).toHaveClass("min-h-11", "border-oro/50", "w-full");
   });
 });
