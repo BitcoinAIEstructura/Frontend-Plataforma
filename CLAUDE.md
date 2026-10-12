@@ -26,6 +26,7 @@ Next.js 16 (App Router) con TypeScript estricto, Tailwind CSS 4, TanStack Query,
 - Oro champán como color principal y naranja Bitcoin para las acciones; violeta real para detalles.
 - Contraste: texto ≥ 4,5:1 y marcas gráficas ≥ 3:1.
 - Subida y bajada nunca se distinguen solo por color: llevan icono o texto.
+- Gráficas: solo los tokens `--grafica-*` (validados con el validador de paletas para ambos temas). Turquesa/rosa tiene un aviso de daltonismo (ΔE 6,6), así que siempre van con codificación secundaria: vela que sube hueca, que baja rellena, y ▲▼ en los textos. Una sola escala por gráfica (nunca dos ejes Y).
 - Animaciones respetan `prefers-reduced-motion`; la escena 3D tiene versión liviana.
 - Invitar a operar sí, engañar no: sin urgencias falsas ni botones confusos. El aviso "Simulación con datos reales del mercado; no es asesoría financiera" está visible.
 

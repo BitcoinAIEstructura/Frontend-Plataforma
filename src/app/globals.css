@@ -31,6 +31,13 @@
   --baja: #ff8095;
   --error: #ff7b7b;
   --exito: #4fd1c5;
+  /* Gráficas (marcas, no texto): validadas con el validador de paletas, banda OKLCH L 0,48–0,67. */
+  --grafica-sube: #139c8e;
+  --grafica-baja: #d9506b;
+  --grafica-serie-1: #b08a2c;
+  --grafica-serie-2: #8a6cf0;
+  --grafica-neutra: #6e6788;
+  --grafica-rejilla: #221f2e;
 }
 
 [data-theme="claro"] {
@@ -53,6 +60,12 @@
   --baja: #b42340;
   --error: #b42318;
   --exito: #0f766e;
+  --grafica-sube: #008a7b;
+  --grafica-baja: #c23a57;
+  --grafica-serie-1: #a07a1e;
+  --grafica-serie-2: #6a4fd6;
+  --grafica-neutra: #8a8398;
+  --grafica-rejilla: #efe9dc;
 }
 
 @theme inline {
@@ -74,6 +87,11 @@
   --color-baja: var(--baja);
   --color-error: var(--error);
   --color-exito: var(--exito);
+  --color-grafica-sube: var(--grafica-sube);
+  --color-grafica-baja: var(--grafica-baja);
+  --color-grafica-serie-1: var(--grafica-serie-1);
+  --color-grafica-serie-2: var(--grafica-serie-2);
+  --color-grafica-neutra: var(--grafica-neutra);
 
   --font-titulo: var(--fuente-titulo), system-ui, sans-serif;
   --font-texto: var(--fuente-texto), system-ui, sans-serif;

@@ -52,6 +52,14 @@ describe.each(["oscuro", "claro"] as const)("tema %s", (tema) => {
     },
   );
 
+  it.each(
+    ["grafica-sube", "grafica-baja", "grafica-serie-1", "grafica-serie-2", "grafica-neutra"].flatMap((m) =>
+      ["fondo", "superficie"].map((f) => [m, f] as const),
+    ),
+  )("la marca gráfica %s se distingue sobre %s (≥ 3:1)", (marca, fondo) => {
+    expect(contraste(c[marca]!, c[fondo]!)).toBeGreaterThanOrEqual(3);
+  });
+
   it("el texto de los botones dorados se lee (≥ 4,5:1)", () => {
     expect(contraste(c["sobre-oro"]!, c["oro"]!)).toBeGreaterThanOrEqual(4.5);
   });
