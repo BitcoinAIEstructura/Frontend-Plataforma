@@ -1,8 +1,8 @@
+import { redirect } from "next/navigation";
+
+import { INICIO_APP } from "@/lib/navegacion";
+
+/** La raíz lleva al panel; sin sesión, proxy.ts la manda antes a iniciar sesión. */
 export default function Inicio() {
-  return (
-    <main>
-      <h1>Nexabit</h1>
-      <p>Trading simulado de Bitcoin con inteligencia artificial.</p>
-    </main>
-  );
+  redirect(INICIO_APP);
 }
