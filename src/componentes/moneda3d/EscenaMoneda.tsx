@@ -18,7 +18,8 @@ function leerVioleta(): string {
   return getComputedStyle(document.documentElement).getPropertyValue("--violeta").trim() || "#9b7dff";
 }
 
-function Moneda({ colores }: { colores: ColoresMoneda }) {
+/** `brillo`: luz propia de las caras; más alta cuando no hay reflejos (versión liviana). */
+function Moneda({ colores, brillo }: { colores: ColoresMoneda; brillo: number }) {
   const grupo = useRef<Group>(null);
   const halo = useRef<Mesh>(null);
 
@@ -28,6 +29,9 @@ function Moneda({ colores }: { colores: ColoresMoneda }) {
     const textura = new CanvasTexture(lienzo);
     textura.colorSpace = SRGBColorSpace;
     textura.anisotropy = 8;
+    // Las tapas del cilindro giran la textura 90°; esto deja el ₿ derecho.
+    textura.center.set(0.5, 0.5);
+    textura.rotation = Math.PI / 2;
     return textura;
   }, [colores]);
 
@@ -53,15 +57,19 @@ function Moneda({ colores }: { colores: ColoresMoneda }) {
           attach="material-1"
           map={cara}
           color={cara ? "#ffffff" : colores.oro}
-          metalness={0.85}
-          roughness={0.28}
+          metalness={0.55}
+          roughness={0.3}
+          emissive={colores.oroProfundo}
+          emissiveIntensity={brillo}
         />
         <meshStandardMaterial
           attach="material-2"
           map={cara}
           color={cara ? "#ffffff" : colores.oro}
-          metalness={0.85}
-          roughness={0.28}
+          metalness={0.55}
+          roughness={0.3}
+          emissive={colores.oroProfundo}
+          emissiveIntensity={brillo}
         />
       </mesh>
       {/* Canto naranja Bitcoin. */}
@@ -90,23 +98,24 @@ export default function EscenaMoneda({ calidad }: { calidad: Exclude<Calidad, "e
       camera={{ position: [0, 0, 6.2], fov: 35 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
     >
-      <ambientLight intensity={0.35} />
-      <directionalLight position={[3, 4, 5]} intensity={2.4} color={colores.oroClaro} />
+      <ambientLight intensity={0.7} />
+      <directionalLight position={[3, 4, 5]} intensity={3.2} color={colores.oroClaro} />
       <pointLight position={[-3, -1.5, 2.5]} intensity={18} color={violeta} />
       <pointLight position={[3.2, -2, 2]} intensity={14} color={colores.bitcoin} />
       {ajustes.reflejos && (
         // Reflejos de "estudio" hechos con paneles de luz: no se descarga ningún archivo HDR.
         <Environment resolution={256}>
-          <Lightformer intensity={3} color={colores.oroClaro} position={[0, 5, -2]} scale={[10, 2, 1]} />
+          <Lightformer intensity={6} color={colores.oroClaro} position={[0, 5, -2]} scale={[10, 2, 1]} />
+          <Lightformer intensity={1.4} color="white" position={[0, 0, 6]} scale={[6, 6, 1]} />
           <Lightformer
-            intensity={2}
+            intensity={4}
             color={violeta}
             position={[-5, 0, 2]}
             rotation-y={Math.PI / 2}
             scale={[2, 8, 1]}
           />
           <Lightformer
-            intensity={2}
+            intensity={4}
             color={colores.bitcoin}
             position={[5, -1, 2]}
             rotation-y={-Math.PI / 2}
@@ -115,7 +124,7 @@ export default function EscenaMoneda({ calidad }: { calidad: Exclude<Calidad, "e
         </Environment>
       )}
       <Float speed={1.6} rotationIntensity={0.25} floatIntensity={0.9}>
-        <Moneda colores={colores} />
+        <Moneda colores={colores} brillo={ajustes.reflejos ? 0.18 : 0.42} />
       </Float>
       <Sparkles
         count={ajustes.particulas}
