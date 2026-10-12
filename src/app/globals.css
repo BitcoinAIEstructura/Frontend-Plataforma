@@ -74,11 +74,29 @@
   --color-baja: var(--baja);
   --color-error: var(--error);
   --color-exito: var(--exito);
+
+  --font-titulo: var(--fuente-titulo), system-ui, sans-serif;
+  --font-texto: var(--fuente-texto), system-ui, sans-serif;
+  --font-cifras: var(--fuente-cifras), ui-monospace, monospace;
 }
 
 html {
   background: var(--fondo);
   color: var(--texto);
+  font-family: var(--font-texto);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-titulo);
+  letter-spacing: -0.01em;
+}
+
+/* Precios y cantidades: monoespaciada con números tabulares (no "bailan" al cambiar). */
+@utility cifra {
+  font-family: var(--font-cifras);
+  font-variant-numeric: tabular-nums;
 }
 
 body {
