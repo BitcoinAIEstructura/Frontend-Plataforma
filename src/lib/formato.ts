@@ -60,3 +60,46 @@ export function describirAgente(agente: string): string {
   if (navegador && sistema) return `${navegador} en ${sistema}`;
   return navegador ?? sistema ?? "Dispositivo desconocido";
 }
+
+const USD = new Intl.NumberFormat("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const USD_COMPACTO = new Intl.NumberFormat("es-CO", { notation: "compact", maximumFractionDigits: 1 });
+const BTC = new Intl.NumberFormat("es-CO", { minimumFractionDigits: 4, maximumFractionDigits: 8 });
+const PORCENTAJE = new Intl.NumberFormat("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+const SIN_DATO = "—";
+
+/** "84.184,03" (USDT, con 2 decimales; "—" si falta). */
+export function usdt(valor: number | null | undefined): string {
+  return valor == null || !Number.isFinite(valor) ? SIN_DATO : USD.format(valor);
+}
+
+/** "12,6 mil" para ejes y espacios chicos. */
+export function usdtCompacto(valor: number): string {
+  return USD_COMPACTO.format(valor);
+}
+
+/** "0,0125" BTC (de 4 a 8 decimales). */
+export function btc(valor: number | null | undefined): string {
+  return valor == null || !Number.isFinite(valor) ? SIN_DATO : BTC.format(valor);
+}
+
+export type Sentido = "sube" | "baja" | "igual";
+
+export function sentido(valor: number): Sentido {
+  if (Math.abs(valor) < 1e-12) return "igual";
+  return valor > 0 ? "sube" : "baja";
+}
+
+/** Variación con signo e ícono: "▲ +2,40 %", "▼ −1,10 %" o "● 0,00 %" (fracción: 0,024 = 2,4 %). */
+export function variacion(fraccion: number): string {
+  const s = sentido(fraccion);
+  const icono = s === "sube" ? "▲" : s === "baja" ? "▼" : "●";
+  const signo = s === "sube" ? "+" : s === "baja" ? "−" : "";
+  return `${icono} ${signo}${PORCENTAJE.format(Math.abs(fraccion) * 100)} %`;
+}
+
+/** Ganancia en USDT con signo: "+125,50" / "−30,00". */
+export function conSigno(valor: number): string {
+  const s = sentido(valor);
+  return `${s === "sube" ? "+" : s === "baja" ? "−" : ""}${USD.format(Math.abs(valor))}`;
+}

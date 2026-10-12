@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
 
-import { describirAgente, fechaHora, haceCuanto } from "./formato";
+import {
+  btc,
+  conSigno,
+  describirAgente,
+  fechaHora,
+  haceCuanto,
+  usdt,
+  usdtCompacto,
+  variacion,
+} from "./formato";
 
 describe("formato", () => {
   it("fecha y hora en hora de Colombia (UTC-5)", () => {
@@ -36,5 +45,26 @@ describe("formato", () => {
     ["curl/8.21.0", "Dispositivo desconocido"],
   ])("%s → %s", (agente, esperado) => {
     expect(describirAgente(agente)).toBe(esperado);
+  });
+});
+
+describe("dinero y variaciones", () => {
+  it("USDT y BTC en formato colombiano", () => {
+    expect(usdt(84184.03)).toBe("84.184,03");
+    expect(usdt(null)).toBe("—");
+    expect(btc(0.0125)).toBe("0,0125");
+    expect(btc(0.00604171651)).toBe("0,00604172");
+  });
+
+  it("la variación lleva ícono y signo, no solo color", () => {
+    expect(variacion(0.024)).toBe("▲ +2,40 %");
+    expect(variacion(-0.011)).toBe("▼ −1,10 %");
+    expect(variacion(0)).toBe("● 0,00 %");
+    expect(conSigno(125.5)).toBe("+125,50");
+    expect(conSigno(-30)).toBe("−30,00");
+  });
+
+  it("compacto para ejes", () => {
+    expect(usdtCompacto(12600)).toMatch(/12,6/);
   });
 });
