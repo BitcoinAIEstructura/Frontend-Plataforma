@@ -29,10 +29,10 @@ function Fila({ c }: { c: Clasificado }) {
           </span>
         )}
       </td>
-      <td className={`cifra px-3 py-2 text-right font-semibold ${color(c.rentabilidad)}`}>
+      <td className={`cifra px-3 py-2 text-right font-semibold whitespace-nowrap ${color(c.rentabilidad)}`}>
         {variacion(c.rentabilidad)}
       </td>
-      <td className="cifra hidden px-3 py-2 text-right text-texto-secundario sm:table-cell">
+      <td className="cifra hidden px-3 py-2 text-right whitespace-nowrap text-texto-secundario sm:table-cell">
         {usdt(c.valorTotal)}
       </td>
     </tr>
