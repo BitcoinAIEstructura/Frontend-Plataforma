@@ -17,8 +17,8 @@ describe("Navegación", () => {
 
   it("las secciones futuras no son enlaces y dicen Pronto", () => {
     render(<BarraLateral />);
-    expect(screen.queryByRole("link", { name: /Mercado/ })).toBeNull();
-    expect(screen.getByText("Mercado").closest("[aria-disabled]")).toHaveTextContent("Pronto");
+    expect(screen.queryByRole("link", { name: /Órdenes/ })).toBeNull();
+    expect(screen.getByText("Órdenes").closest("[aria-disabled]")).toHaveTextContent("Pronto");
   });
 
   it("en el teléfono hay como máximo 5 secciones", () => {

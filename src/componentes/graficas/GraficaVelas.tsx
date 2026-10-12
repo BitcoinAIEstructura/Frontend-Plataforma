@@ -174,16 +174,18 @@ export function GraficaVelas({ velas, capas = [], alto = 420, titulo }: Props) {
           <span className="text-texto-atenuado">Sin velas todavía</span>
         )}
         <span className="flex items-center gap-3">
-          {capas.map((capa) => (
-            <span key={capa.id} className="flex items-center gap-1.5 text-xs text-texto-secundario">
-              <span
-                aria-hidden
-                className="h-0.5 w-4 rounded-full"
-                style={{ background: VARIABLE_CAPA[capa.color] }}
-              />
-              {capa.nombre}
-            </span>
-          ))}
+          {capas
+            .filter((capa) => capa.nombre)
+            .map((capa) => (
+              <span key={capa.id} className="flex items-center gap-1.5 text-xs text-texto-secundario">
+                <span
+                  aria-hidden
+                  className="h-0.5 w-4 rounded-full"
+                  style={{ background: VARIABLE_CAPA[capa.color] }}
+                />
+                {capa.nombre}
+              </span>
+            ))}
           <button
             type="button"
             onClick={() => setComoTabla((v) => !v)}
