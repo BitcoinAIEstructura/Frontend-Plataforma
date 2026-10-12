@@ -6,6 +6,7 @@ import { useEffect, type ReactNode } from "react";
 import { Logo, SimboloNexabit } from "@/componentes/marca/Logo";
 import { AvisoSimulacion } from "@/componentes/ui/AvisoSimulacion";
 import { Boton } from "@/componentes/ui/Boton";
+import { InterruptorTema } from "@/componentes/ui/InterruptorTema";
 import { useUsuarioActual } from "@/lib/hooks/useSesion";
 
 import { MenuUsuario } from "./MenuUsuario";
@@ -63,7 +64,10 @@ export function MarcoApp({ children }: { children: ReactNode }) {
               </span>
               <h1 className="text-xl font-semibold sm:text-2xl">{titulo}</h1>
             </div>
-            <MenuUsuario usuario={usuario} />
+            <div className="flex items-center gap-1">
+              <InterruptorTema />
+              <MenuUsuario usuario={usuario} />
+            </div>
           </header>
           <main className="flex flex-col gap-5">{children}</main>
           <AvisoSimulacion className="px-1" />

@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Logo } from "@/componentes/marca/Logo";
 import { MonedaBitcoin } from "@/componentes/moneda3d/MonedaBitcoin";
 import { AvisoSimulacion } from "@/componentes/ui/AvisoSimulacion";
+import { InterruptorTema } from "@/componentes/ui/InterruptorTema";
 
 const BENEFICIOS = [
   { icono: "◆", texto: "10 000 USDT de práctica al crear tu cuenta" },
@@ -13,7 +14,8 @@ const BENEFICIOS = [
 /** Inicio de sesión y registro: la moneda 3D a un lado y el formulario al otro. */
 export default function AccesoLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="fondo-aurora min-h-dvh">
+    <div className="fondo-aurora relative min-h-dvh">
+      <InterruptorTema className="absolute top-4 right-4 z-10" />
       <div className="mx-auto grid max-w-7xl content-start lg:min-h-dvh lg:grid-cols-[1.1fr_1fr] lg:content-stretch">
         <section
           aria-label="Bienvenida a Nexabit"
