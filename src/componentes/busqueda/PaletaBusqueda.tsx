@@ -161,7 +161,7 @@ export function PaletaBusqueda() {
                   setActivo(0);
                 }}
                 onKeyDown={alTeclearCasilla}
-                className="min-h-14 flex-1 bg-transparent text-base text-texto placeholder:text-texto-atenuado focus:outline-none"
+                className="min-h-14 flex-1 bg-transparent text-base text-texto placeholder:text-texto-atenuado focus:outline-none focus-visible:outline-none"
               />
               <kbd className="rounded border border-borde-fuerte px-1.5 text-[10px] text-texto-atenuado">
                 Esc
