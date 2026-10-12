@@ -25,11 +25,18 @@ export function CodigosRespaldo({
 }) {
   const [copiados, setCopiados] = useState(false);
   const [guardados, setGuardados] = useState(false);
+  const [sinPortapapeles, setSinPortapapeles] = useState(false);
 
   async function copiar() {
-    await navigator.clipboard?.writeText(textoParaGuardar(codigos));
-    setCopiados(true);
-    setGuardados(true);
+    try {
+      if (!navigator.clipboard) throw new Error("sin portapapeles");
+      await navigator.clipboard.writeText(textoParaGuardar(codigos));
+      setCopiados(true);
+      setGuardados(true);
+    } catch {
+      // El navegador puede negar el permiso: entonces no se dan por guardados.
+      setSinPortapapeles(true);
+    }
   }
 
   function descargar() {
@@ -71,6 +78,11 @@ export function CodigosRespaldo({
           Ya los guardé
         </Boton>
       </div>
+      {sinPortapapeles && (
+        <p role="alert" className="text-sm text-bitcoin">
+          Tu navegador no dejó copiar. Usa «Descargar .txt» o anótalos en un lugar seguro.
+        </p>
+      )}
     </div>
   );
 }

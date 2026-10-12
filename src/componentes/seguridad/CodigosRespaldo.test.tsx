@@ -30,6 +30,17 @@ describe("CodigosRespaldo", () => {
     expect(alTerminar).toHaveBeenCalledOnce();
   });
 
+  it("si el navegador niega copiar, lo dice y no los da por guardados", async () => {
+    const user = userEvent.setup();
+    vi.spyOn(navigator.clipboard, "writeText").mockRejectedValueOnce(
+      new DOMException("denegado", "NotAllowedError"),
+    );
+    render(<CodigosRespaldo codigos={CODIGOS} alTerminar={vi.fn()} />);
+    await user.click(screen.getByRole("button", { name: "Copiar" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Descargar .txt");
+    expect(screen.getByRole("button", { name: "Ya los guardé" })).toBeDisabled();
+  });
+
   it("el texto guardado explica qué son y advierte no compartirlos", () => {
     const texto = textoParaGuardar(CODIGOS);
     expect(texto).toContain("sirve una sola vez");
