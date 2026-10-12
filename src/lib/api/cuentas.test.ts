@@ -48,7 +48,9 @@ describe("cuentas", () => {
   it("usuario actual y rutas con id escapado", async () => {
     responder(200, { usuario: USUARIO });
     await expect(obtenerUsuarioActual()).resolves.toMatchObject({ nombre: "Ana" });
-    const fetchFalso = vi.fn(async (_ruta: string) => new Response(null, { status: 204 }));
+    const fetchFalso = vi.fn<(ruta: string) => Promise<Response>>(
+      async () => new Response(null, { status: 204 }),
+    );
     vi.stubGlobal("fetch", fetchFalso);
     await cerrarSesionPorId(7);
     expect(fetchFalso.mock.calls[0]?.[0]).toBe("/api/cuentas/sesiones/7");
