@@ -103,3 +103,8 @@ export function conSigno(valor: number): string {
   const s = sentido(valor);
   return `${s === "sube" ? "+" : s === "baja" ? "−" : ""}${USD.format(Math.abs(valor))}`;
 }
+
+/** Número con 2 decimales al estilo es-CO ("36,13"), para indicadores sin unidad. */
+export function numero(valor: number): string {
+  return Number.isFinite(valor) ? USD.format(valor) : SIN_DATO;
+}

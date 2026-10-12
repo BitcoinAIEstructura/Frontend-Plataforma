@@ -13,8 +13,9 @@ import { useEffect, useRef } from "react";
 
 import { useTema } from "@/componentes/ui/InterruptorTema";
 import type { Punto } from "@/lib/api/mercado";
+import { numero } from "@/lib/formato";
 
-import { aLineaGrafica, conAlfa, leerColoresGrafica, type ColoresGrafica } from "./datos";
+import { INTERACCION, aLineaGrafica, conAlfa, leerColoresGrafica, type ColoresGrafica } from "./datos";
 
 export interface SerieOscilador {
   id: string;
@@ -58,11 +59,12 @@ export function GraficaOscilador({ titulo, series, referencias = [], alto = 170 
     if (!contenedor.current) return;
     const nueva = createChart(contenedor.current, {
       autoSize: true,
+      ...INTERACCION,
       ...opcionesTema(leerColoresGrafica()),
       rightPriceScale: { borderVisible: false },
       timeScale: { borderVisible: false, timeVisible: true, secondsVisible: false },
       crosshair: { mode: CrosshairMode.Normal },
-      localization: { locale: "es-CO" },
+      localization: { locale: "es-CO", priceFormatter: numero },
     });
     grafica.current = nueva;
     const mapa = creadas.current;
@@ -135,7 +137,7 @@ export function GraficaOscilador({ titulo, series, referencias = [], alto = 170 
           ))}
         {series[0] && series[0].puntos.length > 0 && (
           <span className="cifra ml-auto text-texto">
-            {series[0].nombre}: {series[0].puntos.at(-1)!.valor.toFixed(2).replace(".", ",")}
+            {series[0].nombre}: {numero(series[0].puntos.at(-1)!.valor)}
           </span>
         )}
       </figcaption>

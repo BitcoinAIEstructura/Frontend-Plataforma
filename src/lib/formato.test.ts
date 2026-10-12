@@ -6,6 +6,7 @@ import {
   describirAgente,
   fechaHora,
   haceCuanto,
+  numero,
   usdt,
   usdtCompacto,
   variacion,
@@ -66,5 +67,11 @@ describe("dinero y variaciones", () => {
 
   it("compacto para ejes", () => {
     expect(usdtCompacto(12600)).toMatch(/12,6/);
+  });
+
+  it("números sin unidad con coma decimal", () => {
+    expect(numero(70)).toBe("70,00");
+    expect(numero(36.128)).toBe("36,13");
+    expect(numero(Number.NaN)).toBe("—");
   });
 });
