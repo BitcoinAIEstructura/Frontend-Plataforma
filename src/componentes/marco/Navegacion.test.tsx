@@ -6,6 +6,17 @@ import { SECCIONES } from "./secciones";
 
 const ruta = vi.hoisted(() => ({ actual: "/seguridad" }));
 vi.mock("next/navigation", () => ({ usePathname: () => ruta.actual }));
+// Hoy todas las secciones están listas: se agrega una futura para probar cómo se ve.
+vi.mock("./secciones", async (original) => {
+  const real = await original<typeof import("./secciones")>();
+  return {
+    ...real,
+    SECCIONES: [
+      ...real.SECCIONES,
+      { ruta: "/alertas", titulo: "Alertas", icono: "!", lista: false, enTelefono: false },
+    ],
+  };
+});
 
 describe("Navegación", () => {
   it("marca la sección actual y enlaza las que están listas", () => {
@@ -17,8 +28,9 @@ describe("Navegación", () => {
 
   it("las secciones futuras no son enlaces y dicen Pronto", () => {
     render(<BarraLateral />);
-    expect(screen.queryByRole("link", { name: /Predicciones IA/ })).toBeNull();
-    expect(screen.getByText("Predicciones IA").closest("[aria-disabled]")).toHaveTextContent("Pronto");
+    expect(screen.queryByRole("link", { name: /Alertas/ })).toBeNull();
+    expect(screen.getByText("Alertas").closest("[aria-disabled]")).toHaveTextContent("Pronto");
+    expect(screen.getByRole("link", { name: /Predicciones IA/ })).toHaveAttribute("href", "/ia");
   });
 
   it("en el teléfono hay como máximo 5 secciones", () => {
