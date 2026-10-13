@@ -29,73 +29,76 @@ export function GraficaExactitud({ modelos, comite }: { modelos: readonly Modelo
         Exactitud en las {comite.metricas.muestras} velas de prueba. La línea es la base: decir siempre lo que
         más pasó ({porcentaje(base)}).
       </figcaption>
-      <svg
-        viewBox={`0 0 ${ANCHO} ${alto}`}
-        className="w-full"
-        role="img"
-        aria-label={`Exactitud: ${todos.map((m) => `${m.nombre} ${porcentaje(m.metricas.exactitud)}`).join(", ")}; base ${porcentaje(base)}`}
-      >
-        {marcas.map((v) => (
-          <g key={v}>
-            <line x1={x(v)} x2={x(v)} y1={8} y2={alto - 24} stroke="var(--grafica-rejilla)" />
-            <text x={x(v)} y={alto - 8} textAnchor="middle" fontSize={11} fill="var(--texto-atenuado)">
-              {porcentaje(v)}
-            </text>
-          </g>
-        ))}
-        <line
-          x1={x(base)}
-          x2={x(base)}
-          y1={4}
-          y2={alto - 24}
-          stroke="var(--grafica-neutra)"
-          strokeWidth={2}
-          strokeDasharray="5 4"
-        />
-        {todos.map((m, i) => {
-          const y = 22 + i * FILA;
-          const gana = m.metricas.ventaja > 0;
-          return (
-            <g key={m.nombre}>
-              <text
-                x={IZQUIERDA - 12}
-                y={y}
-                textAnchor="end"
-                dominantBaseline="central"
-                fontSize={13}
-                fill="var(--texto)"
-              >
-                {m.nombre}
-              </text>
-              <line
-                x1={x(base)}
-                x2={x(m.metricas.exactitud)}
-                y1={y}
-                y2={y}
-                stroke="var(--borde-fuerte)"
-                strokeWidth={2}
-              />
-              <circle
-                cx={x(m.metricas.exactitud)}
-                cy={y}
-                r={7}
-                fill={gana ? "var(--grafica-sube)" : "var(--superficie)"}
-                stroke={gana ? "var(--grafica-sube)" : "var(--grafica-baja)"}
-                strokeWidth={2.5}
-              />
-              <text
-                x={ANCHO - DERECHA + 8}
-                y={y}
-                dominantBaseline="central"
-                fontSize={12}
-                fill="var(--texto-secundario)"
-              >
-                {porcentaje(m.metricas.exactitud)} {gana ? "▲" : "▼"}
+      {/* En el teléfono no se encoge por debajo de 460 px: se desliza, así el texto se sigue leyendo. */}
+      <div className="overflow-x-auto">
+        <svg
+          viewBox={`0 0 ${ANCHO} ${alto}`}
+          className="w-full min-w-[460px]"
+          role="img"
+          aria-label={`Exactitud: ${todos.map((m) => `${m.nombre} ${porcentaje(m.metricas.exactitud)}`).join(", ")}; base ${porcentaje(base)}`}
+        >
+          {marcas.map((v) => (
+            <g key={v}>
+              <line x1={x(v)} x2={x(v)} y1={8} y2={alto - 24} stroke="var(--grafica-rejilla)" />
+              <text x={x(v)} y={alto - 8} textAnchor="middle" fontSize={11} fill="var(--texto-atenuado)">
+                {porcentaje(v)}
               </text>
             </g>
-          );
-        })}
-      </svg>
+          ))}
+          <line
+            x1={x(base)}
+            x2={x(base)}
+            y1={4}
+            y2={alto - 24}
+            stroke="var(--grafica-neutra)"
+            strokeWidth={2}
+            strokeDasharray="5 4"
+          />
+          {todos.map((m, i) => {
+            const y = 22 + i * FILA;
+            const gana = m.metricas.ventaja > 0;
+            return (
+              <g key={m.nombre}>
+                <text
+                  x={IZQUIERDA - 12}
+                  y={y}
+                  textAnchor="end"
+                  dominantBaseline="central"
+                  fontSize={13}
+                  fill="var(--texto)"
+                >
+                  {m.nombre}
+                </text>
+                <line
+                  x1={x(base)}
+                  x2={x(m.metricas.exactitud)}
+                  y1={y}
+                  y2={y}
+                  stroke="var(--borde-fuerte)"
+                  strokeWidth={2}
+                />
+                <circle
+                  cx={x(m.metricas.exactitud)}
+                  cy={y}
+                  r={7}
+                  fill={gana ? "var(--grafica-sube)" : "var(--superficie)"}
+                  stroke={gana ? "var(--grafica-sube)" : "var(--grafica-baja)"}
+                  strokeWidth={2.5}
+                />
+                <text
+                  x={ANCHO - DERECHA + 8}
+                  y={y}
+                  dominantBaseline="central"
+                  fontSize={12}
+                  fill="var(--texto-secundario)"
+                >
+                  {porcentaje(m.metricas.exactitud)} {gana ? "▲" : "▼"}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
       <p className="text-xs text-texto-atenuado">
         Punto relleno ▲: le ganó a la base. Punto hueco ▼: no le ganó.
       </p>
