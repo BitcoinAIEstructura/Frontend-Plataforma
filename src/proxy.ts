@@ -15,6 +15,10 @@ export function proxy(peticion: NextRequest) {
 }
 
 export const config = {
-  // Todo menos la API (la reenvía next.config.ts), los archivos de Next y los íconos.
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|icon.svg|robots.txt).*)"],
+  // Todo menos la API (la reenvía next.config.ts), los archivos de Next, los íconos y lo
+  // que la app instalable (PWA) necesita sin sesión: el manifest, el service worker y la
+  // página "Sin conexión". Si se redirigieran, el navegador no podría instalarla.
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|icon.svg|robots.txt|manifest.webmanifest|sw.js|sin-conexion.html|iconos/).*)",
+  ],
 };
