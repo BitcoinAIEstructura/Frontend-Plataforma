@@ -1,4 +1,5 @@
 import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { renderizar, servidorFalso, USUARIO_PRUEBA } from "@/test/utilidades";
@@ -26,6 +27,21 @@ describe("MarcoApp", () => {
     expect(screen.getByRole("heading", { level: 1, name: "Seguridad" })).toBeInTheDocument();
     expect(screen.getByText("Ana Pérez")).toBeInTheDocument();
     expect(screen.getByRole("note")).toHaveTextContent("no se usa dinero real");
+  });
+
+  it("lo primero del teclado es saltar al contenido", async () => {
+    servidorFalso({ "GET /api/cuentas/yo": { estado: 200, cuerpo: { usuario: USUARIO_PRUEBA } } });
+    renderizar(
+      <MarcoApp>
+        <p>contenido privado</p>
+      </MarcoApp>,
+    );
+    await screen.findByText("contenido privado");
+    await userEvent.tab();
+    const salto = screen.getByRole("link", { name: "Saltar al contenido" });
+    expect(salto).toHaveFocus();
+    expect(salto).toHaveAttribute("href", "#contenido");
+    expect(screen.getByRole("main")).toHaveAttribute("id", "contenido");
   });
 
   it("sesión vencida: no muestra nada privado y manda a iniciar sesión", async () => {

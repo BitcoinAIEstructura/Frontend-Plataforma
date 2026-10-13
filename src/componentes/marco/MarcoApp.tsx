@@ -56,6 +56,13 @@ export function MarcoApp({ children }: { children: ReactNode }) {
   const titulo = seccionActiva(ruta)?.titulo ?? "Nexabit";
   return (
     <div className="fondo-aurora min-h-dvh">
+      {/* Lo primero que alcanza el teclado: saltar la navegación e ir directo al contenido. */}
+      <a
+        href="#contenido"
+        className="sr-only z-50 rounded-xl bg-oro px-4 py-2 font-semibold text-sobre-oro focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+      >
+        Saltar al contenido
+      </a>
       <div className="mx-auto flex max-w-[96rem] gap-6 p-3 sm:p-4">
         <BarraLateral />
         <div className="flex min-w-0 flex-1 flex-col gap-5 pb-24 lg:pb-4">
@@ -72,7 +79,9 @@ export function MarcoApp({ children }: { children: ReactNode }) {
               <MenuUsuario usuario={usuario} />
             </div>
           </header>
-          <main className="flex flex-col gap-5">{children}</main>
+          <main id="contenido" tabIndex={-1} className="flex flex-col gap-5 focus:outline-none">
+            {children}
+          </main>
           <AvisoSimulacion className="px-1" />
         </div>
       </div>
