@@ -53,6 +53,10 @@ Proyecto universitario de Estructuras de Datos. El backend (Python + FastAPI, co
 - **Páginas protegidas:** `src/proxy.ts` manda a iniciar sesión cuando no hay cookie. Después, cada página confirma con el backend quién está conectado.
 - **Sin open redirect:** `?siguiente=` solo acepta rutas internas.
 - **Validación de respuestas:** cada respuesta del backend se valida con zod.
+- **Encabezados de seguridad** (`src/lib/encabezados.ts`):
+  - Una política de contenido (CSP) que solo permite cargar cosas del mismo sitio y prohíbe meter la página en un iframe.
+  - `nosniff`, `Referrer-Policy`, `Permissions-Policy` y `Cross-Origin-Opener-Policy`.
+- **Cierre por inactividad:** tras 25 minutos sin tocar nada aparece «¿Sigues ahí?», y si no hay respuesta se cierra la sesión.
 
 ## Instalar y ejecutar
 
@@ -67,6 +71,8 @@ npm run dev
 ```
 
 Abre `http://localhost:3000`. Si el backend está en otra dirección, copia `.env.example` a `.env.local` y cambia `BACKEND_URL`.
+
+> **Ojo al compilar para producción:** Next.js fija el destino de `/api/*` en el momento de `npm run build`. `BACKEND_URL` tiene que estar definida al compilar, no solo al arrancar.
 
 Revisiones (las mismas que corre el CI):
 
