@@ -42,7 +42,9 @@ Proyecto universitario de Estructuras de Datos. El backend (Python + FastAPI, co
 - **¿Y si hubiera invertido?:** cuánto valdría hoy una compra hecha en una fecha del pasado, con el mejor y el peor momento para vender.
 - **Búsqueda Ctrl + K:** páginas, acciones, indicadores y conceptos mientras escribes. La responde un trie del backend.
 
-Las predicciones de la IA llegan en la próxima fase.
+- **Predicciones IA:** regresión logística, árbol de decisión y k vecinos (hechos a mano en el backend), más un comité que los combina. Para cada uno se ve:
+  - Qué cree de la próxima vela y por qué: el aporte de cada característica, el camino del árbol o las velas más parecidas del pasado.
+  - Cómo le fue con datos que no vio, frente a la **base** de decir siempre lo que más pasó. Si no le ganó, la página lo advierte claramente.
 
 ## Seguridad en el navegador
 
@@ -97,6 +99,7 @@ npm run build
 | `src/componentes/panel`, `mercado`, `ordenes`, `cartera`, `bot`, `liga` | Las pantallas de la plataforma |
 | `src/componentes/estructuras` | "Cómo funciona": dibujos de árboles, vistas de cada estructura y el laboratorio |
 | `src/componentes/busqueda` | La búsqueda Ctrl + K |
+| `src/componentes/ia` | Predicciones IA: comité, modelos, evaluación y el árbol por dentro |
 | `src/componentes/ui` | Botón, Campo, Tarjeta, Segmentado, tema y Aviso |
 | `src/lib/api` | Cliente de la API y esquemas zod |
 | `src/lib/hooks` | Datos con TanStack Query (sesión, mercado y simulación) |
