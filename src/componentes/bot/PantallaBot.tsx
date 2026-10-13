@@ -5,6 +5,7 @@ import { useAccionesBot, useBot, useHistorial } from "@/lib/hooks/useDatos";
 
 import { ActividadBot, EstadoBot } from "./EstadoBot";
 import { FormularioBot } from "./FormularioBot";
+import { MaquinaDelTiempo } from "./MaquinaDelTiempo";
 
 /** Bot: ajustes y encendido a la izquierda; estado y actividad a la derecha. */
 export function PantallaBot() {
@@ -61,6 +62,9 @@ export function PantallaBot() {
       <div className="flex flex-col gap-5 lg:col-span-3">
         <EstadoBot estado={bot.data} />
         <ActividadBot eventos={historial.data ?? []} />
+      </div>
+      <div className="lg:col-span-5">
+        <MaquinaDelTiempo />
       </div>
     </div>
   );
