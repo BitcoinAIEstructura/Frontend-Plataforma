@@ -40,6 +40,9 @@ Proyecto universitario de Estructuras de Datos. El backend (Python + FastAPI, co
   - Un laboratorio que corre el código del backend paso a paso: rotaciones del AVL, rehash de la tabla, el anillo que pisa al más viejo.
 - **Liga de inversores:** los 10 mejores por rentabilidad, cada uno con un alias (nadie ve tu nombre), y tu puesto.
 - **¿Y si hubiera invertido?:** cuánto valdría hoy una compra hecha en una fecha del pasado, con el mejor y el peor momento para vender.
+- **Alertas de precio:** «avísame cuando suba o baje a…». Llega un aviso en cualquier página cuando se cumple. El backend las guarda en dos montículos.
+- **Máquina del tiempo:** el bot sobre un periodo pasado (un mes, seis meses o dos años), comparado con comprar y no hacer nada. También muestra la prueba "sin trampa", con velas que no se usaron para elegir.
+- **Se instala como app (PWA):** en el teléfono o el portátil, con su ícono y una página «Sin conexión» si no hay red.
 - **Búsqueda Ctrl + K:** páginas, acciones, indicadores y conceptos mientras escribes. La responde un trie del backend.
 
 - **Predicciones IA:** regresión logística, árbol de decisión y k vecinos (hechos a mano en el backend), más un comité que los combina. Para cada uno se ve:
