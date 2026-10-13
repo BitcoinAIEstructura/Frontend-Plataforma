@@ -21,7 +21,9 @@ function mensajeDe(error: unknown): string {
  */
 export function FormularioInicio() {
   const router = useRouter();
-  const destino = destinoSeguro(useSearchParams().get("siguiente"));
+  const parametros = useSearchParams();
+  const destino = destinoSeguro(parametros.get("siguiente"));
+  const porInactividad = parametros.get("motivo") === "inactividad";
   const iniciar = useIniciarSesion();
   const enviarCodigo = useEnviarCodigo();
   const [paso, setPaso] = useState<"credenciales" | "codigo">("credenciales");
@@ -111,6 +113,11 @@ export function FormularioInicio() {
           Entra para ver tu cartera, tus órdenes y lo que la IA ve en el mercado.
         </p>
       </header>
+      {porInactividad && (
+        <p role="status" className="rounded-xl border border-violeta/50 bg-violeta/10 px-4 py-3 text-sm">
+          Cerramos tu sesión porque no la usaste por un rato. Vuelve a entrar cuando quieras.
+        </p>
+      )}
       <Campo
         etiqueta="Correo"
         type="email"

@@ -6,16 +6,25 @@ import { renderizar, servidorFalso, USUARIO_PRUEBA } from "@/test/utilidades";
 
 import { FormularioInicio } from "./FormularioInicio";
 
-const navegacion = vi.hoisted(() => ({ replace: vi.fn(), siguiente: null as string | null }));
+const navegacion = vi.hoisted(() => ({
+  replace: vi.fn(),
+  siguiente: null as string | null,
+  motivo: null as string | null,
+}));
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ replace: navegacion.replace, push: vi.fn() }),
-  useSearchParams: () => new URLSearchParams(navegacion.siguiente ? { siguiente: navegacion.siguiente } : {}),
+  useSearchParams: () =>
+    new URLSearchParams({
+      ...(navegacion.siguiente ? { siguiente: navegacion.siguiente } : {}),
+      ...(navegacion.motivo ? { motivo: navegacion.motivo } : {}),
+    }),
 }));
 
 beforeEach(() => {
   navegacion.replace.mockReset();
   navegacion.siguiente = null;
+  navegacion.motivo = null;
 });
 afterEach(() => vi.unstubAllGlobals());
 
@@ -26,6 +35,12 @@ async function escribirCredenciales(correo = "ana@correo.co", contrasena = "Luna
 }
 
 describe("FormularioInicio", () => {
+  it("explica si la sesión se cerró por inactividad", () => {
+    navegacion.motivo = "inactividad";
+    renderizar(<FormularioInicio />);
+    expect(screen.getByRole("status")).toHaveTextContent("no la usaste por un rato");
+  });
+
   it("con credenciales correctas entra y va al destino pedido", async () => {
     navegacion.siguiente = "/cartera";
     const servidor = servidorFalso({

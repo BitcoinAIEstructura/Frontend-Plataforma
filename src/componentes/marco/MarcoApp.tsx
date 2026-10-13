@@ -10,6 +10,7 @@ import { Boton } from "@/componentes/ui/Boton";
 import { InterruptorTema } from "@/componentes/ui/InterruptorTema";
 import { useUsuarioActual } from "@/lib/hooks/useSesion";
 
+import { AvisoInactividad } from "./AvisoInactividad";
 import { MenuUsuario } from "./MenuUsuario";
 import { BarraInferior, BarraLateral } from "./Navegacion";
 import { seccionActiva } from "./secciones";
@@ -76,6 +77,7 @@ export function MarcoApp({ children }: { children: ReactNode }) {
         </div>
       </div>
       <BarraInferior />
+      <AvisoInactividad />
     </div>
   );
 }

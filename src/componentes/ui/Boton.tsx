@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode, Ref } from "react";
 
 export type VarianteBoton = "dorado" | "contorno" | "fantasma" | "peligro";
 
@@ -27,6 +27,8 @@ export interface PropsBoton extends ButtonHTMLAttributes<HTMLButtonElement> {
   cargando?: boolean;
   anchoCompleto?: boolean;
   icono?: ReactNode;
+  /** Para darle el foco desde afuera (en React 19 ref es una prop más). */
+  ref?: Ref<HTMLButtonElement>;
 }
 
 export function Boton({
