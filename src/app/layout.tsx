@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
 import { Proveedores } from "@/componentes/Proveedores";
+import { RegistroPwa } from "@/componentes/RegistroPwa";
 import { SCRIPT_TEMA } from "@/componentes/ui/InterruptorTema";
 
 import { variablesDeFuentes } from "./fuentes";
@@ -10,7 +11,11 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Nexabit",
   description: "Trading simulado de Bitcoin con inteligencia artificial. Sin dinero real.",
+  appleWebApp: { capable: true, title: "Nexabit", statusBarStyle: "black-translucent" },
+  icons: { apple: "/iconos/nexabit-192.png" },
 };
+
+export const viewport: Viewport = { themeColor: "#07060b", width: "device-width", initialScale: 1 };
 
 export default function RaizLayout({ children }: { children: ReactNode }) {
   return (
@@ -21,6 +26,7 @@ export default function RaizLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <Proveedores>{children}</Proveedores>
+        <RegistroPwa />
       </body>
     </html>
   );
