@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import { TarjetaAlertas } from "@/componentes/alertas/TarjetaAlertas";
 import { GraficaOscilador, type SerieOscilador } from "@/componentes/graficas/GraficaOscilador";
 import { GraficaVelas, type Capa } from "@/componentes/graficas/GraficaVelas";
 import { Segmentado } from "@/componentes/ui/Segmentado";
@@ -171,6 +172,8 @@ export function PantallaMercado() {
           referencias={oscilador === "rsi" ? [30, 70] : [0]}
         />
       </Tarjeta>
+
+      <TarjetaAlertas />
     </div>
   );
 }

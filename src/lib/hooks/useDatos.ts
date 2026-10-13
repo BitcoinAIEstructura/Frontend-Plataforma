@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { cancelarAlerta, crearAlerta, obtenerAlertas, type Alerta } from "@/lib/api/alertas";
 import { obtenerEstructuras } from "@/lib/api/estructuras";
 import { obtenerPredicciones, type IntervaloIA } from "@/lib/api/ia";
 import { obtenerLiga } from "@/lib/api/liga";
@@ -110,6 +111,24 @@ export function useLiga() {
     queryFn: ({ signal }) => obtenerLiga(signal),
     refetchInterval: 60_000,
   });
+}
+
+// ---------- alertas de precio ----------
+
+export function useAlertas() {
+  return useQuery({ queryKey: CLAVES.alertas, queryFn: ({ signal }) => obtenerAlertas(signal) });
+}
+
+export function useAccionesAlertas() {
+  const cliente = useQueryClient();
+  const recargar = () => cliente.invalidateQueries({ queryKey: CLAVES.alertas });
+  return {
+    crear: useMutation({
+      mutationFn: ({ tipo, precio }: { tipo: Alerta["tipo"]; precio: number }) => crearAlerta(tipo, precio),
+      onSettled: recargar,
+    }),
+    cancelar: useMutation({ mutationFn: (id: number) => cancelarAlerta(id), onSettled: recargar }),
+  };
 }
 
 // ---------- inteligencia artificial ----------
