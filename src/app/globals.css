@@ -193,6 +193,18 @@ body {
 }
 
 /* Destello que recorre los botones dorados. */
+/* Los avisos entran subiendo un poco (solo si no se pidió menos movimiento: motion-safe). */
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes destello {
   from {
     transform: translateX(-120%) skewX(-20deg);
