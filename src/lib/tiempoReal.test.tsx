@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { clienteDePrueba } from "@/test/utilidades";
 
-import { aplicarEvento, CLAVES, ProveedorTiempoReal, useEstadoConexion } from "./tiempoReal";
+import { aplicarEvento, CLAVES, ProveedorTiempoReal, textoAlerta, useEstadoConexion } from "./tiempoReal";
 
 class EventSourceFalso {
   static ultima: EventSourceFalso | null = null;
@@ -97,6 +97,29 @@ describe("aplicarEvento", () => {
     expect(invalidar).toHaveBeenCalledWith({ queryKey: CLAVES.bot });
     // La decisión queda como DECISION_BOT en el historial: "Lo que ha hecho el bot" la debe ver.
     expect(invalidar).toHaveBeenCalledWith({ queryKey: CLAVES.historial });
+  });
+
+  it("una alerta cumplida recarga la lista y avisa con su texto", () => {
+    const cliente = clienteDePrueba();
+    const invalidar = vi.spyOn(cliente, "invalidateQueries");
+    const avisos: string[] = [];
+    const alerta = {
+      id: 3,
+      tipo: "BAJA_A",
+      precio: 75000,
+      estado: "DISPARADA",
+      creadaEn: 1,
+      disparadaEn: 2,
+      precioDisparo: 74980.5,
+    };
+    expect(
+      aplicarEvento(cliente, "alerta", JSON.stringify(alerta), (a) => avisos.push(textoAlerta(a).titulo)),
+    ).toBe(true);
+    expect(invalidar).toHaveBeenCalledWith({ queryKey: CLAVES.alertas });
+    expect(avisos).toEqual(["▼ El BTC bajó a 75.000,00"]);
+    expect(textoAlerta({ ...alerta, tipo: "SUBE_A", estado: "DISPARADA" }).texto).toBe(
+      "Tu alerta se cumplió: ahora está en 74.980,50 USDT.",
+    );
   });
 
   it("ignora eventos inválidos o desconocidos", () => {

@@ -3,6 +3,8 @@
 import { useQueryClient, type QueryClient } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
+import { useAvisos } from "@/componentes/ui/Avisos";
+import { esquemaAlerta, type Alerta } from "@/lib/api/alertas";
 import { esquemaDecision, esquemaPrecio } from "@/lib/api/mercado";
 import { esquemaCartera, esquemaOrden } from "@/lib/api/simulacion";
 
@@ -14,6 +16,7 @@ export const CLAVES = {
   historial: ["simulacion", "historial"] as const,
   bot: ["simulacion", "bot"] as const,
   senalBot: ["simulacion", "senal-bot"] as const,
+  alertas: ["alertas"] as const,
 };
 
 export type EstadoConexion = "conectando" | "en-vivo" | "reconectando";
@@ -22,7 +25,12 @@ export type EstadoConexion = "conectando" | "en-vivo" | "reconectando";
  * Aplica un evento del stream a la caché. Devuelve false si el evento no es válido
  * (se ignora en vez de romper la pantalla).
  */
-export function aplicarEvento(cliente: QueryClient, tipo: string, texto: string): boolean {
+export function aplicarEvento(
+  cliente: QueryClient,
+  tipo: string,
+  texto: string,
+  alCumplirseAlerta?: (alerta: Alerta) => void,
+): boolean {
   let datos: unknown;
   try {
     datos = JSON.parse(texto);
@@ -57,9 +65,28 @@ export function aplicarEvento(cliente: QueryClient, tipo: string, texto: string)
       }
       return r.success;
     }
+    case "alerta": {
+      const r = esquemaAlerta.safeParse(datos);
+      if (r.success) {
+        void cliente.invalidateQueries({ queryKey: CLAVES.alertas });
+        alCumplirseAlerta?.(r.data);
+      }
+      return r.success;
+    }
     default:
       return false;
   }
+}
+
+const PRECIO = new Intl.NumberFormat("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+/** El texto del aviso cuando se cumple una alerta. */
+export function textoAlerta(alerta: Alerta): { titulo: string; texto: string } {
+  const sube = alerta.tipo === "SUBE_A";
+  return {
+    titulo: `${sube ? "▲" : "▼"} El BTC ${sube ? "subió" : "bajó"} a ${PRECIO.format(alerta.precio)}`,
+    texto: `Tu alerta se cumplió: ahora está en ${PRECIO.format(alerta.precioDisparo ?? alerta.precio)} USDT.`,
+  };
 }
 
 const ContextoConexion = createContext<EstadoConexion>("conectando");
@@ -75,14 +102,16 @@ export function useEstadoConexion(): EstadoConexion {
  */
 export function ProveedorTiempoReal({ children }: { children: ReactNode }) {
   const cliente = useQueryClient();
+  const avisar = useAvisos();
   const [estado, setEstado] = useState<EstadoConexion>("conectando");
 
   useEffect(() => {
     if (typeof EventSource === "undefined") return;
     const fuente = new EventSource("/api/stream", { withCredentials: true });
-    const tipos = ["precio", "cartera", "orden", "senal"] as const;
+    const tipos = ["precio", "cartera", "orden", "senal", "alerta"] as const;
     const oyentes = tipos.map((tipo) => {
-      const oyente = (e: MessageEvent<string>) => aplicarEvento(cliente, tipo, e.data);
+      const oyente = (e: MessageEvent<string>) =>
+        aplicarEvento(cliente, tipo, e.data, (a) => avisar({ tipo: "alerta", ...textoAlerta(a) }));
       fuente.addEventListener(tipo, oyente);
       return [tipo, oyente] as const;
     });
@@ -93,7 +122,7 @@ export function ProveedorTiempoReal({ children }: { children: ReactNode }) {
       for (const [tipo, oyente] of oyentes) fuente.removeEventListener(tipo, oyente);
       fuente.close();
     };
-  }, [cliente]);
+  }, [cliente, avisar]);
 
   return <ContextoConexion.Provider value={estado}>{children}</ContextoConexion.Provider>;
 }

@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 
+import { ProveedorAvisos } from "@/componentes/ui/Avisos";
 import { ErrorApi } from "@/lib/api/cliente";
 
 /** Reintentar solo lo que puede arreglarse solo: fallas de red o del servidor (no 4xx). */
@@ -23,5 +24,9 @@ export function crearClienteDeConsultas(): QueryClient {
 export function Proveedores({ children }: { children: ReactNode }) {
   // Un cliente por pestaña (no compartido entre peticiones del servidor).
   const [cliente] = useState(crearClienteDeConsultas);
-  return <QueryClientProvider client={cliente}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={cliente}>
+      <ProveedorAvisos>{children}</ProveedorAvisos>
+    </QueryClientProvider>
+  );
 }
