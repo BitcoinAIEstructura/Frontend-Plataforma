@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { obtenerEstructuras } from "@/lib/api/estructuras";
+import { obtenerPredicciones, type IntervaloIA } from "@/lib/api/ia";
 import { obtenerLiga } from "@/lib/api/liga";
 import {
   obtenerIndicador,
@@ -108,6 +109,19 @@ export function useLiga() {
     queryKey: ["liga"],
     queryFn: ({ signal }) => obtenerLiga(signal),
     refetchInterval: 60_000,
+  });
+}
+
+// ---------- inteligencia artificial ----------
+
+/** El backend reentrena cada 10 minutos; antes de eso la respuesta es la misma. */
+export function usePredicciones(intervalo: IntervaloIA) {
+  return useQuery({
+    queryKey: ["ia", intervalo],
+    queryFn: ({ signal }) => obtenerPredicciones(intervalo, signal),
+    staleTime: 5 * 60_000,
+    refetchInterval: 10 * 60_000,
+    placeholderData: (anterior) => anterior,
   });
 }
 
