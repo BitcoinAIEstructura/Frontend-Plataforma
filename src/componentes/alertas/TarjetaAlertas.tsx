@@ -5,6 +5,7 @@ import { useState, type FormEvent } from "react";
 import { leerMonto } from "@/componentes/ordenes/calculos";
 import { Boton } from "@/componentes/ui/Boton";
 import { Campo } from "@/componentes/ui/Campo";
+import { Confirmar } from "@/componentes/ui/Dialogo";
 import { Segmentado } from "@/componentes/ui/Segmentado";
 import { Tarjeta } from "@/componentes/ui/Tarjeta";
 import type { Alerta } from "@/lib/api/alertas";
@@ -30,6 +31,7 @@ export function TarjetaAlertas() {
   const [tipo, setTipo] = useState<Alerta["tipo"]>("SUBE_A");
   const [texto, setTexto] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [aBorrar, setABorrar] = useState<Alerta | null>(null);
   const precio = usePrecio();
   const alertas = useAlertas();
   const { crear, cancelar } = useAccionesAlertas();
@@ -117,11 +119,14 @@ export function TarjetaAlertas() {
               </span>
               <button
                 type="button"
-                onClick={() => cancelar.mutate(a.id)}
-                className="rounded-lg px-2 py-1 text-texto-secundario hover:bg-error/10 hover:text-error"
-                aria-label={`Cancelar la alerta: ${describirAlerta(a)}`}
+                onClick={() => {
+                  cancelar.reset();
+                  setABorrar(a);
+                }}
+                className="min-h-9 rounded-lg px-3 text-texto-secundario hover:bg-error/10 hover:text-error"
+                aria-label={`Borrar la alerta: ${describirAlerta(a)}`}
               >
-                Cancelar
+                Borrar
               </button>
             </li>
           ))}
@@ -139,6 +144,26 @@ export function TarjetaAlertas() {
           </ul>
         </div>
       )}
+      <Confirmar
+        abierto={aBorrar !== null}
+        alCancelar={() => setABorrar(null)}
+        alConfirmar={() => aBorrar && cancelar.mutate(aBorrar.id, { onSuccess: () => setABorrar(null) })}
+        cargando={cancelar.isPending}
+        error={cancelar.isError ? cancelar.error.message : null}
+        titulo="¿Borrar esta alerta?"
+        descripcion={
+          aBorrar && (
+            <p>
+              Ya no te avisaremos cuando el BTC{" "}
+              <strong className="font-semibold text-texto">
+                {aBorrar.tipo === "SUBE_A" ? "suba" : "baje"} a {usdt(aBorrar.precio)} USDT
+              </strong>
+              . Si la quieres otra vez, tendrás que crearla de nuevo.
+            </p>
+          )
+        }
+        confirmar="Sí, borrar la alerta"
+      />
     </Tarjeta>
   );
 }

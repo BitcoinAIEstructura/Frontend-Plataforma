@@ -53,7 +53,7 @@ describe("TarjetaAlertas", () => {
     expect(cuerpos).toEqual([]);
   });
 
-  it("lista las activas para cancelarlas y las cumplidas", async () => {
+  it("lista las activas para borrarlas (con confirmación) y las cumplidas", async () => {
     const { fetch } = servidor([alerta(1, "BAJA_A", 75_000), alerta(2, "SUBE_A", 79_000, "DISPARADA")]);
     renderizar(<TarjetaAlertas />);
     const activas = await screen.findByRole("list", { name: "Alertas activas" });
@@ -61,7 +61,11 @@ describe("TarjetaAlertas", () => {
     expect(screen.getByRole("list", { name: "Alertas cumplidas" })).toHaveTextContent(
       "▲ Suba a 79.000,00 · se cumplió a 79.010,00",
     );
-    await userEvent.click(within(activas).getByRole("button", { name: /Cancelar la alerta/ }));
+    await userEvent.click(within(activas).getByRole("button", { name: /Borrar la alerta/ }));
+    const ventana = screen.getByRole("alertdialog", { name: "¿Borrar esta alerta?" });
+    expect(ventana).toHaveTextContent("baje a 75.000,00 USDT");
+    expect(fetch).not.toHaveBeenCalledWith("/api/alertas/1", expect.anything());
+    await userEvent.click(within(ventana).getByRole("button", { name: "Sí, borrar la alerta" }));
     await waitFor(() =>
       expect(fetch).toHaveBeenCalledWith("/api/alertas/1", expect.objectContaining({ method: "DELETE" })),
     );
