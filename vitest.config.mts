@@ -12,7 +12,8 @@ export default defineConfig({
     include: ["src/**/*.test.{ts,tsx}"],
     css: false,
     // Las pruebas de formularios escriben letra por letra (como una persona) y tardan
-    // unos 5 s; con el límite por defecto (5 s) fallaban a veces en equipos cargados.
-    testTimeout: 15_000,
+    // unos 5 s; con el límite por defecto (5 s) fallaban a veces en equipos cargados, y con
+    // el servidor de desarrollo y otros programas abiertos el registro pasó de 15 s.
+    testTimeout: 30_000,
   },
 });
