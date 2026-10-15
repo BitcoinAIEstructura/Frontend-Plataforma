@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 import { Logo } from "@/componentes/marca/Logo";
+import { Dialogo } from "@/componentes/ui/Dialogo";
 
 import { SECCIONES, seccionActiva, type Seccion } from "./secciones";
 
@@ -62,17 +64,64 @@ export function BarraLateral() {
   );
 }
 
-/** Barra inferior del teléfono (oculta en el portátil). */
+/** Barra inferior del teléfono (oculta en el portátil): 4 secciones y «Más» con todas. */
 export function BarraInferior() {
   const activa = seccionActiva(usePathname());
+  const [mas, setMas] = useState(false);
+  const activaEnMas = activa !== undefined && !activa.enTelefono;
   return (
-    <nav
-      aria-label="Secciones"
-      className="vidrio fixed inset-x-2 bottom-2 z-40 flex gap-1 rounded-2xl p-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))] lg:hidden"
-    >
-      {SECCIONES.filter((s) => s.enTelefono).map((s) => (
-        <Elemento key={s.ruta} seccion={s} activa={s === activa} compacto />
-      ))}
-    </nav>
+    <>
+      <nav
+        aria-label="Secciones"
+        className="vidrio fixed inset-x-2 bottom-2 z-40 flex gap-1 rounded-2xl p-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))] lg:hidden"
+      >
+        {SECCIONES.filter((s) => s.enTelefono).map((s) => (
+          <Elemento key={s.ruta} seccion={s} activa={s === activa} compacto />
+        ))}
+        <button
+          type="button"
+          onClick={() => setMas(true)}
+          aria-haspopup="dialog"
+          className={
+            "flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl text-[11px] font-medium transition " +
+            (activaEnMas
+              ? "bg-oro/12 text-oro"
+              : "text-texto-secundario hover:bg-superficie-alta hover:text-texto")
+          }
+        >
+          <span aria-hidden className="text-base">
+            ☰
+          </span>
+          <span>Más</span>
+        </button>
+      </nav>
+      <Dialogo abierto={mas} alCerrar={() => setMas(false)} titulo="Todas las secciones">
+        <nav aria-label="Todas las secciones">
+          <ul className="flex flex-col gap-1">
+            {SECCIONES.filter((s) => s.lista).map((s) => (
+              <li key={s.ruta}>
+                <Link
+                  href={s.ruta}
+                  onClick={() => setMas(false)}
+                  aria-current={s === activa ? "page" : undefined}
+                  className={
+                    "flex items-start gap-3 rounded-xl px-3 py-2.5 transition " +
+                    (s === activa ? "bg-oro/12 text-oro" : "hover:bg-superficie-alta")
+                  }
+                >
+                  <span aria-hidden className="mt-0.5 text-lg">
+                    {s.icono}
+                  </span>
+                  <span className="flex flex-col">
+                    <span className="font-semibold text-texto">{s.titulo}</span>
+                    <span className="text-sm text-texto-secundario">{s.descripcion}</span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </Dialogo>
+    </>
   );
 }
