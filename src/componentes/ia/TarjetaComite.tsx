@@ -31,13 +31,14 @@ export function ArcoProbabilidad({ probabilidad, nombre }: { probabilidad: numbe
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={valor}
-        aria-valuetext={`${valor} % de que suba`}
+        aria-valuetext={`${porcentaje(probabilidad)} de que suba`}
         className="-mt-14 flex flex-col items-center"
       >
         <span className={`text-2xl font-semibold ${sube ? "text-sube" : "text-baja"}`}>
           <span aria-hidden>{sube ? "▲" : "▼"}</span> {sube ? "Sube" : "Baja"}
         </span>
-        <span className="cifra text-sm text-texto-secundario">{valor} % de que suba</span>
+        {/* El mismo redondeo que el resto de la página (50,7 %, no 51 %). */}
+        <span className="cifra text-sm text-texto-secundario">{porcentaje(probabilidad)} de que suba</span>
       </div>
     </div>
   );
