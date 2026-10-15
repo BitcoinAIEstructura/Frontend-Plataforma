@@ -25,6 +25,7 @@ describe("MarcoApp", () => {
     );
     expect(await screen.findByText("contenido privado")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 1, name: "Seguridad" })).toBeInTheDocument();
+    expect(screen.getByText(/Protege tu cuenta/)).toBeInTheDocument();
     expect(screen.getByText("Ana Pérez")).toBeInTheDocument();
     expect(screen.getByRole("note")).toHaveTextContent("no se usa dinero real");
   });

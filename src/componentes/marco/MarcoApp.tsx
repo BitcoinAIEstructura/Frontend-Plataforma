@@ -9,6 +9,7 @@ import { Logo, SimboloNexabit } from "@/componentes/marca/Logo";
 import { AvisoSimulacion } from "@/componentes/ui/AvisoSimulacion";
 import { Boton } from "@/componentes/ui/Boton";
 import { InterruptorTema } from "@/componentes/ui/InterruptorTema";
+import { useDesplazarAlAncla } from "@/lib/hooks/useAncla";
 import { useUsuarioActual } from "@/lib/hooks/useSesion";
 
 import { AvisoInactividad } from "./AvisoInactividad";
@@ -35,6 +36,7 @@ export function MarcoApp({ children }: { children: ReactNode }) {
   const router = useRouter();
   const ruta = usePathname();
   const { usuario, cargando, sinSesion, error } = useUsuarioActual();
+  useDesplazarAlAncla(Boolean(usuario));
 
   useEffect(() => {
     if (sinSesion) router.replace(`/iniciar-sesion?siguiente=${encodeURIComponent(ruta)}`);
@@ -54,7 +56,8 @@ export function MarcoApp({ children }: { children: ReactNode }) {
   }
   if (cargando || !usuario) return <Cargando />;
 
-  const titulo = seccionActiva(ruta)?.titulo ?? "Nexabit";
+  const seccion = seccionActiva(ruta);
+  const titulo = seccion?.titulo ?? "Nexabit";
   return (
     <div className="fondo-aurora min-h-dvh">
       {/* Lo primero que alcanza el teclado: saltar la navegación e ir directo al contenido. */}
@@ -66,21 +69,28 @@ export function MarcoApp({ children }: { children: ReactNode }) {
       </a>
       <div className="mx-auto flex max-w-[96rem] gap-6 p-3 sm:p-4">
         <BarraLateral />
-        <div className="flex min-w-0 flex-1 flex-col gap-5 pb-24 lg:pb-4">
-          <header className="flex items-center justify-between gap-3 px-1 pt-1">
-            <div className="flex items-center gap-3">
-              <span className="lg:hidden">
-                <Logo conNombre={false} tamano={32} />
-              </span>
-              <h1 className="text-xl font-semibold sm:text-2xl">{titulo}</h1>
+        <div className="flex min-w-0 flex-1 flex-col gap-6 pb-40 lg:pb-24">
+          <header className="flex flex-col gap-1.5 px-1 pt-1">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <span className="lg:hidden">
+                  <Logo conNombre={false} tamano={32} />
+                </span>
+                <h1 className="text-xl font-semibold sm:text-2xl">{titulo}</h1>
+              </div>
+              <div className="flex items-center gap-1">
+                <PaletaBusqueda />
+                <InterruptorTema />
+                <MenuUsuario usuario={usuario} />
+              </div>
             </div>
-            <div className="flex items-center gap-1">
-              <PaletaBusqueda />
-              <InterruptorTema />
-              <MenuUsuario usuario={usuario} />
-            </div>
+            {seccion && (
+              <p className="max-w-3xl text-[15px] leading-relaxed text-texto-secundario">
+                {seccion.descripcion}
+              </p>
+            )}
           </header>
-          <main id="contenido" tabIndex={-1} className="flex flex-col gap-5 focus:outline-none">
+          <main id="contenido" tabIndex={-1} className="flex flex-col gap-6 focus:outline-none">
             {children}
           </main>
           <AvisoSimulacion className="px-1" />
