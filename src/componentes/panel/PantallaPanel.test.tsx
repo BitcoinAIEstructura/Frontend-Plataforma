@@ -45,7 +45,7 @@ describe("PantallaPanel", () => {
     expect(await screen.findByText("▲ +5,00 %")).toBeInTheDocument();
     expect(screen.getByText("en las últimas 24 h")).toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Evolución de tu cartera" })).toBeInTheDocument();
-    expect(screen.getByRole("region", { name: "Señal de la IA" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Señal de la estrategia" })).toBeInTheDocument();
     const rutas = fetch.mock.calls.map((c) => String(c[0]));
     expect(rutas).toContain("/api/velas?intervalo=1h&cantidad=24");
     expect(rutas).toContain("/api/senal?estrategia=combinada&intervalo=1h");

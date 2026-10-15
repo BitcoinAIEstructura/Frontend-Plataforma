@@ -9,7 +9,7 @@ import { TarjetaSenal } from "./MedidorSenal";
 import { ResumenCartera } from "./ResumenCartera";
 import { TarjetaEvolucion } from "./TarjetaEvolucion";
 
-/** Panel principal: saludo, cifras de la cartera, precio, evolución y señal de la IA. */
+/** Panel principal: saludo, cifras de la cartera, precio, evolución y señal de la estrategia. */
 export function PantallaPanel() {
   // Variación de las últimas 24 h: la apertura de la primera de 24 velas de 1 h.
   const dia = useVelas("1h", 24);

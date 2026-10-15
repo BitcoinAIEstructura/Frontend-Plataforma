@@ -38,7 +38,7 @@ const ASPECTO: Record<
 /** Arco de medio círculo (de izquierda a derecha por arriba). */
 const ARCO = "M 20 100 A 80 80 0 0 1 180 100";
 
-/** Medidor de la señal de la IA: qué haría y con cuánta confianza. */
+/** Medidor de la señal de la estrategia combinada (la que sigue el bot): qué haría y con cuánta confianza. Las predicciones de los modelos de IA están en /ia. */
 export function MedidorSenal({ senal }: { senal: Senal }) {
   const { decision, pronostico } = senal;
   const aspecto = ASPECTO[decision.senal];
@@ -62,7 +62,7 @@ export function MedidorSenal({ senal }: { senal: Senal }) {
         </svg>
         <div
           role="meter"
-          aria-label="Confianza de la señal de la IA"
+          aria-label="Confianza de la señal de la estrategia"
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={porcentaje}
@@ -105,13 +105,20 @@ export function TarjetaSenal() {
   const senal = useSenal("1h");
   return (
     <Tarjeta
-      titulo="Señal de la IA"
+      titulo="Señal de la estrategia"
       extra={
         <Link href="/ordenes" className="text-sm font-medium text-oro hover:underline">
           Ir a Órdenes →
         </Link>
       }
     >
+      <p className="mb-3 text-sm leading-relaxed text-texto-secundario">
+        Es lo que haría tu bot ahora, según tres indicadores. Las predicciones de los modelos de IA están en{" "}
+        <Link href="/ia" className="font-medium text-oro hover:underline">
+          Predicciones IA
+        </Link>
+        .
+      </p>
       {senal.data ? (
         <MedidorSenal senal={senal.data} />
       ) : senal.isError ? (
@@ -120,7 +127,7 @@ export function TarjetaSenal() {
         </p>
       ) : (
         <p role="status" className="py-16 text-center text-texto-secundario">
-          La IA está analizando el mercado…
+          La estrategia está analizando el mercado…
         </p>
       )}
     </Tarjeta>

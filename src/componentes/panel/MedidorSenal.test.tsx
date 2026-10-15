@@ -27,7 +27,7 @@ function senal(s: Senal["decision"]["senal"], confianza: number): Senal {
 describe("MedidorSenal", () => {
   it("dice la señal con ícono y palabra, y la confianza como medidor", () => {
     renderizar(<MedidorSenal senal={senal("COMPRAR", 0.624)} />);
-    const medidor = screen.getByRole("meter", { name: "Confianza de la señal de la IA" });
+    const medidor = screen.getByRole("meter", { name: "Confianza de la señal de la estrategia" });
     expect(medidor).toHaveAttribute("aria-valuenow", "62");
     expect(medidor).toHaveAttribute("aria-valuetext", "Comprar, 62 % de confianza");
     expect(medidor).toHaveTextContent("▲ Comprar");

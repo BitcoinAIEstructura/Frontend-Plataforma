@@ -29,7 +29,7 @@ export function Bienvenida() {
               Bitcoin con ayuda de la IA, sin arriesgar dinero real.
             </>
           ) : (
-            "Mira la señal de la IA, revisa el mercado y decide tu siguiente paso con calma."
+            "Mira qué dice la estrategia, revisa el mercado y decide tu siguiente paso con calma."
           )}
         </p>
         <div className="mt-1 flex flex-wrap gap-3">
