@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, type ReactNode } from "react";
 
 import { PaletaBusqueda } from "@/componentes/busqueda/PaletaBusqueda";
+import { LanzadorChat } from "@/componentes/chat/LanzadorChat";
 import { Logo, SimboloNexabit } from "@/componentes/marca/Logo";
 import { AvisoSimulacion } from "@/componentes/ui/AvisoSimulacion";
 import { Boton } from "@/componentes/ui/Boton";
@@ -86,6 +87,7 @@ export function MarcoApp({ children }: { children: ReactNode }) {
         </div>
       </div>
       <BarraInferior />
+      <LanzadorChat nombre={usuario.nombre} />
       <AvisoInactividad />
     </div>
   );

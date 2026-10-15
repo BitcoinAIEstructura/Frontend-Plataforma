@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 
 import { buscar, type ResultadoBusqueda } from "@/lib/api/busqueda";
+import { abrirChat, esRutaDelChat } from "@/lib/chat";
 
 const TIPO: Record<ResultadoBusqueda["tipo"], string> = {
   pagina: "Página",
@@ -95,7 +96,8 @@ export function PaletaBusqueda() {
 
   const ir = (r: ResultadoBusqueda) => {
     cerrar();
-    router.push(r.ruta);
+    if (esRutaDelChat(r.ruta)) abrirChat();
+    else router.push(r.ruta);
   };
 
   const alTeclearCasilla = (e: KeyboardEvent<HTMLInputElement>) => {
