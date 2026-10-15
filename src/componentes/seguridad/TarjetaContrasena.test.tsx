@@ -10,24 +10,41 @@ afterEach(() => vi.unstubAllGlobals());
 
 async function llenar(actual: string, nueva: string, confirmacion = nueva) {
   const user = userEvent.setup();
+  if (!screen.queryByRole("dialog"))
+    await user.click(screen.getByRole("button", { name: "Cambiar contraseña" }));
   await user.type(screen.getByLabelText("Contraseña actual"), actual);
   await user.type(screen.getByLabelText("Contraseña nueva"), nueva);
   await user.type(screen.getByLabelText("Confirma la contraseña nueva"), confirmacion);
-  await user.click(screen.getByRole("button", { name: "Cambiar contraseña" }));
+  await user.click(screen.getByRole("button", { name: "Guardar la nueva contraseña" }));
 }
 
 describe("TarjetaContrasena", () => {
+  it("el formulario no ocupa la página: se abre en una ventana y se cierra sin guardar", async () => {
+    servidorFalso({});
+    renderizar(<TarjetaContrasena usuario={USUARIO_PRUEBA} />);
+    expect(screen.queryByLabelText("Contraseña actual")).toBeNull();
+    await userEvent.click(screen.getByRole("button", { name: "Cambiar contraseña" }));
+    const ventana = screen.getByRole("dialog", { name: "Cambiar la contraseña" });
+    expect(screen.getByLabelText("Contraseña actual")).toHaveFocus();
+    await userEvent.type(screen.getByLabelText("Contraseña actual"), "algo");
+    await userEvent.click(screen.getByRole("button", { name: "Cancelar" }));
+    expect(ventana).not.toBeInTheDocument();
+    // Al volver a abrirla, no queda nada escrito.
+    await userEvent.click(screen.getByRole("button", { name: "Cambiar contraseña" }));
+    expect(screen.getByLabelText("Contraseña actual")).toHaveValue("");
+  });
+
   it("cambia la contraseña y lo confirma", async () => {
     const servidor = servidorFalso({ "POST /api/cuentas/contrasena": { estado: 204 } });
     renderizar(<TarjetaContrasena usuario={USUARIO_PRUEBA} />);
     await llenar("Luna-Roja-2026", "Sol-Azul-Brillante-9");
     expect(await screen.findByRole("status")).toHaveTextContent("Contraseña cambiada");
+    expect(screen.queryByRole("dialog")).toBeNull();
     const llamada = servidor.mock.calls.find(([ruta]) => ruta === "/api/cuentas/contrasena")!;
     expect(JSON.parse(String(llamada[1]?.body))).toEqual({
       contrasenaActual: "Luna-Roja-2026",
       contrasenaNueva: "Sol-Azul-Brillante-9",
     });
-    expect(screen.getByLabelText("Contraseña nueva")).toHaveValue("");
   });
 
   it("no envía si la nueva es débil, igual a la actual o no coincide", async () => {
