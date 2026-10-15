@@ -12,11 +12,12 @@ const VARIANTES: Record<VarianteBoton, string> = {
   peligro: "border border-error/60 text-error hover:bg-error/10",
 };
 
-/** Clases de un botón, para que un enlace (`<Link>`) se vea igual que un `<Boton>`. */
+/** Clases de un botón, para que un enlace (`<Link>`) se vea igual que un `<Boton>`.
+ * Apagado se ve gris y sin brillo, para que nadie piense que se puede tocar. */
 export function clasesBoton(variante: VarianteBoton = "dorado", anchoCompleto = false): string {
   return (
     "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 font-semibold " +
-    "transition disabled:cursor-not-allowed disabled:opacity-55 " +
+    "transition disabled:cursor-not-allowed disabled:opacity-45 disabled:shadow-none disabled:saturate-0 " +
     `${VARIANTES[variante]} ${anchoCompleto ? "w-full" : ""}`
   );
 }
@@ -50,7 +51,8 @@ export function Boton({
       className={`${clasesBoton(variante, anchoCompleto)} ${className}`}
       {...resto}
     >
-      {variante === "dorado" && (
+      {/* El destello invita a tocar: un botón apagado no lo lleva. */}
+      {variante === "dorado" && !disabled && !cargando && (
         <span
           aria-hidden
           className="animar-destello pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-white/25 blur-md"
