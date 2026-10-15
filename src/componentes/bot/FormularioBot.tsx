@@ -5,6 +5,7 @@ import { useId, useState, type FormEvent } from "react";
 import { OPCIONES_INTERVALO } from "@/componentes/mercado/PantallaMercado";
 import { Boton } from "@/componentes/ui/Boton";
 import { Segmentado } from "@/componentes/ui/Segmentado";
+import { Termino, type Concepto } from "@/componentes/ui/Termino";
 import type { Intervalo } from "@/lib/api/mercado";
 import type { ConfiguracionBot } from "@/lib/api/simulacion";
 
@@ -20,6 +21,7 @@ type Segundos = (typeof CADA_CUANTO)[number]["valor"];
 /** Un control deslizante en porcentaje, con su valor escrito al lado. */
 function Porcentaje({
   etiqueta,
+  concepto,
   ayuda,
   valor,
   min,
@@ -28,6 +30,7 @@ function Porcentaje({
   disabled,
 }: {
   etiqueta: string;
+  concepto: Concepto;
   ayuda: string;
   valor: number;
   min: number;
@@ -39,9 +42,12 @@ function Porcentaje({
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-baseline justify-between gap-3">
-        <label htmlFor={id} className="text-sm font-medium text-texto-secundario">
-          {etiqueta}
-        </label>
+        <span className="flex items-center gap-1.5">
+          <label htmlFor={id} className="text-sm font-medium text-texto-secundario">
+            {etiqueta}
+          </label>
+          <Termino concepto={concepto} />
+        </span>
         <output htmlFor={id} className="cifra text-sm font-semibold text-texto">
           {valor} %
         </output>
@@ -118,18 +124,21 @@ export function FormularioBot({ actual, activo, cargando, alIniciar, alDetener }
         <legend className="sr-only">Ajustes del bot</legend>
         <div className="flex flex-col gap-1.5">
           <span aria-hidden className="text-sm font-medium text-texto-secundario">
-            Cada cuánto decide
+            Cada cuánto revisa el mercado
           </span>
           <Segmentado
-            etiqueta="Cada cuánto decide"
+            etiqueta="Cada cuánto revisa el mercado"
             opciones={CADA_CUANTO}
             valor={segundos}
             alCambiar={setSegundos}
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <span aria-hidden className="text-sm font-medium text-texto-secundario">
-            Velas que analiza
+          <span className="flex items-center gap-1.5">
+            <span aria-hidden className="text-sm font-medium text-texto-secundario">
+              Tamaño de las velas que mira
+            </span>
+            <Termino concepto="vela" />
           </span>
           <Segmentado
             etiqueta="Intervalo de las velas que analiza"
@@ -140,6 +149,7 @@ export function FormularioBot({ actual, activo, cargando, alIniciar, alDetener }
         </div>
         <Porcentaje
           etiqueta="Riesgo por compra"
+          concepto="riesgo"
           ayuda="Qué parte de tus USDT usa en cada compra."
           valor={riesgo}
           min={1}
@@ -148,8 +158,9 @@ export function FormularioBot({ actual, activo, cargando, alIniciar, alDetener }
           disabled={activo}
         />
         <Porcentaje
-          etiqueta="Stop-loss"
-          ayuda="Si el precio cae esto desde tu costo promedio, vende todo para limitar la pérdida."
+          etiqueta="Stop-loss (freno de pérdidas)"
+          concepto="stop-loss"
+          ayuda="Si el precio cae esto desde lo que pagaste, vende todo para limitar la pérdida."
           valor={stopLoss}
           min={1}
           max={50}
@@ -157,8 +168,9 @@ export function FormularioBot({ actual, activo, cargando, alIniciar, alDetener }
           disabled={activo}
         />
         <Porcentaje
-          etiqueta="Take-profit"
-          ayuda="Si el precio sube esto desde tu costo promedio, vende todo y asegura la ganancia."
+          etiqueta="Take-profit (meta de ganancia)"
+          concepto="take-profit"
+          ayuda="Si el precio sube esto desde lo que pagaste, vende todo y asegura la ganancia."
           valor={takeProfit}
           min={1}
           max={100}

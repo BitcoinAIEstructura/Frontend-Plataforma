@@ -3,14 +3,28 @@
 import type { ReactNode } from "react";
 
 import { Tarjeta } from "@/componentes/ui/Tarjeta";
+import { Termino, type Concepto } from "@/componentes/ui/Termino";
 import type { Cartera } from "@/lib/api/simulacion";
 import { btc, conSigno, sentido, usdt, variacion } from "@/lib/formato";
 import { useCartera } from "@/lib/hooks/useDatos";
 
-function Cifra({ etiqueta, valor, detalle }: { etiqueta: string; valor: ReactNode; detalle?: ReactNode }) {
+function Cifra({
+  etiqueta,
+  valor,
+  detalle,
+  concepto,
+}: {
+  etiqueta: string;
+  valor: ReactNode;
+  detalle?: ReactNode;
+  concepto?: Concepto;
+}) {
   return (
     <Tarjeta como="div" className="flex flex-col gap-1">
-      <dt className="text-xs font-medium tracking-wide text-texto-atenuado uppercase">{etiqueta}</dt>
+      <dt className="flex items-center gap-1.5 text-xs font-medium tracking-wide text-texto-atenuado uppercase">
+        {etiqueta}
+        {concepto && <Termino concepto={concepto} />}
+      </dt>
       <dd className="cifra text-xl font-semibold text-texto sm:text-2xl">{valor}</dd>
       {detalle && <dd className="cifra text-sm text-texto-secundario">{detalle}</dd>}
     </Tarjeta>
@@ -34,16 +48,19 @@ export function CifrasCartera({ cartera }: { cartera: Cartera }) {
       />
       <Cifra
         etiqueta="Ganancia total"
+        concepto="rentabilidad"
         valor={<span className={color}>{conSigno(cartera.gananciaTotal)}</span>}
         detalle={<span className={color}>{variacion(cartera.rentabilidad)}</span>}
       />
       <Cifra
         etiqueta="USDT disponibles"
+        concepto="usdt"
         valor={usdt(cartera.saldoUsdt)}
         detalle={`Comisiones pagadas: ${usdt(cartera.comisionesPagadas)}`}
       />
       <Cifra
         etiqueta="Bitcoin"
+        concepto="btc"
         valor={
           <>
             {btc(cartera.btc)} <span className="text-sm text-texto-atenuado">BTC</span>

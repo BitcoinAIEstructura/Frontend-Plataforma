@@ -49,7 +49,7 @@ describe("FormularioBot", () => {
     render(
       <FormularioBot actual={ACTUAL} activo cargando={false} alIniciar={vi.fn()} alDetener={alDetener} />,
     );
-    expect(screen.getByRole("slider", { name: "Stop-loss" })).toBeDisabled();
+    expect(screen.getByRole("slider", { name: "Stop-loss (freno de pérdidas)" })).toBeDisabled();
     await userEvent.click(screen.getByRole("button", { name: "■ Detener el bot" }));
     expect(alDetener).toHaveBeenCalled();
   });

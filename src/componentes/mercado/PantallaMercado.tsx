@@ -7,6 +7,7 @@ import { GraficaOscilador, type SerieOscilador } from "@/componentes/graficas/Gr
 import { GraficaVelas, type Capa } from "@/componentes/graficas/GraficaVelas";
 import { Segmentado } from "@/componentes/ui/Segmentado";
 import { Tarjeta } from "@/componentes/ui/Tarjeta";
+import { Termino } from "@/componentes/ui/Termino";
 import type { Intervalo, Punto } from "@/lib/api/mercado";
 import { useIndicador, useVelas } from "@/lib/hooks/useDatos";
 
@@ -171,6 +172,19 @@ export function PantallaMercado() {
           series={seriesOscilador}
           referencias={oscilador === "rsi" ? [30, 70] : [0]}
         />
+        <p className="mt-3 text-sm leading-relaxed text-texto-secundario">
+          {oscilador === "rsi" ? (
+            <>
+              <Termino concepto="rsi">El RSI</Termino> va de 0 a 100: por encima de 70 el precio subió muy
+              rápido y por debajo de 30 bajó muy rápido.
+            </>
+          ) : (
+            <>
+              <Termino concepto="macd">El MACD</Termino> muestra si el precio gana fuerza: arriba de 0, hacia
+              arriba; abajo de 0, hacia abajo.
+            </>
+          )}
+        </p>
       </Tarjeta>
 
       <TarjetaAlertas />

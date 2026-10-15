@@ -57,7 +57,9 @@ describe("FormularioOrden", () => {
     renderizar(<FormularioOrden />);
     expect(await screen.findByText("Disponible: 9.500,00 USDT")).toBeInTheDocument();
     await userEvent.type(screen.getByLabelText("¿Cuántos USDT quieres usar?"), "1.000,50");
-    expect(await screen.findByText(/Recibirías ≈ 0,01249374 BTC/)).toHaveTextContent("comisión ≈ 1,00 USDT");
+    expect(await screen.findByText(/Recibirías ≈ 0,01249374 BTC/)).toHaveTextContent(
+      /comisión\?? ≈ 1,00 USDT/,
+    );
     await userEvent.click(screen.getByRole("button", { name: "Comprar 1.000,50 USDT" }));
     expect(await screen.findByRole("status")).toHaveTextContent("Orden #7 en la cola");
     expect(cuerpos).toEqual([{ tipo: "COMPRA", monto: 1000.5 }]);

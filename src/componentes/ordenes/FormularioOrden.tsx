@@ -6,6 +6,7 @@ import { Boton } from "@/componentes/ui/Boton";
 import { CampoDinero } from "@/componentes/ui/CampoDinero";
 import { Segmentado } from "@/componentes/ui/Segmentado";
 import { Tarjeta } from "@/componentes/ui/Tarjeta";
+import { Termino } from "@/componentes/ui/Termino";
 import { btc, usdt } from "@/lib/formato";
 import { useAccionesOrdenes, useCartera, useOrdenes, usePrecio } from "@/lib/hooks/useDatos";
 
@@ -170,7 +171,9 @@ export function FormularioOrden() {
             {tipo === "COMPRA"
               ? `Recibirías ≈ ${btc(previa.btc)} BTC`
               : `Venderías ≈ ${btc(previa.btc)} BTC y recibirías ≈ ${usdt(previa.usdt)} USDT`}
-            {" · "}comisión ≈ {usdt(previa.comision)} USDT, al precio de ahora ({usdt(precio.data?.precio)}).
+            {" · "}
+            <Termino concepto="comision">comisión</Termino> ≈ {usdt(previa.comision)} USDT, al precio de ahora
+            ({usdt(precio.data?.precio)}).
           </p>
         )}
 
