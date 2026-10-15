@@ -58,12 +58,16 @@ export function LanzadorChat({ nombre }: { nombre: string }) {
           ref={boton}
           type="button"
           onClick={() => setAbierto(true)}
-          className="fixed right-4 bottom-24 z-40 flex min-h-12 items-center gap-2 rounded-full bg-gradient-to-r from-oro-profundo via-oro to-oro-claro px-5 font-semibold text-sobre-oro shadow-[0_10px_30px_-10px_var(--oro)] hover:brightness-110 lg:right-6 lg:bottom-6"
+          aria-label="Pregúntale al bot"
+          // En el teléfono es un círculo pequeño para no tapar la página; en el portátil lleva el texto.
+          className="fixed right-4 bottom-24 z-40 flex size-14 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-oro-profundo via-oro to-oro-claro font-semibold text-sobre-oro shadow-[0_10px_30px_-10px_var(--oro)] hover:brightness-110 lg:right-6 lg:bottom-6 lg:size-auto lg:min-h-12 lg:px-5"
         >
-          <span aria-hidden className="text-lg">
+          <span aria-hidden className="text-xl lg:text-lg">
             💬
           </span>
-          Pregúntale al bot
+          <span aria-hidden className="hidden lg:inline">
+            Pregúntale al bot
+          </span>
         </button>
       )}
       {abierto && (

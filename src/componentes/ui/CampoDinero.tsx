@@ -23,7 +23,8 @@ export function limpiarMonto(texto: string, decimales = 2): string {
   const partes = limpio.split(".");
   if (partes.length === 2) {
     const [entero = "", fraccion = ""] = partes;
-    if (fraccion.length !== 3) limpio = decimales === 0 ? entero : `${entero}.${fraccion.slice(0, decimales)}`;
+    if (fraccion.length !== 3)
+      limpio = decimales === 0 ? entero : `${entero}.${fraccion.slice(0, decimales)}`;
   }
   return limpio;
 }
@@ -98,7 +99,11 @@ export function CampoDinero({
           {moneda}
         </span>
       </div>
-      <p id={idAyuda} className="cifra min-h-5 text-sm text-texto-atenuado" aria-live="polite">
+      <p
+        id={idAyuda}
+        className={`min-h-5 text-sm ${valido && !disabled ? "cifra text-texto-secundario" : "text-texto-atenuado"}`}
+        aria-live="polite"
+      >
         {valido && !disabled
           ? lectura(monto)
           : decimales > 0
