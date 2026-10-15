@@ -6,6 +6,8 @@ import type { Decision } from "@/lib/api/mercado";
 import type { EstadoBot as Estado, EventoSimulacion } from "@/lib/api/simulacion";
 import { haceCuanto, usdt } from "@/lib/formato";
 
+import { TrabajoBot } from "./TrabajoBot";
+
 const SENAL: Record<Decision["senal"], { texto: string; clase: string }> = {
   COMPRAR: { texto: "▲ Comprar", clase: "text-sube" },
   VENDER: { texto: "▼ Vender", clase: "text-baja" },
@@ -26,7 +28,7 @@ export function eventosDelBot(eventos: readonly EventoSimulacion[], cuantos = 8)
   return eventos.filter((e) => TIPOS_BOT.has(e.tipo)).slice(0, cuantos);
 }
 
-/** Si está en marcha, cuántos ciclos lleva, su última decisión y su último error. */
+/** Si está en marcha (y que está trabajando), cuántas veces revisó, su última decisión y su último error. */
 export function EstadoBot({ estado }: { estado: Estado }) {
   const d = estado.ultimaDecision;
   return (
@@ -45,13 +47,14 @@ export function EstadoBot({ estado }: { estado: Estado }) {
         )
       }
     >
+      <TrabajoBot estado={estado} />
       <dl className="grid grid-cols-2 gap-3 text-sm">
         <div>
-          <dt className="text-texto-atenuado">Ciclos</dt>
+          <dt className="text-texto-atenuado">Veces que revisó el mercado</dt>
           <dd className="cifra text-lg font-semibold text-texto">{estado.ciclos}</dd>
         </div>
         <div>
-          <dt className="text-texto-atenuado">Último ciclo</dt>
+          <dt className="text-texto-atenuado">Última revisión</dt>
           <dd className="text-lg font-semibold text-texto">
             {estado.ultimoCiclo ? haceCuanto(estado.ultimoCiclo) : "—"}
           </dd>
@@ -72,7 +75,7 @@ export function EstadoBot({ estado }: { estado: Estado }) {
           </>
         ) : (
           <p className="mt-1 text-sm text-texto-secundario">
-            Aún no ha decidido nada. Al encenderlo, el primer ciclo es inmediato.
+            Aún no ha decidido nada. Al encenderlo, revisa el mercado enseguida y aquí verás qué decidió.
           </p>
         )}
       </div>
@@ -82,7 +85,7 @@ export function EstadoBot({ estado }: { estado: Estado }) {
           role="alert"
           className="mt-3 rounded-xl border border-error/40 bg-error/10 px-4 py-3 text-sm text-error"
         >
-          ⚠ El último ciclo falló: {estado.ultimoError}. El bot sigue con el siguiente.
+          ⚠ La última revisión falló: {estado.ultimoError}. El bot lo vuelve a intentar en la siguiente.
         </p>
       )}
     </Tarjeta>

@@ -20,6 +20,8 @@ const BASE: Estado = {
   ultimoCiclo: null,
   ultimaDecision: null,
   ultimoError: null,
+  encendidoDesde: null,
+  enCiclo: false,
 };
 
 describe("EstadoBot", () => {

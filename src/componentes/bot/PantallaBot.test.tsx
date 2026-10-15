@@ -23,6 +23,8 @@ const ESTADO = {
   ultimoCiclo: null,
   ultimaDecision: null,
   ultimoError: null,
+  encendidoDesde: null,
+  enCiclo: false,
 };
 
 describe("PantallaBot", () => {

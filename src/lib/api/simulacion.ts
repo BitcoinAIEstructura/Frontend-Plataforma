@@ -62,6 +62,9 @@ export const esquemaBot = z.object({
   ultimoCiclo: z.number().nullable(),
   ultimaDecision: esquemaDecision.nullable(),
   ultimoError: z.string().nullable(),
+  /** Cuándo se encendió (ms) y si está revisando el mercado en este momento. */
+  encendidoDesde: z.number().nullable().default(null),
+  enCiclo: z.boolean().default(false),
 });
 export type EstadoBot = z.infer<typeof esquemaBot>;
 

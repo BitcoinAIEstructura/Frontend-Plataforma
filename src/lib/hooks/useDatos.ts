@@ -27,6 +27,7 @@ import {
   obtenerOrdenes,
   procesarSiguiente,
   type ConfiguracionBot,
+  type EstadoBot,
   type NuevaOrden,
 } from "@/lib/api/simulacion";
 import { CLAVES } from "@/lib/tiempoReal";
@@ -162,8 +163,19 @@ export function useHistorial(limite = 50) {
   return useQuery({ queryKey: [...CLAVES.historial, limite], queryFn: () => obtenerHistorial(limite) });
 }
 
+/** Cada cuánto se pregunta por el bot: cada 2 s mientras revisa (o ya le toca), si no cada 15 s. */
+export function esperaBot(estado: EstadoBot | undefined, ahora = Date.now()): number {
+  if (!estado?.activo) return 15_000;
+  const proxima = (estado.ultimoCiclo ?? 0) + estado.configuracion.segundosEntreCiclos * 1000;
+  return estado.enCiclo || ahora >= proxima ? 2_000 : 15_000;
+}
+
 export function useBot() {
-  return useQuery({ queryKey: CLAVES.bot, queryFn: obtenerBot, refetchInterval: 15_000 });
+  return useQuery({
+    queryKey: CLAVES.bot,
+    queryFn: obtenerBot,
+    refetchInterval: (consulta) => esperaBot(consulta.state.data),
+  });
 }
 
 /** Recarga todo lo de la simulación después de una acción del usuario. */
