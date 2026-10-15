@@ -95,7 +95,9 @@ export default function EscenaMoneda({ calidad }: { calidad: Exclude<Calidad, "e
     <Canvas
       aria-hidden
       dpr={[1, ajustes.dprMaximo]}
-      camera={{ position: [0, 0, 6.2], fov: 35 }}
+      // A 7,6 de distancia con 35° se ven ±2,4 de alto: cabe el anillo (radio 1,6 × 1,32 ≈ 2,1)
+      // aunque flote. A 6,2 se veían solo ±1,96 y el anillo salía cortado arriba y abajo.
+      camera={{ position: [0, 0, 7.6], fov: 35 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
     >
       <ambientLight intensity={0.7} />
