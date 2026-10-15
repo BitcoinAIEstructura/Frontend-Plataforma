@@ -6,6 +6,7 @@ import { useState, type FormEvent } from "react";
 import { leerMonto } from "@/componentes/ordenes/calculos";
 import { Boton } from "@/componentes/ui/Boton";
 import { Campo } from "@/componentes/ui/Campo";
+import { CampoDinero } from "@/componentes/ui/CampoDinero";
 import { Tarjeta } from "@/componentes/ui/Tarjeta";
 import { calcularSiHubiera, type SiHubiera as Resultado } from "@/lib/api/liga";
 import { btc, conSigno, sentido, usdt, variacion } from "@/lib/formato";
@@ -78,16 +79,22 @@ export function SiHubiera() {
 
   return (
     <Tarjeta id="si-hubiera" titulo="¿Y si hubiera invertido?" className="scroll-mt-24">
-      <form onSubmit={enviar} noValidate className="mb-5 flex flex-wrap items-end gap-3">
-        <Campo etiqueta="Fecha" type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} />
+      <form onSubmit={enviar} noValidate className="mb-5 flex flex-wrap items-start gap-3">
         <Campo
-          etiqueta="Monto (USDT)"
-          inputMode="decimal"
-          value={texto}
-          onChange={(e) => setTexto(e.target.value)}
-          className="w-40"
+          etiqueta="Día de la compra"
+          type="date"
+          value={fecha}
+          onChange={(e) => setFecha(e.target.value)}
+          className="[&_input]:min-h-12"
         />
-        <Boton type="submit" cargando={calculo.isPending}>
+        <CampoDinero
+          etiqueta="¿Cuánto habrías invertido?"
+          valor={texto}
+          alCambiar={setTexto}
+          lectura={(m) => `= ${usdt(m)} USDT`}
+          className="w-full sm:w-60"
+        />
+        <Boton type="submit" cargando={calculo.isPending} className="min-h-12 sm:mt-[1.625rem]">
           Calcular
         </Boton>
       </form>

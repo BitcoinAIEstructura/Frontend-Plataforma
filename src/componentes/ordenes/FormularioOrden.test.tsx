@@ -56,7 +56,7 @@ describe("FormularioOrden", () => {
     const { cuerpos } = servidor();
     renderizar(<FormularioOrden />);
     expect(await screen.findByText("Disponible: 9.500,00 USDT")).toBeInTheDocument();
-    await userEvent.type(screen.getByLabelText("USDT a gastar (comisión incluida)"), "1.000,50");
+    await userEvent.type(screen.getByLabelText("¿Cuántos USDT quieres usar?"), "1.000,50");
     expect(await screen.findByText(/Recibirías ≈ 0,01249374 BTC/)).toHaveTextContent("comisión ≈ 1,00 USDT");
     await userEvent.click(screen.getByRole("button", { name: "Comprar 1.000,50 USDT" }));
     expect(await screen.findByRole("status")).toHaveTextContent("Orden #7 en la cola");
@@ -67,7 +67,7 @@ describe("FormularioOrden", () => {
     const { cuerpos } = servidor();
     renderizar(<FormularioOrden />);
     await screen.findByText("Disponible: 9.500,00 USDT");
-    await userEvent.type(screen.getByLabelText("USDT a gastar (comisión incluida)"), "20000");
+    await userEvent.type(screen.getByLabelText("¿Cuántos USDT quieres usar?"), "20000");
     await userEvent.click(screen.getByRole("button", { name: /^Comprar/ }));
     expect(screen.getByRole("alert")).toHaveTextContent("Solo tienes 9.500,00 USDT disponibles.");
     expect(cuerpos).toEqual([]);
@@ -78,10 +78,10 @@ describe("FormularioOrden", () => {
     renderizar(<FormularioOrden />);
     await screen.findByText("Disponible: 9.500,00 USDT");
     await userEvent.click(screen.getByRole("button", { name: "25 %" }));
-    expect(screen.getByLabelText("USDT a gastar (comisión incluida)")).toHaveValue("2375");
+    expect(screen.getByLabelText("¿Cuántos USDT quieres usar?")).toHaveValue("2375");
     await userEvent.click(screen.getByRole("radio", { name: "▼ Vender" }));
     await userEvent.click(screen.getByRole("button", { name: "50 %" }));
-    expect(screen.getByLabelText("Valor en USDT del BTC a vender")).toHaveValue("250");
+    expect(screen.getByLabelText("¿Por cuántos USDT quieres vender?")).toHaveValue("250");
   });
 
   it("vender todo manda todo: true y lo dice en el botón", async () => {
@@ -90,7 +90,7 @@ describe("FormularioOrden", () => {
     await userEvent.click(await screen.findByRole("radio", { name: "▼ Vender" }));
     await screen.findByText("Tienes 0,00625 BTC (≈ 500,00 USDT)");
     await userEvent.click(screen.getByRole("button", { name: "Todo" }));
-    expect(screen.getByLabelText("Valor en USDT del BTC a vender")).toBeDisabled();
+    expect(screen.getByLabelText("¿Por cuántos USDT quieres vender?")).toBeDisabled();
     await userEvent.click(screen.getByRole("button", { name: "Vender todo mi BTC" }));
     await waitFor(() => expect(cuerpos).toEqual([{ tipo: "VENTA", todo: true }]));
   });
@@ -102,7 +102,7 @@ describe("FormularioOrden", () => {
     });
     renderizar(<FormularioOrden />);
     await screen.findByText("Disponible: 9.500,00 USDT");
-    await userEvent.type(screen.getByLabelText("USDT a gastar (comisión incluida)"), "10");
+    await userEvent.type(screen.getByLabelText("¿Cuántos USDT quieres usar?"), "10");
     await userEvent.click(screen.getByRole("button", { name: /^Comprar/ }));
     expect(await screen.findByRole("alert")).toHaveTextContent("El monto debe ser mayor que 0");
   });
@@ -121,7 +121,7 @@ describe("FormularioOrden", () => {
     expect(
       await screen.findByText("100,00 USDT ya están en órdenes de compra en la cola."),
     ).toBeInTheDocument();
-    await userEvent.type(screen.getByLabelText("USDT a gastar (comisión incluida)"), "50");
+    await userEvent.type(screen.getByLabelText("¿Cuántos USDT quieres usar?"), "50");
     await userEvent.click(screen.getByRole("button", { name: /^Comprar/ }));
     // Tras crear se recarga la lista: la orden #7 ya aparece ejecutada.
     expect(await screen.findByText("Ejecutada")).toBeInTheDocument();

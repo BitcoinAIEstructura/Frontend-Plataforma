@@ -37,7 +37,7 @@ describe("TarjetaAlertas", () => {
     const { cuerpos } = servidor();
     renderizar(<TarjetaAlertas />);
     await userEvent.click(await screen.findByRole("button", { name: /\+5 %/ }));
-    expect(screen.getByLabelText("Precio (USDT)")).toHaveValue("84000");
+    expect(screen.getByLabelText("Precio del BTC (USDT)")).toHaveValue("84000");
     await userEvent.click(screen.getByRole("button", { name: "Crear alerta" }));
     await waitFor(() => expect(cuerpos).toEqual([{ tipo: "SUBE_A", precio: 84000 }]));
   });
@@ -47,7 +47,7 @@ describe("TarjetaAlertas", () => {
     renderizar(<TarjetaAlertas />);
     await screen.findByRole("button", { name: /\+2 %/ });
     await userEvent.click(screen.getByRole("radio", { name: "▼ Cuando baje a" }));
-    await userEvent.type(screen.getByLabelText("Precio (USDT)"), "90000");
+    await userEvent.type(screen.getByLabelText("Precio del BTC (USDT)"), "90000");
     await userEvent.click(screen.getByRole("button", { name: "Crear alerta" }));
     expect(screen.getByRole("alert")).toHaveTextContent("por debajo del precio de ahora");
     expect(cuerpos).toEqual([]);

@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 
 import { leerMonto } from "@/componentes/ordenes/calculos";
 import { Boton } from "@/componentes/ui/Boton";
-import { Campo } from "@/componentes/ui/Campo";
+import { CampoDinero } from "@/componentes/ui/CampoDinero";
 import { Confirmar } from "@/componentes/ui/Dialogo";
 import { Segmentado } from "@/componentes/ui/Segmentado";
 import { Tarjeta } from "@/componentes/ui/Tarjeta";
@@ -76,17 +76,17 @@ export function TarjetaAlertas() {
             setError(null);
           }}
         />
-        <div className="flex flex-wrap items-end gap-2">
-          <Campo
-            etiqueta="Precio (USDT)"
-            inputMode="decimal"
-            value={texto}
-            onChange={(e) => setTexto(e.target.value)}
+        <div className="flex flex-wrap items-start gap-3">
+          <CampoDinero
+            etiqueta="Precio del BTC (USDT)"
+            valor={texto}
+            alCambiar={setTexto}
             placeholder={actual ? usdt(actual) : "0,00"}
-            className="w-44"
+            lectura={(m) => `Te avisamos cuando 1 BTC ${tipo === "SUBE_A" ? "suba" : "baje"} a ${usdt(m)} USDT.`}
+            className="w-full sm:w-72"
             error={error ?? (crear.isError ? crear.error.message : null)}
           />
-          <Boton type="submit" cargando={crear.isPending}>
+          <Boton type="submit" cargando={crear.isPending} className="min-h-12 sm:mt-[1.625rem]">
             Crear alerta
           </Boton>
         </div>

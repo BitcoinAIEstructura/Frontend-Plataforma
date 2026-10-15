@@ -36,7 +36,7 @@ describe("SiHubiera", () => {
   it("calcula con la fecha y el monto y explica el resultado", async () => {
     const fetch = servidorFalso({ "GET /api/si-hubiera": { estado: 200, cuerpo: RESPUESTA } });
     renderizar(<SiHubiera />);
-    const monto = screen.getByLabelText("Monto (USDT)");
+    const monto = screen.getByLabelText("¿Cuánto habrías invertido?");
     await userEvent.clear(monto);
     await userEvent.type(monto, "1.000");
     await userEvent.click(screen.getByRole("button", { name: "Calcular" }));
@@ -55,7 +55,7 @@ describe("SiHubiera", () => {
       },
     });
     renderizar(<SiHubiera />);
-    const monto = screen.getByLabelText("Monto (USDT)");
+    const monto = screen.getByLabelText("¿Cuánto habrías invertido?");
     await userEvent.clear(monto);
     await userEvent.click(screen.getByRole("button", { name: "Calcular" }));
     expect(screen.getByRole("alert")).toHaveTextContent("El monto va de 1");

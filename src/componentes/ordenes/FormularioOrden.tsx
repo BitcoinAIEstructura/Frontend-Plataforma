@@ -3,7 +3,7 @@
 import { useState, type FormEvent } from "react";
 
 import { Boton } from "@/componentes/ui/Boton";
-import { Campo } from "@/componentes/ui/Campo";
+import { CampoDinero } from "@/componentes/ui/CampoDinero";
 import { Segmentado } from "@/componentes/ui/Segmentado";
 import { Tarjeta } from "@/componentes/ui/Tarjeta";
 import { btc, usdt } from "@/lib/formato";
@@ -120,19 +120,20 @@ export function FormularioOrden() {
           )}
         </p>
 
-        <Campo
-          etiqueta={
-            tipo === "COMPRA" ? "USDT a gastar (comisión incluida)" : "Valor en USDT del BTC a vender"
-          }
-          inputMode="decimal"
-          autoComplete="off"
+        <CampoDinero
+          etiqueta={tipo === "COMPRA" ? "¿Cuántos USDT quieres usar?" : "¿Por cuántos USDT quieres vender?"}
           placeholder={todo ? "Todo tu BTC" : "0,00"}
-          value={texto}
+          valor={texto}
           disabled={todo}
-          onChange={(e) => {
-            setTexto(e.target.value);
+          alCambiar={(t) => {
+            setTexto(t);
             setCreada(null);
           }}
+          lectura={(m) =>
+            tipo === "COMPRA"
+              ? `Vas a gastar ${usdt(m)} USDT (la comisión va incluida).`
+              : `Vas a vender BTC por un valor de ${usdt(m)} USDT.`
+          }
           error={intento ? error : null}
         />
 
