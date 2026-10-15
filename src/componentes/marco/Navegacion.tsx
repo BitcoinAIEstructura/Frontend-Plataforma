@@ -109,7 +109,7 @@ export function BarraInferior() {
                     (s === activa ? "bg-oro/12 text-oro" : "hover:bg-superficie-alta")
                   }
                 >
-                  <span aria-hidden className="mt-0.5 text-lg">
+                  <span aria-hidden className="mt-0.5 w-6 shrink-0 text-center text-lg">
                     {s.icono}
                   </span>
                   <span className="flex flex-col">
