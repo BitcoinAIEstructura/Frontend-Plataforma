@@ -38,7 +38,6 @@ export function FormularioInicio() {
     setError(null);
     try {
       const resultado = await iniciar.mutateAsync({ correo, contrasena });
-      setContrasena(""); // no dejarla en memoria más de lo necesario
       if (resultado.segundoPaso) {
         setPaso("codigo");
       } else {
@@ -46,6 +45,10 @@ export function FormularioInicio() {
       }
     } catch (e) {
       setError(mensajeDe(e));
+    } finally {
+      // No dejarla en memoria más de lo necesario: ni en la casilla ni en la mutación.
+      setContrasena("");
+      iniciar.reset();
     }
   }
 
@@ -106,7 +109,8 @@ export function FormularioInicio() {
   }
 
   return (
-    <form onSubmit={alEnviarCredenciales} className="flex flex-col gap-5" noValidate>
+    // method="post": si se envía antes de que cargue JavaScript, nada viaja en la dirección.
+    <form method="post" onSubmit={alEnviarCredenciales} className="flex flex-col gap-5" noValidate>
       <header className="flex flex-col gap-1.5">
         <h1 className="text-2xl font-semibold">Bienvenido de vuelta</h1>
         <p className="text-texto-secundario">
@@ -127,9 +131,10 @@ export function FormularioInicio() {
         inputMode="email"
         required
       />
+      {/* Sin «Mostrar»: al iniciar sesión la contraseña nunca se ve en pantalla. */}
       <Campo
         etiqueta="Contraseña"
-        revelable
+        type="password"
         value={contrasena}
         onChange={(e) => setContrasena(e.target.value)}
         autoComplete="current-password"

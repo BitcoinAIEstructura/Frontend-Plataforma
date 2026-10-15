@@ -66,6 +66,20 @@ describe("FormularioInicio", () => {
     await waitFor(() => expect(navegacion.replace).toHaveBeenCalledWith("/panel"));
   });
 
+  it("la contraseña nunca se puede ver y se borra después de enviarla", async () => {
+    servidorFalso({
+      "POST /api/sesion": { estado: 401, cuerpo: { error: "Correo o contraseña incorrectos" } },
+    });
+    const { container } = renderizar(<FormularioInicio />);
+    const casilla = screen.getByLabelText("Contraseña");
+    expect(casilla).toHaveAttribute("type", "password");
+    expect(screen.queryByRole("button", { name: "Mostrar" })).toBeNull();
+    expect(container.querySelector("form")).toHaveAttribute("method", "post");
+    await escribirCredenciales();
+    await screen.findByRole("alert");
+    expect(casilla).toHaveValue("");
+  });
+
   it("muestra el error del backend sin decir si el correo existe", async () => {
     servidorFalso({
       "POST /api/sesion": { estado: 401, cuerpo: { error: "Correo o contraseña incorrectos" } },

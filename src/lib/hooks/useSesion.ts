@@ -42,6 +42,9 @@ export function useUsuarioActual() {
 export function useIniciarSesion() {
   const cliente = useQueryClient();
   return useMutation({
+    // La caché de TanStack guarda lo que se envió (correo y contraseña): con gcTime 0 se
+    // borra apenas termina, en vez de quedarse 5 minutos en memoria.
+    gcTime: 0,
     mutationFn: ({ correo, contrasena }: { correo: string; contrasena: string }) =>
       iniciarSesion(correo, contrasena),
     onSuccess: (resultado) => {

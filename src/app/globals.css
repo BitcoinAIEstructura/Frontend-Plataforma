@@ -123,6 +123,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Edge agrega su propio botón para ver la contraseña: se quita para que nunca se vea. */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
 :focus-visible {
   outline: 2px solid var(--oro);
   outline-offset: 2px;
