@@ -21,11 +21,22 @@ export type Usuario = z.infer<typeof esquemaUsuario>;
 
 const esquemaConUsuario = z.object({ usuario: esquemaUsuario });
 
+/** Falta confirmar el correo: llegó un código a ese correo (viene enmascarado: "a***@correo.co"). */
+const esquemaFaltaCorreo = z.object({ verificarCorreo: z.literal(true), correo: z.string() });
+
 export const esquemaInicio = z.union([
   z.object({ segundoPaso: z.literal(true) }),
+  esquemaFaltaCorreo.extend({ segundoPaso: z.literal(false) }),
   z.object({ segundoPaso: z.literal(false), usuario: esquemaUsuario }),
 ]);
 export type ResultadoInicio = z.infer<typeof esquemaInicio>;
+
+/** El registro pide confirmar el correo (lo normal) o, sin envío de correos, deja la sesión abierta. */
+export const esquemaRegistro = z.union([
+  esquemaFaltaCorreo,
+  z.object({ verificarCorreo: z.literal(false).optional(), usuario: esquemaUsuario }),
+]);
+export type ResultadoRegistro = z.infer<typeof esquemaRegistro>;
 
 export const esquemaConfiguracionDosPasos = z.object({ secreto: z.string(), uri: z.string() });
 export const esquemaCodigosRespaldo = z.object({ codigosRespaldo: z.array(z.string()) });
@@ -64,8 +75,21 @@ export interface DatosRegistro {
 
 // ---------- registro y sesión ----------
 
-export async function registrar(datos: DatosRegistro): Promise<Usuario> {
-  return (await pedir("/api/cuentas/registro", esquemaConUsuario, { metodo: "POST", cuerpo: datos })).usuario;
+export function registrar(datos: DatosRegistro): Promise<ResultadoRegistro> {
+  return pedir("/api/cuentas/registro", esquemaRegistro, { metodo: "POST", cuerpo: datos });
+}
+
+/** El código de 6 dígitos que llegó al correo: confirma la cuenta y abre la sesión. */
+export async function verificarCorreo(codigo: string): Promise<Usuario> {
+  return (
+    await pedir("/api/cuentas/verificar-correo", esquemaConUsuario, { metodo: "POST", cuerpo: { codigo } })
+  ).usuario;
+}
+
+/** Manda otro código (uno por minuto). Devuelve el correo enmascarado. */
+export async function reenviarCodigo(): Promise<string> {
+  return (await pedir("/api/cuentas/reenviar-codigo", z.object({ correo: z.string() }), { metodo: "POST" }))
+    .correo;
 }
 
 export function iniciarSesion(correo: string, contrasena: string): Promise<ResultadoInicio> {

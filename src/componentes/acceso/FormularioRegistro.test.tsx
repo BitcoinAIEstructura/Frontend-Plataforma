@@ -51,16 +51,42 @@ describe("validarFormulario", () => {
 });
 
 describe("FormularioRegistro", () => {
-  it("crea la cuenta con los datos escritos y entra al panel", async () => {
+  it("crea la cuenta, pide el código del correo y con él entra al panel", async () => {
     const servidor = servidorFalso({
-      "POST /api/cuentas/registro": { estado: 201, cuerpo: { usuario: USUARIO_PRUEBA } },
+      "POST /api/cuentas/registro": {
+        estado: 201,
+        cuerpo: { verificarCorreo: true, correo: "a***@correo.co" },
+      },
+      "POST /api/cuentas/verificar-correo": { estado: 200, cuerpo: { usuario: USUARIO_PRUEBA } },
+    });
+    renderizar(<FormularioRegistro />);
+    await llenar();
+    await userEvent.click(screen.getByRole("button", { name: "Crear mi cuenta" }));
+    expect(
+      await screen.findByRole("heading", { name: "¡Cuenta creada! Revisa tu correo" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("a***@correo.co")).toBeInTheDocument();
+    const [, opciones] = servidor.mock.calls[0] as unknown as [string, RequestInit];
+    expect(JSON.parse(String(opciones.body))).toEqual(BIEN);
+    expect(replace).not.toHaveBeenCalled();
+    await userEvent.type(screen.getByLabelText("Código del correo"), "042137");
+    await userEvent.click(screen.getByRole("button", { name: "Activar mi cuenta" }));
+    await waitFor(() => expect(replace).toHaveBeenCalledWith("/panel"));
+    const [, verificacion] = servidor.mock.calls[1] as unknown as [string, RequestInit];
+    expect(JSON.parse(String(verificacion.body))).toEqual({ codigo: "042137" });
+  });
+
+  it("sin envío de correos, el registro entra directo al panel", async () => {
+    servidorFalso({
+      "POST /api/cuentas/registro": {
+        estado: 201,
+        cuerpo: { verificarCorreo: false, usuario: USUARIO_PRUEBA },
+      },
     });
     renderizar(<FormularioRegistro />);
     await llenar();
     await userEvent.click(screen.getByRole("button", { name: "Crear mi cuenta" }));
     await waitFor(() => expect(replace).toHaveBeenCalledWith("/panel"));
-    const [, opciones] = servidor.mock.calls[0] as unknown as [string, RequestInit];
-    expect(JSON.parse(String(opciones.body))).toEqual(BIEN);
   });
 
   it("no envía nada si hay errores y los muestra todos", async () => {

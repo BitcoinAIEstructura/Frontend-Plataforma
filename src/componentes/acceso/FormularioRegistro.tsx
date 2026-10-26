@@ -13,6 +13,7 @@ import { INICIO_APP } from "@/lib/navegacion";
 import { contrasenaValida } from "@/lib/validacion/contrasena";
 import { validarCorreo, validarDocumento, validarNombre, validarTelefono } from "@/lib/validacion/registro";
 
+import { PasoCorreo } from "./PasoCorreo";
 import { RequisitosContrasena } from "./RequisitosContrasena";
 import { SelectorDocumento } from "./SelectorDocumento";
 
@@ -58,6 +59,8 @@ export function FormularioRegistro() {
   const [erroresServidor, setErroresServidor] = useState<Errores>({});
   const [errorGeneral, setErrorGeneral] = useState<string | null>(null);
   const [enviado, setEnviado] = useState(false);
+  // Cuenta creada: falta el código que llegó a este correo (enmascarado).
+  const [correoPendiente, setCorreoPendiente] = useState<string | null>(null);
 
   const errores = validarFormulario(datos, confirmacion, acepto);
   const errorDe = (campo: CampoRegistro) =>
@@ -75,8 +78,15 @@ export function FormularioRegistro() {
     setErrorGeneral(null);
     if (Object.keys(errores).length > 0) return;
     try {
-      await registrar.mutateAsync(datos);
-      router.replace(INICIO_APP);
+      const resultado = await registrar.mutateAsync(datos);
+      if (resultado.verificarCorreo) {
+        // La contraseña ya no hace falta aquí: se borra del formulario.
+        setDatos((d) => ({ ...d, contrasena: "" }));
+        setConfirmacion("");
+        setCorreoPendiente(resultado.correo);
+      } else {
+        router.replace(INICIO_APP);
+      }
     } catch (e) {
       if (e instanceof ErrorApi && e.campo) {
         setErroresServidor({ [e.campo as CampoRegistro]: e.message });
@@ -87,6 +97,16 @@ export function FormularioRegistro() {
   }
 
   const personales = [datos.nombre, datos.apellido, datos.correo, datos.numeroDocumento];
+
+  if (correoPendiente) {
+    return (
+      <PasoCorreo
+        titulo="¡Cuenta creada! Revisa tu correo"
+        correo={correoPendiente}
+        alEntrar={() => router.replace(INICIO_APP)}
+      />
+    );
+  }
 
   return (
     <form onSubmit={alEnviar} className="flex flex-col gap-5" noValidate>

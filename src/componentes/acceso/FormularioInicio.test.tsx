@@ -80,6 +80,22 @@ describe("FormularioInicio", () => {
     expect(casilla).toHaveValue("");
   });
 
+  it("si la cuenta no ha confirmado el correo, pide ese código y luego entra", async () => {
+    servidorFalso({
+      "POST /api/sesion": {
+        estado: 200,
+        cuerpo: { segundoPaso: false, verificarCorreo: true, correo: "a***@correo.co" },
+      },
+      "POST /api/cuentas/verificar-correo": { estado: 200, cuerpo: { usuario: USUARIO_PRUEBA } },
+    });
+    renderizar(<FormularioInicio />);
+    await escribirCredenciales();
+    expect(await screen.findByRole("heading", { name: "Falta confirmar tu correo" })).toBeInTheDocument();
+    await userEvent.type(screen.getByLabelText("Código del correo"), "042137");
+    await userEvent.click(screen.getByRole("button", { name: "Activar mi cuenta" }));
+    await waitFor(() => expect(navegacion.replace).toHaveBeenCalledWith("/panel"));
+  });
+
   it("muestra el error del backend sin decir si el correo existe", async () => {
     servidorFalso({
       "POST /api/sesion": { estado: 401, cuerpo: { error: "Correo o contraseña incorrectos" } },

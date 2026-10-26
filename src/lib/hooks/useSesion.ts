@@ -8,7 +8,9 @@ import {
   enviarCodigo,
   iniciarSesion,
   obtenerUsuarioActual,
+  reenviarCodigo,
   registrar,
+  verificarCorreo,
   type DatosRegistro,
   type Usuario,
 } from "@/lib/api/cuentas";
@@ -48,7 +50,7 @@ export function useIniciarSesion() {
     mutationFn: ({ correo, contrasena }: { correo: string; contrasena: string }) =>
       iniciarSesion(correo, contrasena),
     onSuccess: (resultado) => {
-      if (!resultado.segundoPaso) cliente.setQueryData(CLAVE_USUARIO, resultado.usuario);
+      if ("usuario" in resultado) cliente.setQueryData(CLAVE_USUARIO, resultado.usuario);
     },
   });
 }
@@ -64,9 +66,25 @@ export function useEnviarCodigo() {
 export function useRegistrar() {
   const cliente = useQueryClient();
   return useMutation({
+    // Lo enviado incluye la contraseña: que no se quede en la caché.
+    gcTime: 0,
     mutationFn: (datos: DatosRegistro) => registrar(datos),
+    onSuccess: (r) => {
+      if ("usuario" in r) cliente.setQueryData(CLAVE_USUARIO, r.usuario);
+    },
+  });
+}
+
+export function useVerificarCorreo() {
+  const cliente = useQueryClient();
+  return useMutation({
+    mutationFn: (codigo: string) => verificarCorreo(codigo),
     onSuccess: (usuario) => cliente.setQueryData(CLAVE_USUARIO, usuario),
   });
+}
+
+export function useReenviarCodigo() {
+  return useMutation({ mutationFn: () => reenviarCodigo() });
 }
 
 export function useCerrarSesion() {

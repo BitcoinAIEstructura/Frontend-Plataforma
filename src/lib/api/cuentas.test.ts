@@ -1,6 +1,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { cerrarSesionPorId, iniciarSesion, obtenerUsuarioActual, registrar } from "./cuentas";
+import {
+  cerrarSesionPorId,
+  iniciarSesion,
+  obtenerUsuarioActual,
+  registrar,
+  type DatosRegistro,
+} from "./cuentas";
 
 const USUARIO = {
   id: 1,
@@ -23,9 +29,9 @@ function responder(estado: number, cuerpo: unknown) {
 afterEach(() => vi.unstubAllGlobals());
 
 describe("cuentas", () => {
-  it("registrar devuelve el usuario (con datos enmascarados)", async () => {
-    responder(201, { usuario: USUARIO });
-    const usuario = await registrar({
+  it("registrar pide confirmar el correo (o, sin correos, devuelve el usuario)", async () => {
+    responder(201, { verificarCorreo: true, correo: "a***@correo.co" });
+    const datos: DatosRegistro = {
       nombre: "Ana",
       apellido: "Pérez",
       correo: "ana@correo.co",
@@ -33,8 +39,11 @@ describe("cuentas", () => {
       numeroDocumento: "1023456789",
       telefono: "3001234567",
       contrasena: "Luna-Roja-2026",
-    });
-    expect(usuario.documento).toBe("******6789");
+    };
+    await expect(registrar(datos)).resolves.toEqual({ verificarCorreo: true, correo: "a***@correo.co" });
+    responder(201, { verificarCorreo: false, usuario: USUARIO });
+    const r = await registrar(datos);
+    expect("usuario" in r && r.usuario.documento).toBe("******6789");
   });
 
   it("inicio de sesión en uno o en dos pasos", async () => {
@@ -42,7 +51,9 @@ describe("cuentas", () => {
     await expect(iniciarSesion("ana@correo.co", "x")).resolves.toEqual({ segundoPaso: true });
     responder(200, { segundoPaso: false, usuario: USUARIO });
     const r = await iniciarSesion("ana@correo.co", "x");
-    expect(r.segundoPaso === false && r.usuario.id).toBe(1);
+    expect("usuario" in r && r.usuario.id).toBe(1);
+    responder(200, { segundoPaso: false, verificarCorreo: true, correo: "a***@correo.co" });
+    await expect(iniciarSesion("ana@correo.co", "x")).resolves.toMatchObject({ verificarCorreo: true });
   });
 
   it("usuario actual y rutas con id escapado", async () => {

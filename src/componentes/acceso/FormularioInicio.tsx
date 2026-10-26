@@ -10,6 +10,8 @@ import { ErrorApi } from "@/lib/api/cliente";
 import { useEnviarCodigo, useIniciarSesion } from "@/lib/hooks/useSesion";
 import { destinoSeguro } from "@/lib/navegacion";
 
+import { PasoCorreo } from "./PasoCorreo";
+
 function mensajeDe(error: unknown): string {
   if (error instanceof ErrorApi) return error.message;
   return "Algo salió mal. Intenta de nuevo.";
@@ -26,7 +28,9 @@ export function FormularioInicio() {
   const porInactividad = parametros.get("motivo") === "inactividad";
   const iniciar = useIniciarSesion();
   const enviarCodigo = useEnviarCodigo();
-  const [paso, setPaso] = useState<"credenciales" | "codigo">("credenciales");
+  const [paso, setPaso] = useState<"credenciales" | "codigo" | "correo">("credenciales");
+  // Si la cuenta aún no confirmó el correo: a cuál llegó el código (enmascarado).
+  const [correoPendiente, setCorreoPendiente] = useState("");
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
   const [codigo, setCodigo] = useState("");
@@ -40,6 +44,9 @@ export function FormularioInicio() {
       const resultado = await iniciar.mutateAsync({ correo, contrasena });
       if (resultado.segundoPaso) {
         setPaso("codigo");
+      } else if ("verificarCorreo" in resultado) {
+        setCorreoPendiente(resultado.correo);
+        setPaso("correo");
       } else {
         router.replace(destino);
       }
@@ -64,6 +71,17 @@ export function FormularioInicio() {
       setError(mensajeDe(e));
       setCodigo("");
     }
+  }
+
+  if (paso === "correo") {
+    return (
+      <PasoCorreo
+        titulo="Falta confirmar tu correo"
+        correo={correoPendiente}
+        alEntrar={() => router.replace(destino)}
+        alVolver={() => setPaso("credenciales")}
+      />
+    );
   }
 
   if (paso === "codigo") {
