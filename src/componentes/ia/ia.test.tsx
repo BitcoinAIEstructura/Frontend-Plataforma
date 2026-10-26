@@ -31,7 +31,7 @@ describe("comité y veredicto", () => {
   it("si no le ganó a la base lo advierte; si le ganó, lo dice", () => {
     const { rerender } = render(<Veredicto modelo={modelo("X", 0.6, -0.03, null)} />);
     expect(screen.getByText(/Ojo: no le ganó a la base/)).toBeInTheDocument();
-    expect(screen.getByText(/no como una señal para operar/)).toBeInTheDocument();
+    expect(screen.getByText(/Tómalo como un experimento/)).toBeInTheDocument();
     rerender(<Veredicto modelo={modelo("X", 0.6, 0.02, null)} />);
     expect(screen.getByText(/Le ganó a la base/)).toBeInTheDocument();
   });
@@ -50,7 +50,7 @@ describe("TarjetaModelo", () => {
 
   it("en el árbol los factores son importancias (sin signo)", () => {
     render(<TarjetaModelo modelo={PREDICCION.modelos[1]!} />);
-    expect(screen.getByText("Qué características usa más el árbol")).toBeInTheDocument();
+    expect(screen.getByText("Factores de Árbol de decisión")).toBeInTheDocument();
     expect(screen.getByText("40 %")).toBeInTheDocument();
   });
 });

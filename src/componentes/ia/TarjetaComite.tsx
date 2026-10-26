@@ -44,26 +44,17 @@ export function ArcoProbabilidad({ probabilidad, nombre }: { probabilidad: numbe
   );
 }
 
-/** Lo honesto: si en la prueba no le ganó a "decir siempre lo que más pasó", se dice claro. */
+/** El veredicto frente a la base, con el texto que escribe el backend. */
 export function Veredicto({ modelo }: { modelo: ModeloIA }) {
-  const m = modelo.metricas;
-  if (m.ventaja > 0) {
-    return (
-      <p className="rounded-xl border border-exito/40 bg-exito/10 px-4 py-3 text-sm text-texto-secundario">
-        <span className="font-semibold text-exito">✓ Le ganó a la base.</span> En las últimas {m.muestras}{" "}
-        velas (que no vio al aprender) acertó el{" "}
-        <span className="cifra text-texto">{porcentaje(m.exactitud)}</span>, frente al{" "}
-        <span className="cifra">{porcentaje(m.base)}</span> de decir siempre lo que más pasó:{" "}
-        {puntos(m.ventaja)} a favor.
-      </p>
-    );
-  }
+  const v = modelo.veredicto;
   return (
-    <p className="rounded-xl border border-bitcoin/50 bg-bitcoin/10 px-4 py-3 text-sm text-texto-secundario">
-      <span className="font-semibold text-bitcoin">⚠ Ojo: no le ganó a la base.</span> En las últimas{" "}
-      {m.muestras} velas acertó el <span className="cifra text-texto">{porcentaje(m.exactitud)}</span>, y
-      decir siempre lo que más pasó habría acertado el <span className="cifra">{porcentaje(m.base)}</span>.
-      Tómalo como un experimento, no como una señal para operar.
+    <p
+      className={
+        "rounded-xl border px-4 py-3 text-sm text-texto-secundario " +
+        (v.gana ? "border-exito/40 bg-exito/10" : "border-bitcoin/50 bg-bitcoin/10")
+      }
+    >
+      <span className={`font-semibold ${v.gana ? "text-exito" : "text-bitcoin"}`}>{v.titulo}</span> {v.texto}
     </p>
   );
 }

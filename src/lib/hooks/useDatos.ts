@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { cancelarAlerta, crearAlerta, obtenerAlertas, type Alerta } from "@/lib/api/alertas";
 import { obtenerEstructuras } from "@/lib/api/estructuras";
-import { obtenerPredicciones, type IntervaloIA } from "@/lib/api/ia";
+import { obtenerFuentes, obtenerPredicciones, type IntervaloIA } from "@/lib/api/ia";
 import { obtenerLiga } from "@/lib/api/liga";
 import {
   obtenerIndicador,
@@ -135,6 +135,16 @@ export function useAccionesAlertas() {
 // ---------- inteligencia artificial ----------
 
 /** El backend reentrena cada 10 minutos; antes de eso la respuesta es la misma. */
+export function useFuentesIA(intervalo: IntervaloIA) {
+  return useQuery({
+    queryKey: ["ia", "fuentes", intervalo],
+    queryFn: ({ signal }) => obtenerFuentes(intervalo, signal),
+    staleTime: 5 * 60_000,
+    refetchInterval: 10 * 60_000,
+    placeholderData: (anterior) => anterior,
+  });
+}
+
 export function usePredicciones(intervalo: IntervaloIA) {
   return useQuery({
     queryKey: ["ia", intervalo],

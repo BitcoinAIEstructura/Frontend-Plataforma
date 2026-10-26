@@ -3,22 +3,10 @@ import type { ModeloIA } from "@/lib/api/ia";
 
 import { porcentaje, puntos } from "./formato";
 
-/** Qué significan los factores de cada modelo (no todos miden lo mismo). */
-const QUE_SON: Record<string, { titulo: string; conSigno: boolean }> = {
-  "Regresión logística": { titulo: "Cuánto empuja cada característica", conSigno: true },
-  "Árbol de decisión": { titulo: "Qué características usa más el árbol", conSigno: false },
-  "k vecinos": { titulo: "Qué hace distinta a la vela de ahora", conSigno: true },
-};
-
-const IDEA: Record<string, string> = {
-  "Regresión logística": "Suma las características con un peso cada una y lo convierte en probabilidad.",
-  "Árbol de decisión": "Hace preguntas sí/no sobre las características hasta llegar a una hoja.",
-  "k vecinos": "Busca las 15 velas del pasado más parecidas y mira qué pasó después.",
-};
-
 /** Barras de los factores: con signo, a la derecha empuja a subir (▲) y a la izquierda a bajar (▼). */
 export function Factores({ modelo }: { modelo: ModeloIA }) {
-  const que = QUE_SON[modelo.nombre] ?? { titulo: "Factores", conSigno: true };
+  // Qué miden los factores depende del modelo: lo dice el backend.
+  const que = { titulo: modelo.descripcion.tituloFactores, conSigno: modelo.descripcion.factoresConSigno };
   const factores = modelo.explicacion.factores.slice(0, 5);
   const mayor = Math.max(1e-9, ...factores.map((f) => Math.abs(f.peso)));
   return (
@@ -65,7 +53,7 @@ export function TarjetaModelo({ modelo }: { modelo: ModeloIA }) {
   const m = modelo.metricas;
   return (
     <Tarjeta titulo={modelo.nombre} className="flex flex-col">
-      <p className="mb-3 text-sm text-texto-secundario">{IDEA[modelo.nombre]}</p>
+      <p className="mb-3 text-sm text-texto-secundario">{modelo.descripcion.idea}</p>
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <p className={`text-xl font-semibold ${sube ? "text-sube" : "text-baja"}`}>
           <span aria-hidden>{sube ? "▲" : "▼"}</span> {sube ? "Sube" : "Baja"}
