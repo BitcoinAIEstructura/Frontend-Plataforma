@@ -1,7 +1,7 @@
 import { Tarjeta } from "@/componentes/ui/Tarjeta";
 import type { ModeloIA } from "@/lib/api/ia";
 
-import { porcentaje, puntos } from "./formato";
+import { porcentaje } from "./formato";
 
 const ARCO = "M 20 100 A 80 80 0 0 1 180 100";
 
