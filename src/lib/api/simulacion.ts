@@ -18,6 +18,7 @@ export const esquemaOrden = z.object({
   motivo: z.string(),
   detalle: z.string().nullable(),
 });
+/** Orden simulada de compra o venta, con su estado y datos de ejecución. */
 export type Orden = z.infer<typeof esquemaOrden>;
 
 export const esquemaCartera = z.object({
@@ -34,6 +35,7 @@ export const esquemaCartera = z.object({
   comisionesPagadas: z.number(),
   saldoInicial: z.number(),
 });
+/** Saldos, posiciones y rendimiento de la cartera ficticia del usuario. */
 export type Cartera = z.infer<typeof esquemaCartera>;
 
 export const esquemaEvento = z.object({
@@ -42,6 +44,7 @@ export const esquemaEvento = z.object({
   idOrden: z.number().nullable(),
   descripcion: z.string(),
 });
+/** Evento del historial de la simulación (órdenes, cartera y bot). */
 export type EventoSimulacion = z.infer<typeof esquemaEvento>;
 
 export const esquemaConfiguracionBot = z.object({
@@ -52,6 +55,7 @@ export const esquemaConfiguracionBot = z.object({
   stopLoss: z.number(),
   takeProfit: z.number(),
 });
+/** Parámetros con los que se configura el bot simulado. */
 export type ConfiguracionBot = z.infer<typeof esquemaConfiguracionBot>;
 
 export const esquemaBot = z.object({
@@ -66,8 +70,10 @@ export const esquemaBot = z.object({
   encendidoDesde: z.number().nullable().default(null),
   enCiclo: z.boolean().default(false),
 });
+/** Estado actual del bot y su última decisión de mercado. */
 export type EstadoBot = z.infer<typeof esquemaBot>;
 
+/** Datos necesarios para crear una orden: por monto o vendiendo todo el BTC. */
 export type NuevaOrden =
   | { tipo: "COMPRA" | "VENTA"; monto: number; motivo?: string }
   | { tipo: "VENTA"; todo: true; motivo?: string };
