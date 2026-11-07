@@ -75,6 +75,14 @@ npm run dev
 
 Abre `http://localhost:3000`. Si el backend está en otra dirección, copia `.env.example` a `.env.local` y cambia `BACKEND_URL`.
 
+Para confirmar que Next.js está reenviando las peticiones al backend:
+
+```bash
+curl http://localhost:3000/api/precio
+```
+
+Debe responder con el precio actual de `BTCUSDT`, no con un error de conexión.
+
 > **Ojo al compilar para producción:** Next.js fija el destino de `/api/*` en el momento de `npm run build`. `BACKEND_URL` tiene que estar definida al compilar, no solo al arrancar.
 
 Revisiones (las mismas que corre el CI):
