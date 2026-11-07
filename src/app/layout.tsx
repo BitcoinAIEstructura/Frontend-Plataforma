@@ -1,3 +1,9 @@
+/**
+ * Layout raíz de Nexabit.
+ *
+ * Define el documento HTML, los metadatos de la aplicación y los proveedores
+ * globales (tema, datos y PWA) que envuelven todas las rutas.
+ */
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
