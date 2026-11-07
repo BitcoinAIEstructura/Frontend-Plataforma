@@ -68,6 +68,7 @@
   --grafica-rejilla: #efe9dc;
 }
 
+/* ---------- tokens expuestos a Tailwind (bg-fondo, text-oro, etc.) ---------- */
 @theme inline {
   --color-fondo: var(--fondo);
   --color-superficie: var(--superficie);
@@ -98,6 +99,7 @@
   --font-cifras: var(--fuente-cifras), ui-monospace, monospace;
 }
 
+/* ---------- base del documento ---------- */
 html {
   background: var(--fondo);
   color: var(--texto);
