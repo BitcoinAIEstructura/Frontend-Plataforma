@@ -54,6 +54,8 @@ function primero(tabla: [RegExp, string][], texto: string): string | null {
   return tabla.find(([patron]) => patron.test(texto))?.[1] ?? null;
 }
 
+// TODO: reemplazar la detección por User-Agent por navigator.userAgentData cuando
+// todos los navegadores objetivo lo soporten; hoy es una heurística que puede fallar.
 export function describirAgente(agente: string): string {
   const navegador = primero(NAVEGADORES, agente);
   const sistema = primero(SISTEMAS, agente);
