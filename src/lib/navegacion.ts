@@ -1,3 +1,9 @@
+/**
+ * Configuración de navegación compartida.
+ *
+ * Centraliza la ruta de inicio de la app y la validación de destinos internos
+ * para que login, proxy y layouts apliquen las mismas reglas.
+ */
 export const INICIO_APP = "/panel";
 
 /**
