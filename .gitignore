@@ -17,6 +17,7 @@ next-env.d.ts
 # varios
 .DS_Store
 *.pem
+*.log
 npm-debug.log*
 .vscode/
 .idea/
