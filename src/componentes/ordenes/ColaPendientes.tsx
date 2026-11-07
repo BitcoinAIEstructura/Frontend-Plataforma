@@ -137,7 +137,9 @@ export function ColaPendientes({ cola, botActivo }: { cola: readonly Orden[]; bo
         </Boton>
       </div>
       {!hayPendientes && (
-        <p className="mt-2 text-xs text-texto-atenuado">Estos botones se activan cuando hay órdenes en la cola.</p>
+        <p className="mt-2 text-xs text-texto-atenuado">
+          Estos botones se activan cuando hay órdenes en la cola.
+        </p>
       )}
 
       {ultimo && "error" in ultimo && (
@@ -163,8 +165,8 @@ export function ColaPendientes({ cola, botActivo }: { cola: readonly Orden[]; bo
           pregunta && (
             <p>
               Vas a quitar <strong className="font-semibold text-texto">{nombreOrden(pregunta.orden)}</strong>{" "}
-              de la cola. No se ejecutará y no se puede recuperar; si la quieres otra vez, tendrás que crearla de
-              nuevo. Tu dinero no se mueve.
+              de la cola. No se ejecutará y no se puede recuperar; si la quieres otra vez, tendrás que crearla
+              de nuevo. Tu dinero no se mueve.
             </p>
           )
         }
