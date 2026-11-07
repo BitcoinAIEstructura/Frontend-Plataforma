@@ -17,7 +17,7 @@ export default function ErrorDePantalla({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error(error);
+    console.error("Error al renderizar una pantalla privada de Nexabit:", error);
   }, [error]);
   return (
     <Tarjeta como="div" className="flex flex-col items-center gap-4 py-12 text-center">
