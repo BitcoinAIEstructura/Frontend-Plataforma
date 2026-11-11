@@ -72,9 +72,9 @@ export const PREDICCION: PrediccionIA = {
     no: { hoja: true, muestras: 679, probabilidad: 0.49, enCamino: false },
   },
   prueba: [
-    { tiempo: 1, probabilidad: 0.6, subio: true },
-    { tiempo: 2, probabilidad: 0.6, subio: false },
-    { tiempo: 3, probabilidad: 0.4, subio: false },
+    { tiempo: 1, probabilidad: 0.6, subio: true, rendimiento: 0.01 },
+    { tiempo: 2, probabilidad: 0.6, subio: false, rendimiento: -0.01 },
+    { tiempo: 3, probabilidad: 0.4, subio: false, rendimiento: -0.01 },
   ],
   fuentesExternas: {
     usadas: [

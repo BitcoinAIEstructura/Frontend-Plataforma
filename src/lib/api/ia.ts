@@ -86,7 +86,15 @@ const esquemaPrediccion = z.object({
   modelos: z.array(esquemaModelo),
   caracteristicas: z.array(z.object({ nombre: z.string(), valor: z.number() })),
   arbol: esquemaNodo.nullable(),
-  prueba: z.array(z.object({ tiempo: z.number(), probabilidad: z.number(), subio: z.boolean() })),
+  prueba: z.array(
+    z.object({
+      tiempo: z.number(),
+      probabilidad: z.number(),
+      subio: z.boolean(),
+      /** Cuánto cambió el precio en la vela siguiente (0,01 = +1 %). */
+      rendimiento: z.number().default(0),
+    }),
+  ),
   fuentesExternas: z.object({
     usadas: z.array(esquemaFuente),
     omitidas: z.array(esquemaFuente.extend({ motivo: z.string() })),

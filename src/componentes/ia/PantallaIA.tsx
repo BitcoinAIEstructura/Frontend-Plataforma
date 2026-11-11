@@ -13,6 +13,7 @@ import { TarjetaEvaluacion } from "./Evaluacion";
 import { TarjetaComite } from "./TarjetaComite";
 import { TarjetaFuentes } from "./TarjetaFuentes";
 import { TarjetaModelo } from "./TarjetaModelo";
+import { TarjetaRendimientoIA } from "./RendimientoIA";
 
 /**
  * Predicciones IA: tres modelos hechos a mano y un comité, medidos con honestidad. Los textos
@@ -67,6 +68,7 @@ export function PantallaIA() {
               <TarjetaModelo key={m.nombre} modelo={m} />
             ))}
           </div>
+          <TarjetaRendimientoIA prediccion={p} />
           <TarjetaFuentes fuentes={fuentes.data} externos={p.fuentesExternas} />
           <TarjetaEvaluacion prediccion={p} />
           <div className="grid gap-5 lg:grid-cols-2">

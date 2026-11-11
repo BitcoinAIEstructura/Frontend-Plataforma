@@ -7,6 +7,11 @@ import { renderizar, servidorFalso } from "@/test/utilidades";
 
 import { PantallaIA } from "./PantallaIA";
 
+// jsdom no tiene canvas: la gráfica de rendimiento se prueba aparte (ver rendimiento.test.ts).
+vi.mock("./RendimientoIA", () => ({
+  TarjetaRendimientoIA: () => <section aria-label="Si hubieras seguido a la IA" />,
+}));
+
 afterEach(() => vi.unstubAllGlobals());
 
 describe("PantallaIA", () => {
@@ -18,6 +23,7 @@ describe("PantallaIA", () => {
     renderizar(<PantallaIA />);
     expect(screen.getByRole("status")).toHaveTextContent("Entrenando los tres modelos");
     expect(await screen.findByRole("region", { name: "Lo que cree el comité" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Si hubieras seguido a la IA" })).toBeInTheDocument();
     for (const nombre of ["Regresión logística", "Árbol de decisión", "k vecinos"]) {
       expect(screen.getByRole("region", { name: nombre })).toBeInTheDocument();
     }

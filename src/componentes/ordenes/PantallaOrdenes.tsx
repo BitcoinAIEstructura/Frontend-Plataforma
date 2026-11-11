@@ -1,5 +1,6 @@
 "use client";
 
+import { ConsejoIA } from "@/componentes/ia/ConsejoIA";
 import { PrecioEnVivo } from "@/componentes/mercado/PrecioEnVivo";
 import { Tarjeta } from "@/componentes/ui/Tarjeta";
 import { useBot, useOrdenes } from "@/lib/hooks/useDatos";
@@ -21,6 +22,7 @@ export function PantallaOrdenes() {
         <Tarjeta como="div">
           <PrecioEnVivo />
         </Tarjeta>
+        <ConsejoIA compacto />
         <FormularioOrden />
       </div>
       <div className="flex flex-col gap-5 lg:col-span-3">
