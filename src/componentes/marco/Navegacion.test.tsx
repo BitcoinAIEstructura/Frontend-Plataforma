@@ -27,6 +27,22 @@ describe("Navegación", () => {
     expect(within(nav).getByRole("link", { name: /Panel/ })).not.toHaveAttribute("aria-current");
   });
 
+  it("es solo de iconos: cada enlace se llama como su sección y un botón muestra los nombres", async () => {
+    render(<BarraLateral />);
+    const boton = screen.getByRole("button", { name: "Mostrar los nombres de las secciones" });
+    expect(boton).toHaveAttribute("aria-expanded", "false");
+    expect(screen.getByRole("link", { name: "Panel" }).querySelector("svg")).not.toBeNull();
+    await userEvent.click(boton);
+    expect(screen.getByRole("button", { name: "Mostrar solo los iconos" })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
+    expect(window.localStorage.getItem("nexabit.barra-expandida")).toBe("1");
+    expect(screen.getByRole("link", { name: "Panel" })).toHaveTextContent("Panel");
+    await userEvent.click(screen.getByRole("button", { name: "Mostrar solo los iconos" }));
+    expect(window.localStorage.getItem("nexabit.barra-expandida")).toBe("0");
+  });
+
   it("las secciones futuras no son enlaces y dicen Pronto", () => {
     render(<BarraLateral />);
     expect(screen.queryByRole("link", { name: /Alertas/ })).toBeNull();

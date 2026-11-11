@@ -2,6 +2,7 @@
 export interface Seccion {
   ruta: string;
   titulo: string;
+  /** Nombre del icono SVG (ver `Iconos.tsx`). */
   icono: string;
   lista: boolean;
   /** Aparece en la barra inferior del teléfono (máximo 4; las demás están en «Más»). */
@@ -14,7 +15,7 @@ export const SECCIONES: readonly Seccion[] = [
   {
     ruta: "/panel",
     titulo: "Panel",
-    icono: "◈",
+    icono: "panel",
     lista: true,
     enTelefono: true,
     descripcion: "Tu resumen: cuánto tienes, el precio del Bitcoin ahora y qué opina la estrategia.",
@@ -22,7 +23,7 @@ export const SECCIONES: readonly Seccion[] = [
   {
     ruta: "/mercado",
     titulo: "Mercado",
-    icono: "⌁",
+    icono: "mercado",
     lista: true,
     enTelefono: true,
     descripcion: "El precio del Bitcoin en velas, con indicadores que ayudan a leerlo, y tus alertas.",
@@ -30,7 +31,7 @@ export const SECCIONES: readonly Seccion[] = [
   {
     ruta: "/ordenes",
     titulo: "Órdenes",
-    icono: "⇅",
+    icono: "ordenes",
     lista: true,
     enTelefono: true,
     descripcion: "Aquí compras y vendes Bitcoin con dinero de práctica.",
@@ -38,7 +39,7 @@ export const SECCIONES: readonly Seccion[] = [
   {
     ruta: "/cartera",
     titulo: "Cartera",
-    icono: "◎",
+    icono: "cartera",
     lista: true,
     enTelefono: false,
     descripcion: "Cuánto dinero simulado tienes, en qué está y todo lo que ha pasado.",
@@ -46,7 +47,7 @@ export const SECCIONES: readonly Seccion[] = [
   {
     ruta: "/bot",
     titulo: "Bot",
-    icono: "⚙",
+    icono: "bot",
     lista: true,
     enTelefono: true,
     descripcion: "Un robot que compra y vende solo, siguiendo reglas que tú ajustas.",
@@ -54,7 +55,7 @@ export const SECCIONES: readonly Seccion[] = [
   {
     ruta: "/liga",
     titulo: "Liga",
-    icono: "♛",
+    icono: "liga",
     lista: true,
     enTelefono: false,
     descripcion: "Compárate con otros inversores y mira qué habría pasado si invertías en el pasado.",
@@ -62,7 +63,7 @@ export const SECCIONES: readonly Seccion[] = [
   {
     ruta: "/ia",
     titulo: "Predicciones IA",
-    icono: "✦",
+    icono: "ia",
     lista: true,
     enTelefono: false,
     descripcion: "Modelos que aprenden del pasado e intentan decir si el precio subirá o bajará.",
@@ -70,7 +71,7 @@ export const SECCIONES: readonly Seccion[] = [
   {
     ruta: "/como-funciona",
     titulo: "Cómo funciona",
-    icono: "⬡",
+    icono: "como-funciona",
     lista: true,
     enTelefono: false,
     descripcion: "Las estructuras de datos que hacen funcionar Nexabit, en vivo.",
@@ -78,7 +79,7 @@ export const SECCIONES: readonly Seccion[] = [
   {
     ruta: "/seguridad",
     titulo: "Seguridad",
-    icono: "⛨",
+    icono: "seguridad",
     lista: true,
     enTelefono: false,
     descripcion: "Protege tu cuenta: verificación en dos pasos, contraseña y dispositivos conectados.",
