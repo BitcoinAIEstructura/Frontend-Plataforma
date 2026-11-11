@@ -5,7 +5,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { Boton } from "@/componentes/ui/Boton";
-import { LARGO_MAXIMO_MENSAJE, preguntarAlBot, type AccionAsistente } from "@/lib/api/asistente";
+import {
+  LARGO_MAXIMO_MENSAJE,
+  preguntarAlBot,
+  type AccionAsistente,
+  type TurnoChat,
+} from "@/lib/api/asistente";
 import { useAccionesBot, useBot } from "@/lib/hooks/useDatos";
 
 export const SUGERENCIAS_INICIALES = ["¿Qué estás haciendo?", "¿Cuánto he ganado?", "¿Qué es el stop loss?"];
@@ -19,6 +24,15 @@ export interface Mensaje {
   accionUsada?: boolean;
   sugerencias?: readonly string[];
   error?: boolean;
+  /** La respuesta la escribió la IA (Claude). */
+  deIA?: boolean;
+}
+
+/** Lo que se le manda a la IA para que siga la conversación (sin errores ni la bienvenida). */
+export function historialDe(mensajes: readonly Mensaje[]): TurnoChat[] {
+  return mensajes
+    .filter((m) => !m.error && m.id !== 0)
+    .map((m) => ({ rol: m.de === "tu" ? "usuario" : "bot", texto: m.texto }));
 }
 
 export function bienvenida(nombre: string): Mensaje {
@@ -62,18 +76,28 @@ export function ChatBot({ mensajes, setMensajes, preguntaInicial, alIr }: Props)
   const enviar = (contenido: string) => {
     const limpio = contenido.trim().slice(0, LARGO_MAXIMO_MENSAJE);
     if (!limpio || pregunta.isPending) return;
+    const historial = historialDe(mensajes);
     agregar({ de: "tu", texto: limpio });
     setTexto("");
-    pregunta.mutate(limpio, {
-      onSuccess: (r) =>
-        agregar({ de: "bot", texto: r.respuesta, accion: r.accion, sugerencias: r.sugerencias }),
-      onError: (e) =>
-        agregar({
-          de: "bot",
-          texto: `No pude responder: ${e.message}. Intenta de nuevo en un momento.`,
-          error: true,
-        }),
-    });
+    pregunta.mutate(
+      { mensaje: limpio, historial },
+      {
+        onSuccess: (r) =>
+          agregar({
+            de: "bot",
+            texto: r.respuesta,
+            accion: r.accion,
+            sugerencias: r.sugerencias,
+            deIA: r.fuente === "ia",
+          }),
+        onError: (e) =>
+          agregar({
+            de: "bot",
+            texto: `No pude responder: ${e.message}. Intenta de nuevo en un momento.`,
+            error: true,
+          }),
+      },
+    );
   };
 
   // La pregunta que venía al abrir se envía una sola vez.
@@ -152,8 +176,16 @@ export function ChatBot({ mensajes, setMensajes, preguntaInicial, alIr }: Props)
               }
             >
               <span className="sr-only">{m.de === "tu" ? "Tú: " : "Bot: "}</span>
-              {m.texto}
+              <span className="whitespace-pre-line">{m.texto}</span>
             </p>
+            {m.deIA && (
+              <span className="-mt-1 px-2 text-[11px] text-texto-atenuado">
+                <span aria-hidden className="text-violeta">
+                  ✦{" "}
+                </span>
+                Respondido por IA · puede equivocarse
+              </span>
+            )}
             {m.accion && (
               <Boton
                 variante={

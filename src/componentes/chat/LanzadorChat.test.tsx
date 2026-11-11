@@ -63,9 +63,37 @@ describe("LanzadorChat", () => {
     expect(await within(panel).findByText("Vas ganando 10,00 USDT.")).toBeInTheDocument();
     expect(within(panel).getByText("¿cuánto he ganado?")).toBeInTheDocument();
     const llamada = fetch.mock.calls.find(([ruta]) => ruta === "/api/asistente")!;
-    expect(JSON.parse(String(llamada[1]?.body))).toEqual({ mensaje: "¿cuánto he ganado?" });
+    // La bienvenida no va en el historial: es el primer mensaje.
+    expect(JSON.parse(String(llamada[1]?.body))).toEqual({ mensaje: "¿cuánto he ganado?", historial: [] });
+    // Sin IA (respuesta de reglas) no aparece la marca.
+    expect(within(panel).queryByText(/Respondido por IA/)).toBeNull();
     // Las sugerencias de la última respuesta se pueden tocar.
     expect(within(panel).getByRole("button", { name: "¿Qué estás haciendo?" })).toBeInTheDocument();
+  });
+
+  it("con la IA, manda la conversación anterior y marca sus respuestas", async () => {
+    const fetch = servidorFalso({
+      "GET /api/bot/estado": { estado: 200, cuerpo: BOT },
+      "POST /api/asistente": respuesta({ respuesta: "Con 10.000 USDT de práctica podrías…", fuente: "ia" }),
+    });
+    renderizar(<LanzadorChat nombre="Ana" />);
+    await userEvent.click(screen.getByRole("button", { name: /Pregúntale al bot/ }));
+    const panel = screen.getByRole("dialog", { name: "Habla con tu bot" });
+    const casilla = screen.getByLabelText("Escribe tu pregunta para el bot");
+    await userEvent.type(casilla, "Quiero invertir{Enter}");
+    expect(await within(panel).findAllByText(/Respondido por IA/)).toHaveLength(1);
+    await userEvent.type(casilla, "¿y cuánto?{Enter}");
+    await within(panel)
+      .findAllByText("Con 10.000 USDT de práctica podrías…")
+      .then((t) => expect(t).toHaveLength(2));
+    const llamadas = fetch.mock.calls.filter(([ruta]) => ruta === "/api/asistente");
+    expect(JSON.parse(String(llamadas[1]![1]?.body))).toEqual({
+      mensaje: "¿y cuánto?",
+      historial: [
+        { rol: "usuario", texto: "Quiero invertir" },
+        { rol: "bot", texto: "Con 10.000 USDT de práctica podrías…" },
+      ],
+    });
   });
 
   it("encender el bot solo pasa al tocar el botón de la respuesta", async () => {
