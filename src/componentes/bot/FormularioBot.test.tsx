@@ -11,6 +11,7 @@ const ACTUAL = {
   riesgo: 0.2,
   stopLoss: 0.05,
   takeProfit: 0.1,
+  modo: "reglas" as const,
 };
 
 describe("FormularioBot", () => {
@@ -41,6 +42,7 @@ describe("FormularioBot", () => {
       riesgo: 0.2,
       stopLoss: 0.05,
       takeProfit: 0.1,
+      modo: "reglas" as const,
     });
   });
 
@@ -65,5 +67,39 @@ describe("FormularioBot", () => {
       />,
     );
     expect(screen.getByRole("radio", { name: "Cada 5 min" })).toBeChecked();
+  });
+
+  it("con el piloto IA disponible, deja elegir quién decide y los valores pasan a ser topes", async () => {
+    const alIniciar = vi.fn();
+    render(
+      <FormularioBot
+        actual={{ ...ACTUAL, modo: "ia" }}
+        activo={false}
+        cargando={false}
+        alIniciar={alIniciar}
+        alDetener={vi.fn()}
+        pilotoDisponible
+      />,
+    );
+    expect(screen.getByRole("radio", { name: "✦ Piloto IA" })).toBeChecked();
+    expect(screen.getByRole("slider", { name: "Riesgo máximo por compra" })).toHaveValue("20");
+    await userEvent.click(screen.getByRole("button", { name: "✦ Encender el piloto IA" }));
+    expect(alIniciar).toHaveBeenCalledWith(expect.objectContaining({ modo: "ia", riesgo: 0.2 }));
+    await userEvent.click(screen.getByRole("radio", { name: "Reglas (indicadores)" }));
+    expect(screen.getByRole("slider", { name: "Riesgo por compra" })).toBeInTheDocument();
+  });
+
+  it("sin piloto IA no aparece la elección y siempre usa reglas", () => {
+    render(
+      <FormularioBot
+        actual={{ ...ACTUAL, modo: "ia" }}
+        activo={false}
+        cargando={false}
+        alIniciar={vi.fn()}
+        alDetener={vi.fn()}
+      />,
+    );
+    expect(screen.queryByRole("radio", { name: "✦ Piloto IA" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "▶ Encender el bot" })).toBeInTheDocument();
   });
 });

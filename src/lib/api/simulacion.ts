@@ -54,9 +54,29 @@ export const esquemaConfiguracionBot = z.object({
   riesgo: z.number(),
   stopLoss: z.number(),
   takeProfit: z.number(),
+  /** "reglas": estrategia de indicadores. "ia": piloto automático (riesgo, stop-loss y take-profit son topes). */
+  modo: z.enum(["reglas", "ia"]).default("reglas"),
 });
 /** Parámetros con los que se configura el bot simulado. */
 export type ConfiguracionBot = z.infer<typeof esquemaConfiguracionBot>;
+
+/** Lo que decidió el piloto IA en su último ciclo (o lo que haría ahora, en el consejo). */
+export const esquemaDecisionPiloto = z.object({
+  senal: z.enum(["COMPRAR", "VENDER", "MANTENER"]),
+  probabilidad: z.number(),
+  confianza: z.number(),
+  exactitud: z.number(),
+  base: z.number(),
+  riesgo: z.number(),
+  stopLoss: z.number(),
+  takeProfit: z.number(),
+  volatilidad: z.number(),
+  intervalo: z.string(),
+  tiempoVela: z.number(),
+  precio: z.number(),
+  motivo: z.string(),
+});
+export type DecisionPiloto = z.infer<typeof esquemaDecisionPiloto>;
 
 export const esquemaBot = z.object({
   activo: z.boolean(),
@@ -69,6 +89,8 @@ export const esquemaBot = z.object({
   /** Cuándo se encendió (ms) y si está revisando el mercado en este momento. */
   encendidoDesde: z.number().nullable().default(null),
   enCiclo: z.boolean().default(false),
+  piloto: esquemaDecisionPiloto.nullable().default(null),
+  pilotoDisponible: z.boolean().default(false),
 });
 /** Estado actual del bot y su última decisión de mercado. */
 export type EstadoBot = z.infer<typeof esquemaBot>;
@@ -110,6 +132,56 @@ export function obtenerCartera(senal?: AbortSignal): Promise<Cartera> {
 export async function obtenerHistorial(limite = 50): Promise<EventoSimulacion[]> {
   return (await pedir(`/api/historial?limite=${limite}`, z.object({ eventos: z.array(esquemaEvento) })))
     .eventos;
+}
+
+// ---------- estadísticas y consejo de la IA ----------
+
+const esquemaOrigen = z.enum(["manual", "bot", "ia"]);
+export type Origen = z.infer<typeof esquemaOrigen>;
+
+export const esquemaEstadisticas = z.object({
+  operaciones: z.array(
+    z.object({
+      idOrden: z.number(),
+      tiempo: z.number(),
+      ganancia: z.number(),
+      rentabilidad: z.number(),
+      origen: esquemaOrigen,
+    }),
+  ),
+  actividad: z.array(
+    z.object({ dia: z.number(), compras: z.number(), ventas: z.number(), volumen: z.number() }),
+  ),
+  resumen: z.object({
+    cerradas: z.number(),
+    ganadoras: z.number(),
+    perdedoras: z.number(),
+    tasaAcierto: z.number().nullable(),
+    gananciaPromedio: z.number(),
+    mejor: z.number().nullable(),
+    peor: z.number().nullable(),
+    volumenTotal: z.number(),
+  }),
+  porOrigen: z.array(z.object({ origen: esquemaOrigen, ordenes: z.number(), ganancia: z.number() })),
+  reparto: z.object({ usdt: z.number(), btc: z.number() }),
+});
+export type Estadisticas = z.infer<typeof esquemaEstadisticas>;
+
+export const esquemaConsejo = z.object({
+  accion: z.enum(["COMPRAR", "VENDER", "MANTENER", "ESPERAR"]),
+  titulo: z.string(),
+  texto: z.string(),
+  decision: esquemaDecisionPiloto,
+  aviso: z.string(),
+});
+export type ConsejoIA = z.infer<typeof esquemaConsejo>;
+
+export function obtenerEstadisticas(senal?: AbortSignal): Promise<Estadisticas> {
+  return pedir("/api/estadisticas", esquemaEstadisticas, { senal });
+}
+
+export function obtenerConsejo(senal?: AbortSignal): Promise<ConsejoIA> {
+  return pedir("/api/ia/consejo", esquemaConsejo, { senal });
 }
 
 // ---------- bot ----------

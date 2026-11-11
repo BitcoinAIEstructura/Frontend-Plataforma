@@ -18,6 +18,13 @@ export const CADA_CUANTO = [
 
 type Segundos = (typeof CADA_CUANTO)[number]["valor"];
 
+type Modo = ConfiguracionBot["modo"];
+
+export const MODOS: readonly { valor: Modo; etiqueta: string }[] = [
+  { valor: "ia", etiqueta: "✦ Piloto IA" },
+  { valor: "reglas", etiqueta: "Reglas (indicadores)" },
+];
+
 /** Un control deslizante en porcentaje, con su valor escrito al lado. */
 function Porcentaje({
   etiqueta,
@@ -78,8 +85,10 @@ export function aConfiguracion(c: {
   riesgo: number;
   stopLoss: number;
   takeProfit: number;
+  modo?: Modo;
 }): Partial<ConfiguracionBot> {
   return {
+    modo: c.modo,
     segundosEntreCiclos: Number(c.segundos),
     intervalo: c.intervalo,
     riesgo: c.riesgo / 100,
@@ -100,10 +109,22 @@ interface Props {
   cargando: boolean;
   alIniciar: (configuracion: Partial<ConfiguracionBot>) => void;
   alDetener: () => void;
+  /** Si el servidor tiene la IA lista para manejar el bot. */
+  pilotoDisponible?: boolean;
 }
 
 /** Ajustes del bot. Mientras está en marcha se ven, pero no se cambian (hay que detenerlo). */
-export function FormularioBot({ actual, activo, cargando, alIniciar, alDetener }: Props) {
+export function FormularioBot({
+  actual,
+  activo,
+  cargando,
+  alIniciar,
+  alDetener,
+  pilotoDisponible = false,
+}: Props) {
+  // Con la IA disponible se propone el piloto (si el bot ya está en marcha, se muestra cómo va).
+  const [modo, setModo] = useState<Modo>(pilotoDisponible ? (activo ? actual.modo : "ia") : "reglas");
+  const ia = modo === "ia";
   const [segundos, setSegundos] = useState<Segundos>(cercano(actual.segundosEntreCiclos));
   const [intervalo, setIntervalo] = useState<Intervalo>(
     (OPCIONES_INTERVALO.find((o) => o.valor === actual.intervalo)?.valor ?? "1h") as Intervalo,
@@ -115,13 +136,31 @@ export function FormularioBot({ actual, activo, cargando, alIniciar, alDetener }
   const enviar = (e: FormEvent) => {
     e.preventDefault();
     if (activo) alDetener();
-    else alIniciar(aConfiguracion({ segundos, intervalo, riesgo, stopLoss, takeProfit }));
+    else alIniciar(aConfiguracion({ segundos, intervalo, riesgo, stopLoss, takeProfit, modo }));
   };
 
   return (
     <form onSubmit={enviar} className="flex flex-col gap-5">
       <fieldset disabled={activo} className="flex flex-col gap-5 disabled:opacity-80">
         <legend className="sr-only">Ajustes del bot</legend>
+        {pilotoDisponible && (
+          <div className="flex flex-col gap-1.5">
+            <span aria-hidden className="text-sm font-medium text-texto-secundario">
+              ¿Quién decide?
+            </span>
+            <Segmentado
+              etiqueta="Quién decide las operaciones"
+              opciones={MODOS}
+              valor={modo}
+              alCambiar={setModo}
+            />
+            <p className="text-xs text-texto-atenuado" aria-live="polite">
+              {ia
+                ? "La IA (tres modelos que votan) decide comprar, vender o esperar y elige cuánto arriesgar en cada operación. Los valores de abajo son los máximos que le permites."
+                : "Decide la estrategia combinada (cruce de medias, RSI y MACD) con los valores exactos de abajo."}
+            </p>
+          </div>
+        )}
         <div className="flex flex-col gap-1.5">
           <span aria-hidden className="text-sm font-medium text-texto-secundario">
             Cada cuánto revisa el mercado
@@ -148,9 +187,13 @@ export function FormularioBot({ actual, activo, cargando, alIniciar, alDetener }
           />
         </div>
         <Porcentaje
-          etiqueta="Riesgo por compra"
+          etiqueta={ia ? "Riesgo máximo por compra" : "Riesgo por compra"}
           concepto="riesgo"
-          ayuda="Qué parte de tus USDT usa en cada compra."
+          ayuda={
+            ia
+              ? "Lo máximo de tus USDT que la IA puede usar; con poca confianza usa menos."
+              : "Qué parte de tus USDT usa en cada compra."
+          }
           valor={riesgo}
           min={1}
           max={100}
@@ -158,9 +201,13 @@ export function FormularioBot({ actual, activo, cargando, alIniciar, alDetener }
           disabled={activo}
         />
         <Porcentaje
-          etiqueta="Stop-loss (freno de pérdidas)"
+          etiqueta={ia ? "Stop-loss máximo" : "Stop-loss (freno de pérdidas)"}
           concepto="stop-loss"
-          ayuda="Si el precio cae esto desde lo que pagaste, vende todo para limitar la pérdida."
+          ayuda={
+            ia
+              ? "La IA lo ajusta a la volatilidad del mercado, sin pasar de este valor."
+              : "Si el precio cae esto desde lo que pagaste, vende todo para limitar la pérdida."
+          }
           valor={stopLoss}
           min={1}
           max={50}
@@ -168,9 +215,13 @@ export function FormularioBot({ actual, activo, cargando, alIniciar, alDetener }
           disabled={activo}
         />
         <Porcentaje
-          etiqueta="Take-profit (meta de ganancia)"
+          etiqueta={ia ? "Take-profit máximo" : "Take-profit (meta de ganancia)"}
           concepto="take-profit"
-          ayuda="Si el precio sube esto desde lo que pagaste, vende todo y asegura la ganancia."
+          ayuda={
+            ia
+              ? "La IA pone la meta en el doble de su stop-loss, sin pasar de este valor."
+              : "Si el precio sube esto desde lo que pagaste, vende todo y asegura la ganancia."
+          }
           valor={takeProfit}
           min={1}
           max={100}
@@ -185,7 +236,7 @@ export function FormularioBot({ actual, activo, cargando, alIniciar, alDetener }
         </Boton>
       ) : (
         <Boton type="submit" cargando={cargando} anchoCompleto>
-          ▶ Encender el bot
+          {ia ? "✦ Encender el piloto IA" : "▶ Encender el bot"}
         </Boton>
       )}
     </form>

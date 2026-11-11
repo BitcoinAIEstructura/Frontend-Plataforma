@@ -3,7 +3,7 @@
 import { ListaEventos } from "@/componentes/cartera/HistorialEventos";
 import { Tarjeta } from "@/componentes/ui/Tarjeta";
 import type { Decision } from "@/lib/api/mercado";
-import type { EstadoBot as Estado, EventoSimulacion } from "@/lib/api/simulacion";
+import type { DecisionPiloto, EstadoBot as Estado, EventoSimulacion } from "@/lib/api/simulacion";
 import { haceCuanto, usdt } from "@/lib/formato";
 
 import { TrabajoBot } from "./TrabajoBot";
@@ -24,6 +24,36 @@ const TIPOS_BOT = new Set([
   "ERROR_BOT",
 ]);
 
+const PORCENTAJE = new Intl.NumberFormat("es-CO", { maximumFractionDigits: 1 });
+const pct = (fraccion: number) => `${PORCENTAJE.format(fraccion * 100)} %`;
+
+/** Lo que eligió la IA en su último ciclo: no son valores fijos, cambian con su confianza y el mercado. */
+export function AjustesPiloto({ piloto }: { piloto: DecisionPiloto }) {
+  const filas = [
+    { nombre: "Probabilidad de que suba", valor: pct(piloto.probabilidad) },
+    { nombre: "Riesgo que usó", valor: pct(piloto.riesgo) },
+    { nombre: "Stop-loss elegido", valor: pct(piloto.stopLoss) },
+    { nombre: "Take-profit elegido", valor: pct(piloto.takeProfit) },
+    { nombre: "Volatilidad por vela", valor: pct(piloto.volatilidad) },
+    { nombre: "Acierto del comité", valor: pct(piloto.exactitud) },
+  ];
+  return (
+    <div className="mt-4 rounded-xl border border-violeta/40 bg-violeta/5 p-4">
+      <p className="text-xs font-medium tracking-wide text-violeta uppercase">
+        <span aria-hidden>✦ </span>Ajustes que eligió la IA
+      </p>
+      <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-2 text-sm sm:grid-cols-3">
+        {filas.map((f) => (
+          <div key={f.nombre}>
+            <dt className="text-xs text-texto-atenuado">{f.nombre}</dt>
+            <dd className="cifra font-semibold text-texto">{f.valor}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}
+
 export function eventosDelBot(eventos: readonly EventoSimulacion[], cuantos = 8): EventoSimulacion[] {
   return eventos.filter((e) => TIPOS_BOT.has(e.tipo)).slice(0, cuantos);
 }
@@ -33,7 +63,7 @@ export function EstadoBot({ estado }: { estado: Estado }) {
   const d = estado.ultimaDecision;
   return (
     <Tarjeta
-      titulo="Estado del bot"
+      titulo={estado.configuracion.modo === "ia" ? "Estado del piloto IA" : "Estado del bot"}
       extra={
         estado.activo ? (
           <span className="inline-flex items-center gap-1.5 rounded-full border border-exito/40 px-2.5 py-0.5 text-xs font-medium text-exito">
@@ -79,6 +109,8 @@ export function EstadoBot({ estado }: { estado: Estado }) {
           </p>
         )}
       </div>
+
+      {estado.configuracion.modo === "ia" && estado.piloto && <AjustesPiloto piloto={estado.piloto} />}
 
       {estado.ultimoError && (
         <p

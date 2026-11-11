@@ -34,14 +34,17 @@ export function PantallaBot() {
       <div className="flex flex-col gap-5 lg:col-span-2">
         <Tarjeta titulo="Tu bot" destacada>
           <p className="mb-5 text-sm text-texto-secundario">
-            Sigue la estrategia combinada (cruce de medias, RSI y MACD): compra cuando la mayoría dice
-            «comprar» y vende cuando dice «vender» o se activa tu stop-loss o take-profit.{" "}
+            Con el <strong className="font-medium text-texto">piloto IA</strong>, el comité de modelos decide
+            por ti y ajusta el riesgo a su confianza. Con las{" "}
+            <strong className="font-medium text-texto">reglas</strong>, sigue la estrategia combinada (cruce
+            de medias, RSI y MACD). En los dos casos se activa tu stop-loss o take-profit.{" "}
             <strong className="font-medium text-texto">También puede perder</strong>: es práctica con dinero
             simulado.
           </p>
           <FormularioBot
             actual={bot.data.configuracion}
             activo={bot.data.activo}
+            pilotoDisponible={bot.data.pilotoDisponible}
             cargando={iniciar.isPending || detener.isPending}
             alIniciar={(c) => {
               detener.reset();

@@ -46,7 +46,14 @@ describe("PantallaBot", () => {
     expect(await screen.findByRole("button", { name: "■ Detener el bot" })).toBeInTheDocument();
     expect(screen.getByText("En marcha")).toBeInTheDocument();
     expect(cuerpos).toEqual([
-      { segundosEntreCiclos: 60, intervalo: "1h", riesgo: 0.2, stopLoss: 0.05, takeProfit: 0.1 },
+      {
+        modo: "reglas",
+        segundosEntreCiclos: 60,
+        intervalo: "1h",
+        riesgo: 0.2,
+        stopLoss: 0.05,
+        takeProfit: 0.1,
+      },
     ]);
   });
 

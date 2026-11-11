@@ -19,6 +19,7 @@ function estado(cambios: Partial<EstadoBot> = {}): EstadoBot {
       riesgo: 0.2,
       stopLoss: 0.05,
       takeProfit: 0.1,
+      modo: "reglas" as const,
     },
     ciclos: 2,
     ultimoCiclo: AHORA - 15_000,
@@ -26,6 +27,8 @@ function estado(cambios: Partial<EstadoBot> = {}): EstadoBot {
     ultimoError: null,
     encendidoDesde: AHORA - 135_000,
     enCiclo: false,
+    piloto: null,
+    pilotoDisponible: true,
     ...cambios,
   };
 }

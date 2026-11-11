@@ -23,6 +23,8 @@ import {
   iniciarBot,
   obtenerBot,
   obtenerCartera,
+  obtenerConsejo,
+  obtenerEstadisticas,
   obtenerHistorial,
   obtenerOrdenes,
   procesarSiguiente,
@@ -162,6 +164,26 @@ export function useCartera() {
     queryKey: CLAVES.cartera,
     queryFn: ({ signal }) => obtenerCartera(signal),
     refetchInterval: 30_000,
+  });
+}
+
+/** Estadísticas para las gráficas del panel: se recalculan cuando cambian las órdenes. */
+export function useEstadisticas() {
+  return useQuery({
+    queryKey: [...CLAVES.ordenes, "estadisticas"],
+    queryFn: ({ signal }) => obtenerEstadisticas(signal),
+    refetchInterval: 60_000,
+  });
+}
+
+/** Lo que haría la IA ahora con tu cartera (el backend reentrena cada 10 minutos). */
+export function useConsejoIA() {
+  return useQuery({
+    queryKey: [...CLAVES.cartera, "consejo-ia"],
+    queryFn: ({ signal }) => obtenerConsejo(signal),
+    staleTime: 60_000,
+    refetchInterval: 5 * 60_000,
+    retry: 1,
   });
 }
 

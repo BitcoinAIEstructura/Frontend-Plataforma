@@ -15,6 +15,7 @@ const BASE: Estado = {
     riesgo: 0.2,
     stopLoss: 0.05,
     takeProfit: 0.1,
+    modo: "reglas" as const,
   },
   ciclos: 0,
   ultimoCiclo: null,
@@ -22,6 +23,8 @@ const BASE: Estado = {
   ultimoError: null,
   encendidoDesde: null,
   enCiclo: false,
+  piloto: null,
+  pilotoDisponible: true,
 };
 
 describe("EstadoBot", () => {
@@ -58,6 +61,31 @@ describe("EstadoBot", () => {
   it("el último error se muestra como alerta", () => {
     render(<EstadoBot estado={{ ...BASE, ultimoError: "Binance no respondió" }} />);
     expect(screen.getByRole("alert")).toHaveTextContent("Binance no respondió");
+  });
+});
+
+describe("EstadoBot con el piloto IA", () => {
+  it("muestra los ajustes que eligió la IA en su último ciclo", () => {
+    const piloto = {
+      senal: "COMPRAR" as const,
+      probabilidad: 0.62,
+      confianza: 0.24,
+      exactitud: 0.55,
+      base: 0.51,
+      riesgo: 0.12,
+      stopLoss: 0.015,
+      takeProfit: 0.03,
+      volatilidad: 0.005,
+      intervalo: "1h",
+      tiempoVela: 1,
+      precio: 84000,
+      motivo: "El comité da 62 %.",
+    };
+    render(<EstadoBot estado={{ ...BASE, configuracion: { ...BASE.configuracion, modo: "ia" }, piloto }} />);
+    expect(screen.getByRole("region", { name: "Estado del piloto IA" })).toBeInTheDocument();
+    expect(screen.getByText("Ajustes que eligió la IA")).toBeInTheDocument();
+    expect(screen.getByText("12 %")).toBeInTheDocument();
+    expect(screen.getByText("1,5 %")).toBeInTheDocument();
   });
 });
 
