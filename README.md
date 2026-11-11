@@ -19,7 +19,8 @@ Proyecto universitario de Estructuras de Datos. El backend (Python + FastAPI, co
   - Incluye códigos de respaldo y un segundo paso al iniciar sesión.
 - **Centro de seguridad:** dispositivos con sesión abierta (se pueden cerrar), actividad reciente con alertas y cambio de contraseña.
 - **Diseño de lujo:**
-  - Ónix, oro champán y naranja Bitcoin, con tarjetas de vidrio y fondo de aurora.
+  - Modo oscuro: ónix, oro champán y naranja Bitcoin, con tarjetas de vidrio y fondo de aurora.
+  - Modo claro: blanco perla, azul marino y oro, con el mismo naranja Bitcoin para las acciones.
   - Funciona en teléfono y portátil, con tema oscuro o claro y contraste WCAG comprobado por una prueba automática.
   - Gráficas con una paleta validada para daltonismo: lo que sube y lo que baja nunca se distingue solo por color (vela hueca o rellena, ▲▼ en los textos).
 - **Panel:**

@@ -2,8 +2,11 @@
 
 /*
  * Tema de Nexabit: lujo y glamour.
- * Ónix profundo con oro champán como color principal, naranja Bitcoin para las
+ * Oscuro: ónix profundo con oro champán como color principal, naranja Bitcoin para las
  * acciones y violeta real para los detalles.
+ * Claro: blanco perla con texto azul marino, el mismo oro (más oscuro, para que se lea),
+ * naranja Bitcoin para las acciones y azul marino para los detalles (la variable sigue
+ * llamándose "violeta" para no cambiar los componentes).
  *
  * Contrastes comprobados (WCAG) sobre "fondo" y "superficie":
  * - textos (texto, texto-secundario, texto-atenuado, oro, bitcoin, violeta, sube, baja, error) ≥ 4,5:1;
@@ -40,22 +43,23 @@
   --grafica-rejilla: #221f2e;
 }
 
+/* Claro: perla, azul marino y oro. */
 [data-theme="claro"] {
   color-scheme: light;
-  --fondo: #fbf8f1;
+  --fondo: #f4f6fa;
   --superficie: #ffffff;
-  --superficie-alta: #f4efe3;
-  --borde: #e6dfcd;
-  --borde-fuerte: #b3a88c;
-  --texto: #17130a;
-  --texto-secundario: #4a4336;
-  --texto-atenuado: #635b49;
+  --superficie-alta: #e9eef5;
+  --borde: #dbe2ed;
+  --borde-fuerte: #9aa6ba;
+  --texto: #0e1b33;
+  --texto-secundario: #34415a;
+  --texto-atenuado: #4f5b73;
   --oro: #765a17;
   --oro-claro: #b8912f;
   --oro-profundo: #6b5015;
-  --sobre-oro: #fffaf0;
+  --sobre-oro: #ffffff;
   --bitcoin: #a85600;
-  --violeta: #5b3cc4;
+  --violeta: #1e3a8a;
   --sube: #0f766e;
   --baja: #b42340;
   --error: #b42318;
@@ -63,9 +67,9 @@
   --grafica-sube: #008a7b;
   --grafica-baja: #c23a57;
   --grafica-serie-1: #a07a1e;
-  --grafica-serie-2: #6a4fd6;
-  --grafica-neutra: #8a8398;
-  --grafica-rejilla: #efe9dc;
+  --grafica-serie-2: #2f55c8;
+  --grafica-neutra: #78839a;
+  --grafica-rejilla: #e6ebf2;
 }
 
 /* ---------- tokens expuestos a Tailwind (bg-fondo, text-oro, etc.) ---------- */
@@ -179,7 +183,7 @@ input[type="password"]::-ms-clear {
   }
 }
 
-/* Fondo de aurora: halos dorado, violeta y naranja muy suaves sobre el ónix. */
+/* Fondo de aurora: halos dorado, violeta (azul marino en el claro) y naranja muy suaves sobre el fondo. */
 @utility fondo-aurora {
   background:
     radial-gradient(

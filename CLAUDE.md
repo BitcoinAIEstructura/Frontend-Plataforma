@@ -23,10 +23,11 @@ Next.js 16 (App Router) con TypeScript estricto, Tailwind CSS 4, TanStack Query,
 
 ## Diseño (lujo y glamour)
 - Colores solo con los tokens de `src/app/globals.css` (`bg-onix`, `text-oro`, …); nada de hex sueltos en componentes.
-- Oro champán como color principal y naranja Bitcoin para las acciones; violeta real para detalles.
+- Modo oscuro: ónix con oro champán como color principal, naranja Bitcoin para las acciones y violeta real para detalles.
+- Modo claro: blanco perla con texto azul marino, el mismo oro (más oscuro) como color principal, naranja Bitcoin para las acciones y azul marino para detalles (token `violeta`).
 - Contraste: texto ≥ 4,5:1 y marcas gráficas ≥ 3:1.
 - Subida y bajada nunca se distinguen solo por color: llevan icono o texto.
-- Gráficas: solo los tokens `--grafica-*` (validados con el validador de paletas para ambos temas). Turquesa/rosa tiene un aviso de daltonismo (ΔE 6,6), así que siempre van con codificación secundaria: vela que sube hueca, que baja rellena, y ▲▼ en los textos. Una sola escala por gráfica (nunca dos ejes Y).
+- Gráficas: solo los tokens `--grafica-*` (validados con el validador de paletas para ambos temas). Turquesa/rosa tiene un aviso de daltonismo (ΔE 6,6 en el oscuro y 6,2 en el claro), así que siempre van con codificación secundaria: vela que sube hueca, que baja rellena, y ▲▼ en los textos. Una sola escala por gráfica (nunca dos ejes Y).
 - Animaciones respetan `prefers-reduced-motion`; la escena 3D tiene versión liviana.
 - Invitar a operar sí, engañar no: sin urgencias falsas ni botones confusos. El aviso "Simulación con datos reales del mercado; no es asesoría financiera" está visible.
 
