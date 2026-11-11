@@ -3,11 +3,14 @@
 import {
   CandlestickSeries,
   createChart,
+  createSeriesMarkers,
   CrosshairMode,
   HistogramSeries,
   LineSeries,
   type IChartApi,
   type ISeriesApi,
+  type ISeriesMarkersPluginApi,
+  type Time,
   type MouseEventParams,
   type UTCTimestamp,
 } from "lightweight-charts";
@@ -26,6 +29,7 @@ import {
   conAlfa,
   leerColoresGrafica,
   type ColoresGrafica,
+  type MarcaOrden,
 } from "./datos";
 
 /** Una línea encima de las velas (una media, una banda…). */
@@ -48,6 +52,8 @@ interface Props {
   alto?: number;
   /** Nombre de la gráfica para lectores de pantalla ("Velas de BTCUSDT cada hora"). */
   titulo: string;
+  /** Tus compras (▲ debajo de la vela) y ventas (▼ encima). */
+  marcas?: readonly MarcaOrden[];
 }
 
 function opcionesTema(c: ColoresGrafica) {
@@ -75,12 +81,13 @@ function opcionesVelas(c: ColoresGrafica) {
 }
 
 /** Velas de BTCUSDT con volumen en un panel aparte, capas de indicadores, mira y vista de tabla. */
-export function GraficaVelas({ velas, capas = [], alto = 420, titulo }: Props) {
+export function GraficaVelas({ velas, capas = [], alto = 420, titulo, marcas = [] }: Props) {
   const contenedor = useRef<HTMLDivElement>(null);
   const grafica = useRef<IChartApi | null>(null);
   const serieVelas = useRef<ISeriesApi<"Candlestick"> | null>(null);
   const serieVolumen = useRef<ISeriesApi<"Histogram"> | null>(null);
   const seriesCapas = useRef(new Map<string, ISeriesApi<"Line">>());
+  const marcadores = useRef<ISeriesMarkersPluginApi<Time> | null>(null);
   const [enMira, setEnMira] = useState<UTCTimestamp | null>(null);
   const [comoTabla, setComoTabla] = useState(false);
   const tema = useTema();
@@ -101,6 +108,7 @@ export function GraficaVelas({ velas, capas = [], alto = 420, titulo }: Props) {
       localization: { locale: "es-CO", priceFormatter: (p: number) => usdt(p) },
     });
     serieVelas.current = nueva.addSeries(CandlestickSeries, opcionesVelas(c));
+    marcadores.current = createSeriesMarkers(serieVelas.current, []);
     // Volumen en su propio panel: nunca dos escalas sobre el mismo plano.
     serieVolumen.current = nueva.addSeries(
       HistogramSeries,
@@ -116,6 +124,7 @@ export function GraficaVelas({ velas, capas = [], alto = 420, titulo }: Props) {
       nueva.unsubscribeCrosshairMove(alMoverMira);
       nueva.remove();
       grafica.current = null;
+      marcadores.current = null;
       capasActuales.clear();
     };
   }, [alto]);
@@ -126,6 +135,21 @@ export function GraficaVelas({ velas, capas = [], alto = 420, titulo }: Props) {
     serieVelas.current?.setData(aVelasGrafica(velas));
     serieVolumen.current?.setData(aVolumenGrafica(velas, conAlfa(c.sube, 0.45), conAlfa(c.baja, 0.45)));
   }, [velas, tema]);
+
+  // Tus órdenes: la forma (flecha arriba o abajo) y la letra dicen qué fue; el color acompaña.
+  useEffect(() => {
+    const c = leerColoresGrafica();
+    marcadores.current?.setMarkers(
+      marcas.map((m) => ({
+        time: aTiempoGrafica(m.tiempoVela),
+        position: m.tipo === "COMPRA" ? ("belowBar" as const) : ("aboveBar" as const),
+        shape: m.tipo === "COMPRA" ? ("arrowUp" as const) : ("arrowDown" as const),
+        color: m.tipo === "COMPRA" ? c.sube : c.baja,
+        text: `${m.tipo === "COMPRA" ? "Compra" : "Venta"}${m.cantidad > 1 ? ` ×${m.cantidad}` : ""}`,
+        size: 1,
+      })),
+    );
+  }, [marcas, velas, tema]);
 
   // Capas de indicadores: se agregan, actualizan o quitan según `capas`.
   useEffect(() => {
@@ -176,6 +200,12 @@ export function GraficaVelas({ velas, capas = [], alto = 420, titulo }: Props) {
           <span className="text-texto-atenuado">Sin velas todavía</span>
         )}
         <span className="flex items-center gap-3">
+          {marcas.length > 0 && (
+            <span className="text-xs text-texto-secundario">
+              <span className="text-sube">▲</span> tus compras · <span className="text-baja">▼</span> tus
+              ventas
+            </span>
+          )}
           {capas
             .filter((capa) => capa.nombre)
             .map((capa) => (

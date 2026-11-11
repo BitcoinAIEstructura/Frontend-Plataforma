@@ -23,17 +23,22 @@ Proyecto universitario de Estructuras de Datos. El backend (Python + FastAPI, co
   - Modo claro: blanco perla, azul marino y oro, con el mismo naranja Bitcoin para las acciones.
   - Funciona en teléfono y portátil, con tema oscuro o claro y contraste WCAG comprobado por una prueba automática.
   - Gráficas con una paleta validada para daltonismo: lo que sube y lo que baja nunca se distingue solo por color (vela hueca o rellena, ▲▼ en los textos).
+- **La IA en toda la app:**
+  - **Consejo de la IA** en el panel, la cartera y las órdenes: comprar, vender, mantener o esperar según tu cartera, con la probabilidad del comité y cuánto arriesgaría.
+  - **Piloto IA** en el bot: el comité decide por ti y ajusta el riesgo, el stop-loss y el take-profit a su confianza y a la volatilidad, sin pasar los topes que tú pones.
+  - **«Si hubieras seguido a la IA»:** 100 USDT siguiendo al comité en velas que no vio, frente a comprar y guardar (se muestra aunque la IA pierda).
 - **Panel:**
   - Cifras de la cartera (valor, ganancia con ▲▼, USDT y BTC), precio en vivo y la variación de 24 h.
   - Medidor de confianza de la señal de la IA, con el porqué.
   - Evolución de la cartera reconstruida con tus órdenes y las velas (24 h, 7 días o 30 días).
-- **Mercado:** velas de BTCUSDT (de 1 minuto a 1 día) con volumen, SMA, EMA y bandas de Bollinger encima, y RSI o MACD debajo. Cada gráfica tiene vista de tabla.
+  - Tus resultados: porcentaje de operaciones con ganancia, mejor y peor venta, ganancia o pérdida de cada venta, actividad de los últimos 30 días, reparto USDT/BTC y quién operó (tú, el bot de reglas o el piloto IA). Todo con ayuda al pasar el ratón y vista de tabla.
+- **Mercado:** velas de BTCUSDT (de 1 minuto a 1 día) con volumen, SMA, EMA y bandas de Bollinger encima, y RSI o MACD debajo; tus compras (▲) y ventas (▼) quedan marcadas sobre las velas. Cada gráfica tiene vista de tabla.
 - **Órdenes:**
   - Comprar o vender en USDT, con botones de 25 %, 50 % y Todo y una vista previa con la comisión.
   - La cola de pendientes (FIFO) se ejecuta en orden. Cada orden se puede cancelar, y **Ctrl + Z** deshace la última (una pila).
   - Registro con filtro por estado.
 - **Cartera:** reparto USDT/BTC, costo promedio, ganancias realizada y no realizada, y el historial como línea de tiempo.
-- **Bot:** se configura la frecuencia, las velas, el riesgo, el stop-loss y el take-profit; se enciende y se apaga, y se ven sus decisiones en vivo.
+- **Bot:** se elige quién decide (piloto IA o reglas), la frecuencia, las velas, el riesgo, el stop-loss y el take-profit; se enciende y se apaga, y se ven sus decisiones y los ajustes que eligió la IA en vivo.
 - **Tiempo real:** una sola conexión SSE trae el precio, la cartera, las órdenes y las decisiones del bot.
 - **Cómo funciona:** una sección por estructura de datos del backend (cola, pila, montículo, árbol AVL, tabla hash, cola circular y trie). Cada una tiene:
   - Su uso real en Nexabit y su complejidad.

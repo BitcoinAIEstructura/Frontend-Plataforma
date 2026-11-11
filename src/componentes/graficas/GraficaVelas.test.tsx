@@ -17,6 +17,7 @@ vi.mock("lightweight-charts", () => {
     HistogramSeries: "Histogram",
     LineSeries: "Line",
     CrosshairMode: { Normal: 0 },
+    createSeriesMarkers: () => ({ setMarkers: vi.fn() }),
     createChart: () => ({
       addSeries: (tipo: string) => serie(tipo),
       removeSeries: vi.fn(),

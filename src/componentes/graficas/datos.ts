@@ -101,3 +101,38 @@ export const INTERACCION = {
   handleScroll: { mouseWheel: false, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: false },
   handleScale: { mouseWheel: false, pinch: true, axisPressedMouseMove: true },
 } as const;
+
+/** Una orden ejecutada dibujada sobre la vela en que ocurrió. */
+export interface MarcaOrden {
+  /** Tiempo de apertura de la vela que contiene la ejecución. */
+  tiempoVela: number;
+  tipo: "COMPRA" | "VENTA";
+  /** Cuántas órdenes de ese tipo cayeron en esa vela. */
+  cantidad: number;
+}
+
+/**
+ * Ubica cada orden ejecutada en su vela (dos punteros: ambas listas van en orden de tiempo).
+ * Las que caen fuera de las velas visibles se omiten. Complejidad: O(velas + órdenes · log).
+ */
+export function marcasEnVelas(
+  velas: readonly Vela[],
+  ejecuciones: readonly { tiempo: number; tipo: "COMPRA" | "VENTA" }[],
+): MarcaOrden[] {
+  const ordenadas = [...ejecuciones].sort((a, b) => a.tiempo - b.tiempo);
+  const porClave = new Map<string, MarcaOrden>();
+  let v = 0;
+  for (const e of ordenadas) {
+    while (v < velas.length && velas[v]!.tiempoCierre < e.tiempo) v++;
+    const vela = velas[v];
+    if (!vela || e.tiempo < vela.tiempoApertura) continue;
+    const clave = `${vela.tiempoApertura}:${e.tipo}`;
+    const actual = porClave.get(clave);
+    porClave.set(clave, {
+      tiempoVela: vela.tiempoApertura,
+      tipo: e.tipo,
+      cantidad: (actual?.cantidad ?? 0) + 1,
+    });
+  }
+  return [...porClave.values()].sort((a, b) => a.tiempoVela - b.tiempoVela);
+}

@@ -9,7 +9,8 @@ import { Segmentado } from "@/componentes/ui/Segmentado";
 import { Tarjeta } from "@/componentes/ui/Tarjeta";
 import { Termino } from "@/componentes/ui/Termino";
 import type { Intervalo, Punto } from "@/lib/api/mercado";
-import { useIndicador, useVelas } from "@/lib/hooks/useDatos";
+import { marcasEnVelas } from "@/componentes/graficas/datos";
+import { useIndicador, useOrdenes, useVelas } from "@/lib/hooks/useDatos";
 
 import { PrecioEnVivo } from "./PrecioEnVivo";
 
@@ -94,7 +95,18 @@ export function PantallaMercado() {
     ];
   }, [oscilador, rsi.data, macd.data]);
 
-  const lista = velas.data ?? [];
+  const lista = useMemo(() => velas.data ?? [], [velas.data]);
+  const ordenes = useOrdenes();
+  const marcas = useMemo(
+    () =>
+      marcasEnVelas(
+        lista,
+        (ordenes.data ?? [])
+          .filter((o) => o.estado === "EJECUTADA" && o.ejecutadaEn != null)
+          .map((o) => ({ tiempo: o.ejecutadaEn!, tipo: o.tipo })),
+      ),
+    [lista, ordenes.data],
+  );
   const nombreIntervalo = OPCIONES_INTERVALO.find((o) => o.valor === intervalo)?.etiqueta ?? intervalo;
 
   return (
@@ -149,7 +161,12 @@ export function PantallaMercado() {
             Cargando velas…
           </div>
         ) : (
-          <GraficaVelas titulo={`Velas de BTCUSDT cada ${nombreIntervalo}`} velas={lista} capas={capas} />
+          <GraficaVelas
+            titulo={`Velas de BTCUSDT cada ${nombreIntervalo}`}
+            velas={lista}
+            capas={capas}
+            marcas={marcas}
+          />
         )}
       </Tarjeta>
 
