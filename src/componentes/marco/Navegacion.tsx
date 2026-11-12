@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type FocusEvent, type KeyboardEvent } from "react";
 
 import { SimboloNexabit } from "@/componentes/marca/Logo";
 import { Dialogo } from "@/componentes/ui/Dialogo";
@@ -68,18 +68,57 @@ function ElementoLateral({
 /**
  * Barra lateral del portátil (oculta en el teléfono). Cerrada muestra solo los iconos;
  * al acercar el cursor se abre por encima del contenido con el nombre de cada sección,
- * y al quitarlo vuelve a los iconos. El hueco que ocupa en la página no cambia, así
+ * y al quitarlo vuelve a los iconos. Con el teclado se abre al llegar con Tab y se
+ * cierra al salir de ella o con Escape. El hueco que ocupa en la página no cambia, así
  * que el contenido no salta.
  */
 export function BarraLateral() {
   const activa = seccionActiva(usePathname());
   const [abierta, setAbierta] = useState(false);
   const temporizador = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  /** Si el foco llegó por un clic o un toque (no por el teclado). */
+  const conPuntero = useRef(false);
+
   const programar = (valor: boolean, espera: number) => {
     clearTimeout(temporizador.current);
     temporizador.current = setTimeout(() => setAbierta(valor), espera);
   };
-  useEffect(() => () => clearTimeout(temporizador.current), []);
+  useEffect(() => {
+    // Se escucha en toda la página: a la barra también se llega con Tab desde afuera.
+    const puntero = () => {
+      conPuntero.current = true;
+    };
+    const teclado = () => {
+      conPuntero.current = false;
+    };
+    window.addEventListener("pointerdown", puntero, true);
+    window.addEventListener("keydown", teclado, true);
+    return () => {
+      window.removeEventListener("pointerdown", puntero, true);
+      window.removeEventListener("keydown", teclado, true);
+      clearTimeout(temporizador.current);
+    };
+  }, []);
+
+  const alEnfocar = () => {
+    // Solo con el teclado: un clic deja el foco en el enlace y la barra quedaría abierta.
+    if (!conPuntero.current) {
+      clearTimeout(temporizador.current);
+      setAbierta(true);
+    }
+  };
+  const alDesenfocar = (e: FocusEvent<HTMLElement>) => {
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      clearTimeout(temporizador.current);
+      setAbierta(false);
+    }
+  };
+  const alTeclear = (e: KeyboardEvent<HTMLElement>) => {
+    if (e.key === "Escape") {
+      clearTimeout(temporizador.current);
+      setAbierta(false);
+    }
+  };
 
   return (
     <aside className="sticky top-4 z-30 hidden h-[calc(100dvh-2rem)] w-[4.75rem] shrink-0 lg:block">
@@ -87,6 +126,9 @@ export function BarraLateral() {
         data-abierta={abierta}
         onMouseEnter={() => programar(true, ESPERA_ABRIR_MS)}
         onMouseLeave={() => programar(false, ESPERA_CERRAR_MS)}
+        onFocus={alEnfocar}
+        onBlur={alDesenfocar}
+        onKeyDown={alTeclear}
         className={
           "vidrio absolute inset-y-0 left-0 flex flex-col gap-6 overflow-hidden rounded-3xl px-3 py-4 " +
           "transition-[width,box-shadow] duration-300 ease-out motion-reduce:transition-none " +

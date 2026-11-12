@@ -65,6 +65,25 @@ describe("Navegación", () => {
     }
   });
 
+  it("con el teclado se abre al llegar con Tab y se cierra con Escape o al salir", async () => {
+    render(
+      <>
+        <BarraLateral />
+        <button type="button">después</button>
+      </>,
+    );
+    const panel = screen.getByRole("navigation", { name: "Secciones" }).parentElement!;
+    await userEvent.tab();
+    expect(screen.getByRole("link", { name: "Panel" })).toHaveFocus();
+    expect(panel).toHaveAttribute("data-abierta", "true");
+    await userEvent.keyboard("{Escape}");
+    expect(panel).toHaveAttribute("data-abierta", "false");
+    await userEvent.tab();
+    expect(panel).toHaveAttribute("data-abierta", "true");
+    act(() => screen.getByRole("button", { name: "después" }).focus());
+    expect(panel).toHaveAttribute("data-abierta", "false");
+  });
+
   it("las secciones futuras no son enlaces y dicen Pronto", () => {
     render(<BarraLateral />);
     expect(screen.queryByRole("link", { name: /Alertas/ })).toBeNull();
