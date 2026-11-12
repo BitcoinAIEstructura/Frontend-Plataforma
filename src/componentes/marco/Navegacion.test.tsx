@@ -1,8 +1,8 @@
-import { render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { BarraInferior, BarraLateral } from "./Navegacion";
+import { BarraInferior, BarraLateral, ESPERA_ABRIR_MS, ESPERA_CERRAR_MS } from "./Navegacion";
 import { SECCIONES } from "./secciones";
 
 const ruta = vi.hoisted(() => ({ actual: "/seguridad" }));
@@ -27,20 +27,42 @@ describe("Navegación", () => {
     expect(within(nav).getByRole("link", { name: /Panel/ })).not.toHaveAttribute("aria-current");
   });
 
-  it("es solo de iconos: cada enlace se llama como su sección y un botón muestra los nombres", async () => {
-    render(<BarraLateral />);
-    const boton = screen.getByRole("button", { name: "Mostrar los nombres de las secciones" });
-    expect(boton).toHaveAttribute("aria-expanded", "false");
-    expect(screen.getByRole("link", { name: "Panel" }).querySelector("svg")).not.toBeNull();
-    await userEvent.click(boton);
-    expect(screen.getByRole("button", { name: "Mostrar solo los iconos" })).toHaveAttribute(
-      "aria-expanded",
-      "true",
-    );
-    expect(window.localStorage.getItem("nexabit.barra-expandida")).toBe("1");
-    expect(screen.getByRole("link", { name: "Panel" })).toHaveTextContent("Panel");
-    await userEvent.click(screen.getByRole("button", { name: "Mostrar solo los iconos" }));
-    expect(window.localStorage.getItem("nexabit.barra-expandida")).toBe("0");
+  it("cerrada muestra solo iconos; se abre al acercar el cursor y se cierra al quitarlo", async () => {
+    vi.useFakeTimers();
+    try {
+      render(<BarraLateral />);
+      const panel = screen.getByRole("navigation", { name: "Secciones" }).parentElement!;
+      const enlace = screen.getByRole("link", { name: "Panel" });
+      // El nombre siempre es el nombre accesible del enlace, aunque no se vea.
+      expect(enlace.querySelector("svg")).not.toBeNull();
+      expect(panel).toHaveAttribute("data-abierta", "false");
+      expect(within(enlace).getByText("Panel")).toHaveClass("opacity-0");
+      expect(screen.queryByRole("button")).toBeNull();
+
+      fireEvent.mouseEnter(panel);
+      act(() => vi.advanceTimersByTime(ESPERA_ABRIR_MS));
+      expect(panel).toHaveAttribute("data-abierta", "true");
+      expect(within(enlace).getByText("Panel")).toHaveClass("opacity-100");
+
+      // Salirse y volver enseguida no la cierra.
+      fireEvent.mouseLeave(panel);
+      act(() => vi.advanceTimersByTime(ESPERA_CERRAR_MS / 2));
+      fireEvent.mouseEnter(panel);
+      act(() => vi.advanceTimersByTime(ESPERA_CERRAR_MS));
+      expect(panel).toHaveAttribute("data-abierta", "true");
+
+      fireEvent.mouseLeave(panel);
+      act(() => vi.advanceTimersByTime(ESPERA_CERRAR_MS));
+      expect(panel).toHaveAttribute("data-abierta", "false");
+
+      // Pasar de largo con el cursor no la abre.
+      fireEvent.mouseEnter(panel);
+      fireEvent.mouseLeave(panel);
+      act(() => vi.advanceTimersByTime(ESPERA_CERRAR_MS));
+      expect(panel).toHaveAttribute("data-abierta", "false");
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("las secciones futuras no son enlaces y dicen Pronto", () => {

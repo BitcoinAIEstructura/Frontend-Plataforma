@@ -2,85 +2,48 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { Logo } from "@/componentes/marca/Logo";
+import { SimboloNexabit } from "@/componentes/marca/Logo";
 import { Dialogo } from "@/componentes/ui/Dialogo";
 
 import { Icono } from "./Iconos";
 import { SECCIONES, seccionActiva, type Seccion } from "./secciones";
 
-/** Preferencia de este navegador (no es un dato personal): barra con nombres o solo iconos. */
-const CLAVE_EXPANDIDA = "nexabit.barra-expandida";
+/** Espera antes de abrir (pasar de largo con el cursor no la abre) y antes de cerrar (salirse un poco no la cierra). */
+export const ESPERA_ABRIR_MS = 90;
+export const ESPERA_CERRAR_MS = 220;
 
-function leerExpandida(): boolean {
-  if (typeof window === "undefined") return false;
-  try {
-    return window.localStorage.getItem(CLAVE_EXPANDIDA) === "1";
-  } catch {
-    return false; // ventana privada o almacenamiento bloqueado: solo iconos
-  }
-}
-
-function guardarExpandida(valor: boolean) {
-  try {
-    window.localStorage.setItem(CLAVE_EXPANDIDA, valor ? "1" : "0");
-  } catch {
-    // sin almacenamiento la preferencia dura hasta recargar
-  }
-}
-
-/** Nombre flotante a la derecha del icono; aparece al pasar el ratón o al llegar con el teclado. */
-function Globo({ children }: { children: ReactNode }) {
+/** Lo que solo se ve con la barra abierta: el nombre se desvanece sin moverse de su sitio. */
+function textoOculto(abierta: boolean) {
   return (
-    <span
-      className={
-        "pointer-events-none absolute top-1/2 left-full z-50 ml-3 -translate-y-1/2 translate-x-1 rounded-lg " +
-        "border border-borde bg-superficie px-2.5 py-1.5 text-xs font-medium whitespace-nowrap text-texto " +
-        "opacity-0 shadow-lg transition motion-reduce:transition-none " +
-        "group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
-      }
-    >
-      {children}
-    </span>
+    "whitespace-nowrap transition-opacity duration-200 motion-reduce:transition-none " +
+    (abierta ? "opacity-100 delay-75" : "opacity-0")
   );
 }
 
-/** Un elemento de la barra lateral: solo el icono (con su nombre flotante) o icono y nombre. */
+/** Un elemento de la barra lateral: el icono siempre; el nombre aparece cuando la barra se abre. */
 function ElementoLateral({
   seccion,
   activa,
-  expandida,
+  abierta,
 }: {
   seccion: Seccion;
   activa: boolean;
-  expandida: boolean;
+  abierta: boolean;
 }) {
-  const forma = expandida
-    ? "flex h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-medium"
-    : "grid size-11 place-items-center rounded-xl";
-  const marca = activa && (
-    <span aria-hidden className="absolute top-2 bottom-2 -left-3 w-1 rounded-r-full bg-oro" />
-  );
+  // El icono queda centrado en la barra cerrada (52 px de ancho útil) y no se mueve al abrirse.
+  const forma = "relative flex h-11 w-full items-center gap-3 rounded-xl px-[15px] text-sm font-medium";
   if (!seccion.lista) {
     return (
-      <span
-        aria-disabled="true"
-        className={`group relative ${forma} cursor-not-allowed text-texto-atenuado/70`}
-      >
+      <span aria-disabled="true" className={`${forma} cursor-not-allowed text-texto-atenuado/70`}>
         <Icono nombre={seccion.icono} />
-        {expandida ? (
-          <>
-            <span>{seccion.titulo}</span>
-            <span className="ml-auto rounded-full border border-borde px-2 py-0.5 text-[10px] uppercase">
-              Pronto
-            </span>
-          </>
-        ) : (
-          <Globo>
-            <span>{seccion.titulo}</span> · <span className="uppercase">Pronto</span>
-          </Globo>
-        )}
+        <span className={textoOculto(abierta)}>{seccion.titulo}</span>
+        <span
+          className={`ml-auto rounded-full border border-borde px-2 py-0.5 text-[10px] uppercase ${textoOculto(abierta)}`}
+        >
+          Pronto
+        </span>
       </span>
     );
   }
@@ -89,67 +52,63 @@ function ElementoLateral({
       href={seccion.ruta}
       aria-current={activa ? "page" : undefined}
       className={
-        `group relative ${forma} transition outline-none focus-visible:ring-2 focus-visible:ring-oro/60 ` +
+        `${forma} transition-colors outline-none focus-visible:ring-2 focus-visible:ring-oro/60 ` +
         (activa
           ? "bg-oro/12 text-oro shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--oro)_35%,transparent)]"
           : "text-texto-secundario hover:bg-superficie-alta hover:text-texto")
       }
     >
-      {marca}
+      {activa && <span aria-hidden className="absolute top-2 bottom-2 -left-3 w-1 rounded-r-full bg-oro" />}
       <Icono nombre={seccion.icono} />
-      {expandida ? <span>{seccion.titulo}</span> : <Globo>{seccion.titulo}</Globo>}
+      <span className={textoOculto(abierta)}>{seccion.titulo}</span>
     </Link>
   );
 }
 
 /**
- * Barra lateral del portátil (oculta en el teléfono): solo iconos, con el nombre de cada
- * sección al pasar el ratón o el teclado. Un botón la expande para ver los nombres.
+ * Barra lateral del portátil (oculta en el teléfono). Cerrada muestra solo los iconos;
+ * al acercar el cursor se abre por encima del contenido con el nombre de cada sección,
+ * y al quitarlo vuelve a los iconos. El hueco que ocupa en la página no cambia, así
+ * que el contenido no salta.
  */
 export function BarraLateral() {
   const activa = seccionActiva(usePathname());
-  // Solo se monta en el navegador (MarcoApp espera a saber quién entró), así que puede leerse ya.
-  const [expandida, setExpandida] = useState(leerExpandida);
-
-  const alternar = () => {
-    setExpandida((v) => {
-      guardarExpandida(!v);
-      return !v;
-    });
+  const [abierta, setAbierta] = useState(false);
+  const temporizador = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const programar = (valor: boolean, espera: number) => {
+    clearTimeout(temporizador.current);
+    temporizador.current = setTimeout(() => setAbierta(valor), espera);
   };
+  useEffect(() => () => clearTimeout(temporizador.current), []);
 
   return (
-    <aside
-      className={
-        "vidrio sticky top-4 z-30 hidden h-[calc(100dvh-2rem)] shrink-0 flex-col gap-6 rounded-3xl py-4 transition-[width] " +
-        "duration-300 motion-reduce:transition-none lg:flex " +
-        (expandida ? "w-64 px-4" : "w-[4.75rem] items-center px-3")
-      }
-    >
-      <div className={expandida ? "px-2 pt-2" : "pt-2"}>
-        <Logo conNombre={expandida} tamano={34} />
-      </div>
-      <nav aria-label="Secciones" className={`flex flex-col gap-1.5 ${expandida ? "" : "items-center"}`}>
-        {SECCIONES.map((s) => (
-          <ElementoLateral key={s.ruta} seccion={s} activa={s === activa} expandida={expandida} />
-        ))}
-      </nav>
-      <button
-        type="button"
-        onClick={alternar}
-        aria-expanded={expandida}
-        aria-label={expandida ? "Mostrar solo los iconos" : "Mostrar los nombres de las secciones"}
+    <aside className="sticky top-4 z-30 hidden h-[calc(100dvh-2rem)] w-[4.75rem] shrink-0 lg:block">
+      <div
+        data-abierta={abierta}
+        onMouseEnter={() => programar(true, ESPERA_ABRIR_MS)}
+        onMouseLeave={() => programar(false, ESPERA_CERRAR_MS)}
         className={
-          "group relative mt-auto text-texto-atenuado transition outline-none hover:bg-superficie-alta hover:text-texto " +
-          "focus-visible:ring-2 focus-visible:ring-oro/60 " +
-          (expandida
-            ? "flex h-10 w-full items-center gap-3 rounded-xl px-3 text-sm"
-            : "grid size-10 place-items-center rounded-xl")
+          "vidrio absolute inset-y-0 left-0 flex flex-col gap-6 overflow-hidden rounded-3xl px-3 py-4 " +
+          "transition-[width,box-shadow] duration-300 ease-out motion-reduce:transition-none " +
+          (abierta ? "w-64 shadow-2xl" : "w-[4.75rem]")
         }
       >
-        <Icono nombre={expandida ? "contraer" : "expandir"} tamano={20} />
-        {expandida ? <span>Solo iconos</span> : <Globo>Mostrar nombres</Globo>}
-      </button>
+        <div className="flex items-center gap-2.5 pt-2 pl-[9px]">
+          <SimboloNexabit tamano={34} className="shrink-0" />
+          <span
+            aria-hidden
+            className={`font-titulo text-xl font-semibold tracking-wide ${textoOculto(abierta)}`}
+          >
+            <span className="texto-oro">Nexa</span>
+            <span className="text-texto">bit</span>
+          </span>
+        </div>
+        <nav aria-label="Secciones" className="flex flex-col gap-1.5">
+          {SECCIONES.map((s) => (
+            <ElementoLateral key={s.ruta} seccion={s} activa={s === activa} abierta={abierta} />
+          ))}
+        </nav>
+      </div>
     </aside>
   );
 }
