@@ -68,8 +68,6 @@ const TRAZOS: Record<string, ReactNode> = {
     </>
   ),
   mas: <path d="M4.5 7h15M4.5 12h15M4.5 17h15" />,
-  expandir: <path d="m9.5 6 6 6-6 6" />,
-  contraer: <path d="m14.5 6-6 6 6 6" />,
 };
 
 /** Un icono por nombre; si no existe, un punto (para secciones futuras sin icono propio). */
