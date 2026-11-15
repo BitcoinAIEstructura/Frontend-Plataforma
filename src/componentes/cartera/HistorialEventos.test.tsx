@@ -43,4 +43,14 @@ describe("HistorialEventos", () => {
     expect(await screen.findByText(/Todavía no hay movimientos/)).toBeInTheDocument();
     expect(String(fetch.mock.calls[0]![0])).toBe("/api/historial?limite=50");
   });
+
+  it("ofrece descargar el registro de órdenes en CSV", async () => {
+    servidorFalso({ "GET /api/historial": { estado: 200, cuerpo: { eventos: [] } } });
+    renderizar(<HistorialEventos />);
+
+    // Un <a download> normal: el navegador baja el archivo, no navega a otra página.
+    const enlace = screen.getByRole("link", { name: /descargar/i });
+    expect(enlace).toHaveAttribute("href", "/api/exportar/ordenes");
+    expect(enlace).toHaveAttribute("download", "ordenes.csv");
+  });
 });
