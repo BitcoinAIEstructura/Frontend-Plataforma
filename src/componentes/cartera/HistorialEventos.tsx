@@ -73,7 +73,19 @@ export function HistorialEventos() {
   return (
     <Tarjeta
       titulo="Historial"
-      extra={<span className="text-xs text-texto-atenuado">Una pila: lo último queda arriba</span>}
+      extra={
+        <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1">
+          <span className="text-xs text-texto-atenuado">Una pila: lo último queda arriba</span>
+          {/* Enlace normal (no <Link>): el navegador descarga el CSV en vez de navegar. */}
+          <a
+            href="/api/exportar/ordenes"
+            download="ordenes.csv"
+            className="text-xs font-semibold text-oro underline-offset-2 hover:underline"
+          >
+            Descargar CSV
+          </a>
+        </div>
+      }
     >
       {historial.data ? (
         <ListaEventos eventos={historial.data} />
