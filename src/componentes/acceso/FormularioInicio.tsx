@@ -184,14 +184,14 @@ export function FormularioInicio() {
         <button
           type="button"
           onClick={() => {
-            setCorreo("nicolas.florezch@campusucc.edu.co");
+            setCorreo("jonathan.mideros@nexabit.test");
             setContrasena("NxCINpD4jPpZYR#3");
           }}
           className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left transition hover:border-oro/40 hover:bg-white/10"
         >
-          <span className="block text-sm font-semibold">Profesor</span>
+          <span className="block text-sm font-semibold">Jonathan Mideros</span>
           <span className="block text-xs text-texto-secundario">
-            nicolas.florezch@campusucc.edu.co
+            jonathan.mideros@nexabit.test
           </span>
         </button>
       </div>
