@@ -175,6 +175,26 @@ export function FormularioInicio() {
           Crea tu cuenta y recibe 10.000 USDT de práctica
         </Link>
       </p>
+
+      {/* Acceso rápido para demo */}
+      <div className="mt-2 border-t border-white/10 pt-4">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-texto-secundario">
+          Acceso rápido · Demo
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            setCorreo("nicolas.florezch@campusucc.edu.co");
+            setContrasena("NxCINpD4jPpZYR#3");
+          }}
+          className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left transition hover:border-oro/40 hover:bg-white/10"
+        >
+          <span className="block text-sm font-semibold">Profesor</span>
+          <span className="block text-xs text-texto-secundario">
+            nicolas.florezch@campusucc.edu.co
+          </span>
+        </button>
+      </div>
     </form>
   );
 }
