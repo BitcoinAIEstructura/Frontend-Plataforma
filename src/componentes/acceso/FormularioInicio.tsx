@@ -177,7 +177,7 @@ export function FormularioInicio() {
       </p>
 
       {/* Acceso rápido para demo */}
-      <div className="mt-2 border-t border-white/10 pt-4">
+      <div className="mt-2 border-t border-borde pt-4">
         <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-texto-secundario">
           Acceso rápido · Demo
         </p>
@@ -187,7 +187,7 @@ export function FormularioInicio() {
             setCorreo("jonathan.mideros@nexabit.test");
             setContrasena("NxCINpD4jPpZYR#3");
           }}
-          className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left transition hover:border-oro/40 hover:bg-white/10"
+          className="w-full rounded-xl border border-borde-fuerte/70 bg-superficie-alta/70 px-4 py-3 text-left transition hover:border-oro/50 hover:bg-superficie-alta"
         >
           <span className="block text-sm font-semibold">Jonathan Mideros</span>
           <span className="block text-xs text-texto-secundario">
