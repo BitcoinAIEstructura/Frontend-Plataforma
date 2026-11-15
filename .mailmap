@@ -1,0 +1,7 @@
+# Unifica las identidades que aparecen en el historial bajo el correo real
+# del autor, para que las estadísticas de contribución no se dispersen.
+#
+# Formato: Nombre correcto <correo correcto> Nombre en el commit <correo en el commit>
+
+Andres523-star <andres.bolanosca@campusUCC.edu.co> Andres523-star <jonathan.mideros@nexabit.test>
+Andres523-star <andres.bolanosca@campusUCC.edu.co> Andres523-star <andres.bolanosca@campusucc.edu.co>
