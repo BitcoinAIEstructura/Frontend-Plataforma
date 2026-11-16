@@ -67,7 +67,7 @@ export function MarcoApp({ children }: { children: ReactNode }) {
       >
         Saltar al contenido
       </a>
-      <div className="mx-auto flex max-w-[96rem] gap-6 p-3 sm:p-4">
+      <div className="mx-auto flex w-full gap-6 p-3 sm:p-4">
         <BarraLateral />
         <div className="flex min-w-0 flex-1 flex-col gap-6 pb-40 lg:pb-24">
           <header className="flex flex-col gap-1.5 px-1 pt-1">
