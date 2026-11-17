@@ -5,9 +5,6 @@ export const TEXTO_AVISO =
 export function AvisoSimulacion({ className = "" }: { className?: string }) {
   return (
     <p role="note" className={`text-xs leading-relaxed text-texto-atenuado ${className}`}>
-      <span aria-hidden className="mr-1 text-oro">
-        ◆
-      </span>
       {TEXTO_AVISO}
     </p>
   );

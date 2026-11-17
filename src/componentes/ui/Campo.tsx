@@ -38,9 +38,9 @@ export function Campo({
           aria-invalid={error ? true : undefined}
           aria-describedby={[idAyuda, idError].filter(Boolean).join(" ") || undefined}
           className={
-            "min-h-11 w-full rounded-xl border bg-superficie-alta/70 px-4 text-base text-texto " +
+            "min-h-11 w-full rounded-lg border bg-superficie px-4 text-base text-texto shadow-[inset_0_1px_2px_rgb(0_0_0/0.06)] " +
             "placeholder:text-texto-atenuado transition focus:outline-none focus:ring-2 focus:ring-oro/60 " +
-            (error ? "border-error" : "border-borde-fuerte/70 hover:border-oro/50") +
+            (error ? "border-error" : "border-borde-fuerte/60 hover:border-oro/60 focus:border-oro") +
             (revelable ? " pr-24" : "")
           }
           {...resto}
@@ -50,7 +50,7 @@ export function Campo({
             type="button"
             onClick={() => setVisible((v) => !v)}
             aria-pressed={visible}
-            className="absolute inset-y-1 right-1 rounded-lg px-3 text-sm font-medium text-oro hover:bg-oro/10"
+            className="absolute inset-y-1 right-1 rounded-md px-3 text-sm font-medium text-oro hover:bg-oro/10"
           >
             {visible ? "Ocultar" : "Mostrar"}
           </button>

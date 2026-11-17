@@ -4,6 +4,7 @@ import {
   btc,
   conSigno,
   describirAgente,
+  fechaCorta,
   fechaHora,
   haceCuanto,
   numero,
@@ -73,5 +74,12 @@ describe("dinero y variaciones", () => {
     expect(numero(70)).toBe("70,00");
     expect(numero(36.128)).toBe("36,13");
     expect(numero(Number.NaN)).toBe("—");
+  });
+});
+
+describe("fechaCorta", () => {
+  it("día/mes y hora de 24 h en Colombia (UTC−5)", () => {
+    expect(fechaCorta(Date.UTC(2026, 9, 12, 19, 41))).toBe("12/10 14:41");
+    expect(fechaCorta(Date.UTC(2026, 0, 3, 4, 5))).toBe("02/01 23:05");
   });
 });

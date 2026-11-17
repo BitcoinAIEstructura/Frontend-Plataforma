@@ -9,6 +9,22 @@ const FECHA_HORA = new Intl.DateTimeFormat("es-CO", {
   minute: "2-digit",
 });
 
+const FECHA_CORTA = new Intl.DateTimeFormat("es-CO", {
+  timeZone: ZONA,
+  day: "2-digit",
+  month: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
+
+/** "12/10 14:41" en hora de Colombia (para tablas, donde el espacio cuenta). */
+export function fechaCorta(milisegundos: number): string {
+  const partes = Object.fromEntries(FECHA_CORTA.formatToParts(milisegundos).map((p) => [p.type, p.value]));
+  const dos = (v: string | undefined) => (v ?? "").padStart(2, "0");
+  return `${dos(partes.day)}/${dos(partes.month)} ${dos(partes.hour)}:${dos(partes.minute)}`;
+}
+
 const RELATIVO = new Intl.RelativeTimeFormat("es", { numeric: "auto" });
 
 /** "12 oct 2026, 09:41 a. m." en hora de Colombia. */

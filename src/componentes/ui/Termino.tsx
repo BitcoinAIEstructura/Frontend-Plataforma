@@ -95,7 +95,7 @@ export function Termino({ concepto, children }: { concepto: Concepto; children?:
         <span
           id={id}
           role="note"
-          className="vidrio absolute top-full left-0 z-30 mt-2 flex w-72 max-w-[80vw] flex-col gap-2 rounded-xl border border-oro/30 p-3 text-left text-sm leading-relaxed font-normal text-texto normal-case shadow-xl"
+          className="vidrio absolute top-full left-0 z-30 mt-2 flex w-72 max-w-[80vw] flex-col gap-2 rounded-md border border-oro/30 p-3 text-left text-sm leading-relaxed font-normal text-texto normal-case shadow-xl"
         >
           {GLOSARIO[concepto]}
           {pregunta && (

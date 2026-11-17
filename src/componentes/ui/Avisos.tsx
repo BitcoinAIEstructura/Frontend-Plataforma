@@ -36,7 +36,7 @@ function Tarjeta({ aviso, cerrar }: { aviso: Aviso; cerrar: (id: number) => void
   }, [aviso.id, cerrar]);
   return (
     <li
-      className={`vidrio flex items-start gap-3 rounded-2xl border px-4 py-3 shadow-lg motion-safe:animate-[entrar_200ms_ease-out] ${BORDE[aviso.tipo]}`}
+      className={`vidrio flex items-start gap-3 rounded-lg border px-4 py-3 shadow-lg motion-safe:animate-[entrar_200ms_ease-out] ${BORDE[aviso.tipo]}`}
     >
       <span aria-hidden className="text-lg leading-6">
         {ICONO[aviso.tipo]}

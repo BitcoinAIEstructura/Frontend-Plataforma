@@ -27,14 +27,16 @@ export function Segmentado<T extends string>({
   return (
     <fieldset className={className}>
       <legend className="sr-only">{etiqueta}</legend>
-      <div className="inline-flex flex-wrap gap-1 rounded-xl border border-borde bg-superficie-alta/60 p-1">
+      <div className="inline-flex flex-wrap gap-1 rounded-lg border border-borde bg-superficie-alta/70 p-1">
         {opciones.map((o) => (
           <label
             key={o.valor}
             className={
-              "cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium transition " +
+              "cursor-pointer rounded-md px-3 py-1.5 text-sm font-medium transition " +
               "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-oro/60 " +
-              (valor === o.valor ? "bg-oro text-sobre-oro shadow" : "text-texto-secundario hover:text-texto")
+              (valor === o.valor
+                ? "bg-superficie text-texto shadow-[0_1px_2px_rgb(0_0_0/0.12),inset_0_-2px_0_var(--oro)]"
+                : "text-texto-secundario hover:text-texto")
             }
           >
             <input

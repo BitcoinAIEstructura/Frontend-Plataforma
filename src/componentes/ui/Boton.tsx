@@ -3,11 +3,9 @@ import type { ButtonHTMLAttributes, ReactNode, Ref } from "react";
 export type VarianteBoton = "dorado" | "contorno" | "fantasma" | "peligro";
 
 const VARIANTES: Record<VarianteBoton, string> = {
-  // La acción principal: oro con destello, para invitar a usarla.
-  dorado:
-    "relative overflow-hidden bg-gradient-to-r from-oro-profundo via-oro to-oro-claro text-sobre-oro " +
-    "shadow-[0_10px_30px_-10px_var(--oro)] hover:brightness-110 active:brightness-95",
-  contorno: "border border-oro/50 text-oro hover:bg-oro/10",
+  // La acción principal: latón macizo, sin brillos.
+  dorado: "bg-oro text-sobre-oro hover:bg-oro-profundo active:translate-y-px",
+  contorno: "border border-oro/50 text-oro hover:border-oro hover:bg-oro/8",
   fantasma: "text-texto-secundario hover:bg-superficie-alta hover:text-texto",
   peligro: "border border-error/60 text-error hover:bg-error/10",
 };
@@ -16,7 +14,7 @@ const VARIANTES: Record<VarianteBoton, string> = {
  * Apagado se ve gris y sin brillo, para que nadie piense que se puede tocar. */
 export function clasesBoton(variante: VarianteBoton = "dorado", anchoCompleto = false): string {
   return (
-    "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 font-semibold " +
+    "inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-5 font-semibold " +
     "transition disabled:cursor-not-allowed disabled:opacity-45 disabled:shadow-none disabled:saturate-0 " +
     `${VARIANTES[variante]} ${anchoCompleto ? "w-full" : ""}`
   );
@@ -51,13 +49,6 @@ export function Boton({
       className={`${clasesBoton(variante, anchoCompleto)} ${className}`}
       {...resto}
     >
-      {/* El destello invita a tocar: un botón apagado no lo lleva. */}
-      {variante === "dorado" && !disabled && !cargando && (
-        <span
-          aria-hidden
-          className="animar-destello pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-white/25 blur-md"
-        />
-      )}
       {cargando ? (
         <span
           aria-hidden

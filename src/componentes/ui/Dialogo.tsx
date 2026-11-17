@@ -48,7 +48,8 @@ export function Dialogo({
   useEffect(() => {
     if (!abierto) return;
     const anterior = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const primero = caja.current?.querySelector<HTMLElement>("[data-autofocus]") ??
+    const primero =
+      caja.current?.querySelector<HTMLElement>("[data-autofocus]") ??
       caja.current?.querySelector<HTMLElement>(ENFOCABLES);
     primero?.focus();
     const desbordeAntes = document.body.style.overflow;
@@ -83,7 +84,7 @@ export function Dialogo({
   if (!abierto || typeof document === "undefined") return null;
   return createPortal(
     <div
-      className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-fondo/80 px-4 py-6 backdrop-blur-sm"
+      className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-fondo/75 px-4 py-6 backdrop-blur-[2px]"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget && !bloqueado) alCerrar();
       }}
@@ -94,10 +95,10 @@ export function Dialogo({
         aria-modal="true"
         aria-labelledby={`${id}-titulo`}
         aria-describedby={descripcion ? `${id}-texto` : undefined}
-        className="vidrio borde-oro flex motion-safe:animate-[entrar_180ms_ease-out] w-full max-w-md flex-col gap-5 rounded-3xl p-6 sm:p-7"
+        className="vidrio flex motion-safe:animate-[entrar_180ms_ease-out] w-full max-w-md flex-col gap-5 rounded-md p-6 sm:p-7"
       >
         <header className="flex flex-col gap-2">
-          <h2 id={`${id}-titulo`} className="text-xl font-semibold">
+          <h2 id={`${id}-titulo`} className="text-2xl">
             {titulo}
           </h2>
           {descripcion && (
@@ -154,7 +155,10 @@ export function Confirmar({
       bloqueado={cargando}
     >
       {error && (
-        <p role="alert" className="rounded-xl border border-error/40 bg-error/10 px-4 py-3 text-sm text-error">
+        <p
+          role="alert"
+          className="rounded-md border border-error/40 bg-error/10 px-4 py-3 text-sm text-error"
+        >
           {error}
         </p>
       )}

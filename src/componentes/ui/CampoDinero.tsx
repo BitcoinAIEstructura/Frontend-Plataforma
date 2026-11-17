@@ -86,10 +86,10 @@ export function CampoDinero({
           aria-invalid={error ? true : undefined}
           aria-describedby={[idAyuda, idError].filter(Boolean).join(" ")}
           className={
-            "cifra min-h-12 w-full rounded-xl border bg-superficie-alta/70 py-2 pr-20 pl-4 text-lg text-texto " +
+            "cifra min-h-12 w-full rounded-lg border bg-superficie py-2 shadow-[inset_0_1px_2px_rgb(0_0_0/0.06)] pr-20 pl-4 text-lg text-texto " +
             "placeholder:text-texto-atenuado transition focus:outline-none focus:ring-2 focus:ring-oro/60 " +
             "disabled:opacity-60 " +
-            (error ? "border-error" : "border-borde-fuerte/70 hover:border-oro/50")
+            (error ? "border-error" : "border-borde-fuerte/60 hover:border-oro/60 focus:border-oro")
           }
         />
         <span
