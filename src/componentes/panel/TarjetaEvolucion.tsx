@@ -56,9 +56,6 @@ export function TarjetaEvolucion() {
     >
       {sinMovimientos ? (
         <div className="flex flex-col items-center gap-3 py-10 text-center">
-          <span aria-hidden className="text-3xl text-oro">
-            ◎
-          </span>
           <p className="max-w-sm text-texto-secundario">
             Aquí verás cómo crece (o baja) tu cartera cuando hagas tu primera orden. Puedes empezar con poco:
             es dinero de práctica.

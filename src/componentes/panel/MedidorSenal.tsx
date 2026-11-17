@@ -81,13 +81,13 @@ export function MedidorSenal({ senal }: { senal: Senal }) {
         <span className="cifra text-texto">{usdt(decision.precio)}</span> USDT.
       </p>
 
-      <details className="group rounded-xl border border-borde px-4 py-3 text-sm">
+      <details className="group rounded-md border border-borde px-4 py-3 text-sm">
         <summary className="cursor-pointer font-medium text-oro marker:text-oro">¿Por qué?</summary>
         <ul className="mt-3 flex flex-col gap-2 text-texto-secundario">
           {pronostico.justificacion.map((razon) => (
             <li key={razon} className="flex gap-2">
-              <span aria-hidden className="text-violeta">
-                ✦
+              <span aria-hidden className="text-texto-atenuado">
+                –
               </span>
               {razon}
             </li>

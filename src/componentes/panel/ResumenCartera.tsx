@@ -2,7 +2,6 @@
 
 import type { ReactNode } from "react";
 
-import { Tarjeta } from "@/componentes/ui/Tarjeta";
 import { Termino, type Concepto } from "@/componentes/ui/Termino";
 import type { Cartera } from "@/lib/api/simulacion";
 import { btc, conSigno, sentido, usdt, variacion } from "@/lib/formato";
@@ -20,23 +19,23 @@ function Cifra({
   concepto?: Concepto;
 }) {
   return (
-    <Tarjeta como="div" className="flex flex-col gap-1">
-      <dt className="flex items-center gap-1.5 text-xs font-medium tracking-wide text-texto-atenuado uppercase">
+    <div className="flex flex-col gap-1 bg-superficie px-4 py-3.5 sm:px-5">
+      <dt className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-texto-atenuado uppercase">
         {etiqueta}
         {concepto && <Termino concepto={concepto} />}
       </dt>
-      <dd className="cifra text-xl font-semibold text-texto sm:text-2xl">{valor}</dd>
-      {detalle && <dd className="cifra text-sm text-texto-secundario">{detalle}</dd>}
-    </Tarjeta>
+      <dd className="cifra text-lg font-semibold text-texto sm:text-xl">{valor}</dd>
+      {detalle && <dd className="cifra text-xs text-texto-secundario">{detalle}</dd>}
+    </div>
   );
 }
 
-/** Las cuatro cifras de la cartera: valor, ganancia, USDT disponibles y BTC. */
+/** Las cuatro cifras de la cartera en una franja (celdas separadas por filetes): valor, ganancia, USDT y BTC. */
 export function CifrasCartera({ cartera }: { cartera: Cartera }) {
   const s = sentido(cartera.gananciaTotal);
   const color = s === "sube" ? "text-sube" : s === "baja" ? "text-baja" : "text-texto";
   return (
-    <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-md border border-borde bg-borde lg:grid-cols-4">
       <Cifra
         etiqueta="Valor de tu cartera"
         valor={

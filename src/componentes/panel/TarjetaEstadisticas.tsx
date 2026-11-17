@@ -54,7 +54,7 @@ export function barrasActividad(e: Estadisticas): Barra[] {
 
 function Cifra({ nombre, valor, clase = "text-texto" }: { nombre: string; valor: string; clase?: string }) {
   return (
-    <div className="rounded-xl border border-borde px-3 py-2.5">
+    <div className="rounded-md border border-borde px-3 py-2.5">
       <dt className="text-xs text-texto-atenuado">{nombre}</dt>
       <dd className={`cifra text-lg font-semibold ${clase}`}>{valor}</dd>
     </div>
@@ -133,11 +133,6 @@ function PorOrigen({ e }: { e: Estadisticas }) {
         {e.porOrigen.map((o) => (
           <tr key={o.origen} className="border-t border-borde">
             <th scope="row" className="py-1.5 text-left font-normal text-texto-secundario">
-              {o.origen === "ia" && (
-                <span aria-hidden className="mr-1 text-violeta">
-                  ✦
-                </span>
-              )}
               {NOMBRE_ORIGEN[o.origen]}
             </th>
             <td className="py-1.5 text-right text-texto">{o.ordenes}</td>

@@ -9,11 +9,14 @@ import { PantallaPanel } from "./PantallaPanel";
 vi.mock("@/componentes/graficas/GraficaEvolucion", () => ({
   GraficaEvolucion: () => <div data-testid="evolucion" />,
 }));
+vi.mock("@/componentes/graficas/GraficaVelas", () => ({
+  GraficaVelas: () => <div data-testid="velas" />,
+}));
 
 afterEach(() => vi.unstubAllGlobals());
 
 describe("PantallaPanel", () => {
-  it("junta saludo, cifras, precio de 24 h, evolución y señal", async () => {
+  it("junta cifras, gráfica con precio de 24 h, IA, señal, últimas órdenes y evolución", async () => {
     const fetch = servidorFalso({
       "GET /api/precio": { estado: 200, cuerpo: { simbolo: "BTCUSDT", precio: 84_000, momento: 1 } },
       "GET /api/velas": {
@@ -41,9 +44,13 @@ describe("PantallaPanel", () => {
     cliente.setQueryData(CLAVE_USUARIO, { ...USUARIO_PRUEBA, verificacionDosPasos: true });
     renderizar(<PantallaPanel />, { cliente });
 
-    expect(screen.getByRole("heading", { level: 2, name: /Hola, Ana/ })).toBeInTheDocument();
+    // Sin saludo: el panel abre directo con los datos.
+    expect(screen.queryByText(/Hola, Ana/)).toBeNull();
+    expect(screen.getByRole("region", { name: "Precio de Bitcoin" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Nueva orden" })).toHaveAttribute("href", "/ordenes");
     expect(await screen.findByText("▲ +5,00 %")).toBeInTheDocument();
-    expect(screen.getByText("en las últimas 24 h")).toBeInTheDocument();
+    expect(screen.getByText("24 h")).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Últimas órdenes" })).toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Evolución de tu cartera" })).toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Señal de la estrategia" })).toBeInTheDocument();
     const rutas = fetch.mock.calls.map((c) => String(c[0]));
