@@ -12,7 +12,7 @@ const TIPOS: Record<string, { icono: string; nombre: string; clase: string }> = 
   ORDEN_CANCELADA: { icono: "✕", nombre: "Orden cancelada", clase: "text-texto-atenuado" },
   ORDEN_DESHECHA: { icono: "↶", nombre: "Orden deshecha", clase: "text-texto-atenuado" },
   ORDEN_RECHAZADA: { icono: "!", nombre: "Orden rechazada", clase: "text-error" },
-  DECISION_BOT: { icono: "✦", nombre: "Decisión del bot", clase: "text-violeta" },
+  DECISION_BOT: { icono: "●", nombre: "Decisión del bot", clase: "text-violeta" },
   STOP_LOSS: { icono: "▼", nombre: "Stop-loss", clase: "text-baja" },
   TAKE_PROFIT: { icono: "▲", nombre: "Take-profit", clase: "text-sube" },
   BOT_INICIADO: { icono: "▶", nombre: "Bot encendido", clase: "text-oro" },
@@ -30,7 +30,7 @@ export function aspectoEvento(tipo: string) {
 export function ListaEventos({ eventos }: { eventos: readonly EventoSimulacion[] }) {
   if (eventos.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-borde py-8 text-center text-sm text-texto-atenuado">
+      <p className="rounded-md border border-dashed border-borde py-8 text-center text-sm text-texto-atenuado">
         Todavía no hay movimientos. Cuando crees una orden o enciendas el bot, aparecerán aquí.
       </p>
     );
@@ -72,6 +72,7 @@ export function HistorialEventos() {
   const historial = useHistorial(50);
   return (
     <Tarjeta
+      desplazable
       titulo="Historial"
       extra={
         <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1">

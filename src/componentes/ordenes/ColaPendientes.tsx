@@ -75,18 +75,19 @@ export function ColaPendientes({ cola, botActivo }: { cola: readonly Orden[]; bo
 
   return (
     <Tarjeta
+      desplazable="tope"
       titulo="Cola de pendientes"
       extra={<span className="cifra text-sm text-texto-atenuado">{cola.length} en espera</span>}
     >
-      <p className="mb-4 text-sm leading-relaxed text-texto-secundario">
-        Tus órdenes esperan aquí y se ejecutan en el orden en que llegaron, al precio de ese momento.{" "}
+      <p className="mb-3 text-xs leading-relaxed text-texto-atenuado">
+        Se ejecutan en orden de llegada, al precio de ese momento.{" "}
         {botActivo
           ? "Tu bot las ejecuta cada vez que revisa el mercado."
           : "Ejecútalas tú con «Ejecutar siguiente» o enciende el bot para que lo haga solo."}
       </p>
 
       {cola.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-borde px-4 py-8 text-center text-sm text-texto-atenuado">
+        <p className="rounded-md border border-dashed border-borde px-4 py-3 text-center text-sm text-texto-atenuado">
           No hay órdenes esperando. Crea una con el formulario «Nueva orden».
         </p>
       ) : (
@@ -95,7 +96,7 @@ export function ColaPendientes({ cola, botActivo }: { cola: readonly Orden[]; bo
             <li
               key={orden.id}
               className={
-                "flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-xl border px-4 py-3.5 " +
+                "flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-md border px-4 py-3.5 " +
                 (i === 0 ? "border-oro/50 bg-oro/5" : "border-borde")
               }
             >

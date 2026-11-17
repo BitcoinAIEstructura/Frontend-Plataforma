@@ -167,7 +167,7 @@ export function FormularioOrden() {
         </div>
 
         {previa && (
-          <p className="cifra rounded-xl bg-superficie-alta/60 px-4 py-3 text-sm text-texto-secundario">
+          <p className="cifra rounded-md bg-superficie-alta/60 px-4 py-3 text-sm text-texto-secundario">
             {tipo === "COMPRA"
               ? `Recibirías ≈ ${btc(previa.btc)} BTC`
               : `Venderías ≈ ${btc(previa.btc)} BTC y recibirías ≈ ${usdt(previa.usdt)} USDT`}

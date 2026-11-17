@@ -27,7 +27,7 @@ export function RegistroOrdenes({ registro }: { registro: readonly Orden[] }) {
   const filtradas = filtro === "todas" ? registro : registro.filter((o) => o.estado === filtro);
 
   return (
-    <Tarjeta titulo="Registro de órdenes">
+    <Tarjeta titulo="Registro de órdenes" desplazable>
       <Segmentado
         etiqueta="Filtrar por estado"
         opciones={FILTROS}
@@ -36,11 +36,11 @@ export function RegistroOrdenes({ registro }: { registro: readonly Orden[] }) {
           setFiltro(f);
           setVisibles(POR_PAGINA);
         }}
-        className="mb-4"
+        className="sticky top-0 z-10 mb-4 bg-superficie pb-1"
       />
 
       {filtradas.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-borde py-8 text-center text-sm text-texto-atenuado">
+        <p className="rounded-md border border-dashed border-borde py-8 text-center text-sm text-texto-atenuado">
           {registro.length === 0 ? "Aún no has terminado ninguna orden." : "No hay órdenes con ese estado."}
         </p>
       ) : (
@@ -72,7 +72,7 @@ export function RegistroOrdenes({ registro }: { registro: readonly Orden[] }) {
         <button
           type="button"
           onClick={() => setVisibles((v) => v + POR_PAGINA)}
-          className="mt-3 w-full rounded-xl py-2 text-sm font-medium text-oro hover:bg-oro/10"
+          className="mt-3 w-full rounded-md py-2 text-sm font-medium text-oro hover:bg-oro/10"
         >
           Ver más ({filtradas.length - visibles} restantes)
         </button>

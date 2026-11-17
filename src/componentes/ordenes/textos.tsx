@@ -14,7 +14,7 @@ export function EtiquetaEstado({ estado }: { estado: Orden["estado"] }) {
   const e = ESTADOS[estado];
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium ${e.clase}`}
+      className={`inline-flex items-center gap-1 rounded-sm border px-1.5 py-0.5 text-xs font-medium whitespace-nowrap ${e.clase}`}
     >
       <span aria-hidden>{e.icono}</span>
       {e.palabra}
@@ -40,6 +40,7 @@ export function montoOrden(orden: Orden): string {
 export function origenOrden(motivo: string): string {
   if (motivo === "manual") return "Tú";
   if (motivo.startsWith("señal del bot")) return "El bot";
+  if (motivo.startsWith("piloto IA")) return "Piloto IA";
   if (motivo.startsWith("stop-loss")) return "Stop-loss";
   if (motivo.startsWith("take-profit")) return "Take-profit";
   return motivo;
