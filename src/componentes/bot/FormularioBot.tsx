@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type FormEvent } from "react";
+import { useId, useState, type FormEvent, type ReactNode } from "react";
 
 import { OPCIONES_INTERVALO } from "@/componentes/mercado/PantallaMercado";
 import { Boton } from "@/componentes/ui/Boton";
@@ -21,13 +21,30 @@ type Segundos = (typeof CADA_CUANTO)[number]["valor"];
 type Modo = ConfiguracionBot["modo"];
 
 export const MODOS: readonly { valor: Modo; etiqueta: string }[] = [
-  { valor: "ia", etiqueta: "✦ Piloto IA" },
+  { valor: "ia", etiqueta: "Piloto IA" },
   { valor: "reglas", etiqueta: "Reglas (indicadores)" },
 ];
 
-/** Un control deslizante en porcentaje, con su valor escrito al lado. */
+/** Una fila del panel de ajustes: rótulo corto a la izquierda y el control a la derecha. */
+function Fila({ rotulo, children }: { rotulo: ReactNode; children: ReactNode }) {
+  return (
+    <div className="grid gap-1.5 border-b border-borde/70 pb-3 last:border-b-0 last:pb-0 sm:grid-cols-[7rem_minmax(0,1fr)] sm:items-center sm:gap-3">
+      <span className="flex items-center gap-1.5 text-xs font-semibold tracking-wider text-texto-atenuado uppercase">
+        {rotulo}
+      </span>
+      <div className="min-w-0">{children}</div>
+    </div>
+  );
+}
+
+/**
+ * Un control deslizante en porcentaje, en una fila: rótulo corto, barra y el valor al lado.
+ * `nombre` es el nombre completo para los lectores de pantalla (contiene el rótulo visible);
+ * la explicación queda en la ayuda (?) y como descripción del control.
+ */
 function Porcentaje({
-  etiqueta,
+  rotulo,
+  nombre,
   concepto,
   ayuda,
   valor,
@@ -36,7 +53,8 @@ function Porcentaje({
   alCambiar,
   disabled,
 }: {
-  etiqueta: string;
+  rotulo: string;
+  nombre: string;
   concepto: Concepto;
   ayuda: string;
   valor: number;
@@ -47,34 +65,36 @@ function Porcentaje({
 }) {
   const id = useId();
   return (
-    <div className="flex flex-col gap-1.5">
-      <div className="flex items-baseline justify-between gap-3">
-        <span className="flex items-center gap-1.5">
-          <label htmlFor={id} className="text-sm font-medium text-texto-secundario">
-            {etiqueta}
-          </label>
+    <Fila
+      rotulo={
+        <>
+          <span aria-hidden>{rotulo}</span>
           <Termino concepto={concepto} />
-        </span>
-        <output htmlFor={id} className="cifra text-sm font-semibold text-texto">
+        </>
+      }
+    >
+      <div className="flex items-center gap-3" title={ayuda}>
+        <input
+          id={id}
+          type="range"
+          min={min}
+          max={max}
+          step={1}
+          value={valor}
+          disabled={disabled}
+          aria-label={nombre}
+          aria-describedby={`${id}-ayuda`}
+          onChange={(e) => alCambiar(Number(e.target.value))}
+          className="min-w-0 flex-1 accent-oro disabled:opacity-55"
+        />
+        <output htmlFor={id} className="cifra w-12 text-right text-sm font-semibold text-texto">
           {valor} %
         </output>
       </div>
-      <input
-        id={id}
-        type="range"
-        min={min}
-        max={max}
-        step={1}
-        value={valor}
-        disabled={disabled}
-        aria-describedby={`${id}-ayuda`}
-        onChange={(e) => alCambiar(Number(e.target.value))}
-        className="accent-oro disabled:opacity-55"
-      />
-      <p id={`${id}-ayuda`} className="text-xs text-texto-atenuado">
+      <p id={`${id}-ayuda`} className="sr-only">
         {ayuda}
       </p>
-    </div>
+    </Fila>
   );
 }
 
@@ -140,54 +160,50 @@ export function FormularioBot({
   };
 
   return (
-    <form onSubmit={enviar} className="flex flex-col gap-5">
-      <fieldset disabled={activo} className="flex flex-col gap-5 disabled:opacity-80">
+    <form onSubmit={enviar} className="flex flex-col gap-4">
+      <fieldset disabled={activo} className="flex flex-col gap-3 disabled:opacity-80">
         <legend className="sr-only">Ajustes del bot</legend>
         {pilotoDisponible && (
-          <div className="flex flex-col gap-1.5">
-            <span aria-hidden className="text-sm font-medium text-texto-secundario">
-              ¿Quién decide?
-            </span>
+          <Fila rotulo={<span aria-hidden>Decide</span>}>
             <Segmentado
               etiqueta="Quién decide las operaciones"
               opciones={MODOS}
               valor={modo}
               alCambiar={setModo}
             />
-            <p className="text-xs text-texto-atenuado" aria-live="polite">
+            <p className="mt-1.5 text-xs text-texto-atenuado" aria-live="polite">
               {ia
-                ? "La IA (tres modelos que votan) decide comprar, vender o esperar y elige cuánto arriesgar en cada operación. Los valores de abajo son los máximos que le permites."
-                : "Decide la estrategia combinada (cruce de medias, RSI y MACD) con los valores exactos de abajo."}
+                ? "Tres modelos votan y eligen cuánto arriesgar; abajo pones los topes."
+                : "Medias, RSI y MACD con los valores exactos de abajo."}
             </p>
-          </div>
+          </Fila>
         )}
-        <div className="flex flex-col gap-1.5">
-          <span aria-hidden className="text-sm font-medium text-texto-secundario">
-            Cada cuánto revisa el mercado
-          </span>
+        <Fila rotulo={<span aria-hidden>Revisa</span>}>
           <Segmentado
             etiqueta="Cada cuánto revisa el mercado"
             opciones={CADA_CUANTO}
             valor={segundos}
             alCambiar={setSegundos}
           />
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <span className="flex items-center gap-1.5">
-            <span aria-hidden className="text-sm font-medium text-texto-secundario">
-              Tamaño de las velas que mira
-            </span>
-            <Termino concepto="vela" />
-          </span>
+        </Fila>
+        <Fila
+          rotulo={
+            <>
+              <span aria-hidden>Velas</span>
+              <Termino concepto="vela" />
+            </>
+          }
+        >
           <Segmentado
             etiqueta="Intervalo de las velas que analiza"
             opciones={OPCIONES_INTERVALO}
             valor={intervalo}
             alCambiar={setIntervalo}
           />
-        </div>
+        </Fila>
         <Porcentaje
-          etiqueta={ia ? "Riesgo máximo por compra" : "Riesgo por compra"}
+          rotulo={ia ? "Riesgo máx." : "Riesgo"}
+          nombre={ia ? "Riesgo máximo por compra" : "Riesgo por compra"}
           concepto="riesgo"
           ayuda={
             ia
@@ -201,7 +217,8 @@ export function FormularioBot({
           disabled={activo}
         />
         <Porcentaje
-          etiqueta={ia ? "Stop-loss máximo" : "Stop-loss (freno de pérdidas)"}
+          rotulo={ia ? "Stop-loss máx." : "Stop-loss"}
+          nombre={ia ? "Stop-loss máximo" : "Stop-loss (freno de pérdidas)"}
           concepto="stop-loss"
           ayuda={
             ia
@@ -215,7 +232,8 @@ export function FormularioBot({
           disabled={activo}
         />
         <Porcentaje
-          etiqueta={ia ? "Take-profit máximo" : "Take-profit (meta de ganancia)"}
+          rotulo={ia ? "Take-profit máx." : "Take-profit"}
+          nombre={ia ? "Take-profit máximo" : "Take-profit (meta de ganancia)"}
           concepto="take-profit"
           ayuda={
             ia
@@ -236,7 +254,7 @@ export function FormularioBot({
         </Boton>
       ) : (
         <Boton type="submit" cargando={cargando} anchoCompleto>
-          {ia ? "✦ Encender el piloto IA" : "▶ Encender el bot"}
+          {ia ? "Encender el piloto IA" : "Encender el bot"}
         </Boton>
       )}
     </form>

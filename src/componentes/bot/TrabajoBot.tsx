@@ -49,7 +49,7 @@ export function TrabajoBot({ estado }: { estado: EstadoBot }) {
   const avance = revisando ? 100 : Math.min(100, Math.max(0, (1 - restante / espera) * 100));
 
   return (
-    <div className="mb-5 rounded-2xl border border-exito/40 bg-exito/5 p-4 sm:p-5">
+    <div className="mb-5 rounded-lg border border-exito/40 bg-exito/5 p-4 sm:p-5">
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <p className="flex items-center gap-2.5 text-lg font-semibold text-texto">
           {revisando ? (

@@ -42,7 +42,7 @@ describe("PantallaBot", () => {
     });
     renderizar(<PantallaBot />);
     expect(await screen.findByText(/También puede perder/)).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: "▶ Encender el bot" }));
+    await userEvent.click(screen.getByRole("button", { name: "Encender el bot" }));
     expect(await screen.findByRole("button", { name: "■ Detener el bot" })).toBeInTheDocument();
     expect(screen.getByText("En marcha")).toBeInTheDocument();
     expect(cuerpos).toEqual([
@@ -67,7 +67,7 @@ describe("PantallaBot", () => {
       },
     });
     renderizar(<PantallaBot />);
-    await userEvent.click(await screen.findByRole("button", { name: "▶ Encender el bot" }));
+    await userEvent.click(await screen.findByRole("button", { name: "Encender el bot" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Ya hay 20 bots en marcha");
   });
 });

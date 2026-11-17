@@ -53,7 +53,7 @@ export function CodigosRespaldo({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl border border-bitcoin/40 bg-bitcoin/10 p-4 text-sm text-texto-secundario">
+      <div className="rounded-md border border-bitcoin/40 bg-bitcoin/10 p-4 text-sm text-texto-secundario">
         <strong className="text-texto">Guarda estos códigos ahora.</strong> No los volverás a ver. Cada uno
         sirve una sola vez para entrar si pierdes el teléfono.
       </div>

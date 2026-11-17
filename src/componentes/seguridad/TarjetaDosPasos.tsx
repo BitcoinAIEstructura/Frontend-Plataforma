@@ -138,7 +138,7 @@ export function TarjetaDosPasos({ usuario }: { usuario: Usuario }) {
           </ol>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
             {/* El QR se genera aquí mismo: el secreto nunca sale hacia otro servicio. */}
-            <div className="rounded-2xl bg-white p-3">
+            <div className="rounded-lg bg-white p-3">
               <QRCodeSVG
                 value={paso.uri}
                 size={176}

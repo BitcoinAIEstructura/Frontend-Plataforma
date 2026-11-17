@@ -69,7 +69,7 @@ export function ResultadoMaquina({ b }: { b: Backtest }) {
             </span>,
           ],
         ].map(([etiqueta, valor]) => (
-          <div key={String(etiqueta)} className="rounded-xl bg-superficie-alta/60 p-3">
+          <div key={String(etiqueta)} className="rounded-md bg-superficie-alta/60 p-3">
             <dt className="text-xs text-texto-atenuado">{etiqueta}</dt>
             <dd className="cifra text-lg font-semibold text-texto">{valor}</dd>
           </div>
@@ -77,7 +77,7 @@ export function ResultadoMaquina({ b }: { b: Backtest }) {
       </dl>
 
       <p
-        className={`rounded-xl border px-4 py-3 text-sm text-texto-secundario ${ganoAMantener ? "border-exito/40 bg-exito/10" : "border-bitcoin/50 bg-bitcoin/10"}`}
+        className={`rounded-md border px-4 py-3 text-sm text-texto-secundario ${ganoAMantener ? "border-exito/40 bg-exito/10" : "border-bitcoin/50 bg-bitcoin/10"}`}
       >
         Del {dia(r.tiempoInicio)} al {dia(r.tiempoFin)}, con {usdt(r.capitalInicial)} USDT el bot habría
         terminado con <span className="cifra text-texto">{usdt(r.capitalFinal)}</span> (

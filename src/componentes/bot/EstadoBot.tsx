@@ -38,10 +38,8 @@ export function AjustesPiloto({ piloto }: { piloto: DecisionPiloto }) {
     { nombre: "Acierto del comité", valor: pct(piloto.exactitud) },
   ];
   return (
-    <div className="mt-4 rounded-xl border border-violeta/40 bg-violeta/5 p-4">
-      <p className="text-xs font-medium tracking-wide text-violeta uppercase">
-        <span aria-hidden>✦ </span>Ajustes que eligió la IA
-      </p>
+    <div className="mt-4 rounded-md border border-violeta/40 bg-violeta/5 p-4">
+      <p className="text-xs font-medium tracking-wide text-violeta uppercase">Ajustes que eligió la IA</p>
       <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-2 text-sm sm:grid-cols-3">
         {filas.map((f) => (
           <div key={f.nombre}>
@@ -91,7 +89,7 @@ export function EstadoBot({ estado }: { estado: Estado }) {
         </div>
       </dl>
 
-      <div className="mt-4 rounded-xl border border-borde p-4" aria-live="polite">
+      <div className="mt-4 rounded-md border border-borde p-4" aria-live="polite">
         <p className="text-xs font-medium tracking-wide text-texto-atenuado uppercase">Última decisión</p>
         {d ? (
           <>
@@ -115,7 +113,7 @@ export function EstadoBot({ estado }: { estado: Estado }) {
       {estado.ultimoError && (
         <p
           role="alert"
-          className="mt-3 rounded-xl border border-error/40 bg-error/10 px-4 py-3 text-sm text-error"
+          className="mt-3 rounded-md border border-error/40 bg-error/10 px-4 py-3 text-sm text-error"
         >
           ⚠ La última revisión falló: {estado.ultimoError}. El bot lo vuelve a intentar en la siguiente.
         </p>
@@ -126,7 +124,7 @@ export function EstadoBot({ estado }: { estado: Estado }) {
 
 export function ActividadBot({ eventos }: { eventos: readonly EventoSimulacion[] }) {
   return (
-    <Tarjeta titulo="Lo que ha hecho el bot">
+    <Tarjeta titulo="Lo que ha hecho el bot" desplazable>
       <ListaEventos eventos={eventosDelBot(eventos)} />
     </Tarjeta>
   );

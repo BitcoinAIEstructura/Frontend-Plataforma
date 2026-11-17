@@ -28,7 +28,7 @@ export function detalleLegible(detalle: string): string {
 export function TarjetaActividad() {
   const consulta = useQuery({ queryKey: CLAVE_ACTIVIDAD, queryFn: () => obtenerActividad(20) });
   return (
-    <Tarjeta titulo="Actividad reciente">
+    <Tarjeta titulo="Actividad reciente" desplazable>
       <p className="mb-3 text-sm text-texto-secundario">
         Si ves algo que no fuiste tú, cambia tu contraseña y cierra las demás sesiones.
       </p>
@@ -44,7 +44,7 @@ export function TarjetaActividad() {
           return (
             <li
               key={`${e.momento}-${i}`}
-              className={`flex items-start gap-3 rounded-xl px-3 py-2 ${alerta ? "bg-bitcoin/10" : ""}`}
+              className={`flex items-start gap-3 rounded-md px-3 py-2 ${alerta ? "bg-bitcoin/10" : ""}`}
             >
               <span aria-hidden className={alerta ? "text-bitcoin" : "text-oro"}>
                 {alerta ? "▲" : "●"}

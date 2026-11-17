@@ -1,6 +1,6 @@
 "use client";
 
-import { Tarjeta } from "@/componentes/ui/Tarjeta";
+import { ColumnaPareja, Tarjeta } from "@/componentes/ui/Tarjeta";
 import { useAccionesBot, useBot, useHistorial } from "@/lib/hooks/useDatos";
 
 import { ActividadBot, EstadoBot } from "./EstadoBot";
@@ -30,16 +30,12 @@ export function PantallaBot() {
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-5">
-      <div className="flex flex-col gap-5 lg:col-span-2">
+    <div className="grid gap-4 lg:grid-cols-5">
+      <div className="flex flex-col gap-4 lg:col-span-2">
         <Tarjeta titulo="Tu bot" destacada>
-          <p className="mb-5 text-sm text-texto-secundario">
-            Con el <strong className="font-medium text-texto">piloto IA</strong>, el comité de modelos decide
-            por ti y ajusta el riesgo a su confianza. Con las{" "}
-            <strong className="font-medium text-texto">reglas</strong>, sigue la estrategia combinada (cruce
-            de medias, RSI y MACD). En los dos casos se activa tu stop-loss o take-profit.{" "}
-            <strong className="font-medium text-texto">También puede perder</strong>: es práctica con dinero
-            simulado.
+          <p className="mb-4 text-sm text-texto-secundario">
+            Piloto IA o reglas (medias, RSI y MACD), siempre con tu stop-loss y take-profit.{" "}
+            <strong className="font-medium text-texto">También puede perder</strong>: es dinero simulado.
           </p>
           <FormularioBot
             actual={bot.data.configuracion}
@@ -62,10 +58,10 @@ export function PantallaBot() {
           )}
         </Tarjeta>
       </div>
-      <div className="flex flex-col gap-5 lg:col-span-3">
+      <ColumnaPareja className="lg:col-span-3">
         <EstadoBot estado={bot.data} />
         <ActividadBot eventos={historial.data ?? []} />
-      </div>
+      </ColumnaPareja>
       <div className="lg:col-span-5">
         <MaquinaDelTiempo />
       </div>

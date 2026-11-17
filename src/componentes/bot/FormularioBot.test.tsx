@@ -35,7 +35,7 @@ describe("FormularioBot", () => {
     expect(screen.getByRole("slider", { name: "Riesgo por compra" })).toHaveValue("20");
     expect(screen.getByRole("radio", { name: "Cada minuto" })).toBeChecked();
     await userEvent.click(screen.getByRole("radio", { name: "Cada 5 min" }));
-    await userEvent.click(screen.getByRole("button", { name: "▶ Encender el bot" }));
+    await userEvent.click(screen.getByRole("button", { name: "Encender el bot" }));
     expect(alIniciar).toHaveBeenCalledWith({
       segundosEntreCiclos: 300,
       intervalo: "1h",
@@ -81,9 +81,9 @@ describe("FormularioBot", () => {
         pilotoDisponible
       />,
     );
-    expect(screen.getByRole("radio", { name: "✦ Piloto IA" })).toBeChecked();
+    expect(screen.getByRole("radio", { name: "Piloto IA" })).toBeChecked();
     expect(screen.getByRole("slider", { name: "Riesgo máximo por compra" })).toHaveValue("20");
-    await userEvent.click(screen.getByRole("button", { name: "✦ Encender el piloto IA" }));
+    await userEvent.click(screen.getByRole("button", { name: "Encender el piloto IA" }));
     expect(alIniciar).toHaveBeenCalledWith(expect.objectContaining({ modo: "ia", riesgo: 0.2 }));
     await userEvent.click(screen.getByRole("radio", { name: "Reglas (indicadores)" }));
     expect(screen.getByRole("slider", { name: "Riesgo por compra" })).toBeInTheDocument();
@@ -99,7 +99,7 @@ describe("FormularioBot", () => {
         alDetener={vi.fn()}
       />,
     );
-    expect(screen.queryByRole("radio", { name: "✦ Piloto IA" })).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "▶ Encender el bot" })).toBeInTheDocument();
+    expect(screen.queryByRole("radio", { name: "Piloto IA" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Encender el bot" })).toBeInTheDocument();
   });
 });

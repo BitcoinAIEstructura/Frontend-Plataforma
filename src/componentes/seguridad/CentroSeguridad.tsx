@@ -2,6 +2,8 @@
 
 import { useUsuarioActual } from "@/lib/hooks/useSesion";
 
+import { ColumnaPareja } from "@/componentes/ui/Tarjeta";
+
 import { TarjetaActividad } from "./TarjetaActividad";
 import { TarjetaContrasena } from "./TarjetaContrasena";
 import { TarjetaDosPasos } from "./TarjetaDosPasos";
@@ -12,15 +14,16 @@ export function CentroSeguridad() {
   const { usuario } = useUsuarioActual();
   if (!usuario) return null;
   return (
-    <div className="grid gap-5 xl:grid-cols-2">
-      <div className="flex flex-col gap-5">
+    <div className="grid gap-4 xl:grid-cols-2">
+      {/* La última tarjeta se estira: las dos columnas terminan a la misma altura. */}
+      <div className="flex flex-col gap-4 xl:[&>*:last-child]:flex-1">
         <TarjetaDosPasos usuario={usuario} />
         <TarjetaContrasena usuario={usuario} />
       </div>
-      <div className="flex flex-col gap-5">
+      <ColumnaPareja desde="xl">
         <TarjetaSesiones />
         <TarjetaActividad />
-      </div>
+      </ColumnaPareja>
     </div>
   );
 }

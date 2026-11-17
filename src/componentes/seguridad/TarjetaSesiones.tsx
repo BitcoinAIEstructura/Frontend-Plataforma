@@ -47,7 +47,7 @@ export function TarjetaSesiones() {
           <li key={s.id} className="flex items-center gap-3 py-3">
             <span
               aria-hidden
-              className="grid size-10 place-items-center rounded-xl bg-superficie-alta text-oro"
+              className="grid size-10 place-items-center rounded-md bg-superficie-alta text-oro"
             >
               {/Android|iPhone|iPad|Mobile/.test(s.agente) ? "▯" : "▭"}
             </span>
