@@ -74,7 +74,7 @@ export function AvisoInactividad({ inactivoMs = INACTIVO_MS, segundosAviso = SEG
         aria-modal="true"
         aria-labelledby="inactividad-titulo"
         aria-describedby="inactividad-texto"
-        className="vidrio borde-oro flex max-w-sm flex-col gap-4 rounded-3xl p-6 text-center"
+        className="vidrio flex max-w-sm flex-col gap-4 rounded-lg p-6 text-center"
       >
         <h2 id="inactividad-titulo" className="text-xl font-semibold">
           ¿Sigues ahí?

@@ -33,7 +33,7 @@ function ElementoLateral({
   abierta: boolean;
 }) {
   // El icono queda centrado en la barra cerrada (52 px de ancho útil) y no se mueve al abrirse.
-  const forma = "relative flex h-11 w-full items-center gap-3 rounded-xl px-[15px] text-sm font-medium";
+  const forma = "relative flex h-10 w-full items-center gap-3 rounded-md px-[15px] text-sm font-medium";
   if (!seccion.lista) {
     return (
       <span aria-disabled="true" className={`${forma} cursor-not-allowed text-texto-atenuado/70`}>
@@ -54,11 +54,11 @@ function ElementoLateral({
       className={
         `${forma} transition-colors outline-none focus-visible:ring-2 focus-visible:ring-oro/60 ` +
         (activa
-          ? "bg-oro/12 text-oro shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--oro)_35%,transparent)]"
+          ? "bg-superficie-alta text-texto"
           : "text-texto-secundario hover:bg-superficie-alta hover:text-texto")
       }
     >
-      {activa && <span aria-hidden className="absolute top-2 bottom-2 -left-3 w-1 rounded-r-full bg-oro" />}
+      {activa && <span aria-hidden className="absolute inset-y-1.5 -left-3 w-[3px] bg-oro" />}
       <Icono nombre={seccion.icono} />
       <span className={textoOculto(abierta)}>{seccion.titulo}</span>
     </Link>
@@ -121,7 +121,7 @@ export function BarraLateral() {
   };
 
   return (
-    <aside className="sticky top-4 z-30 hidden h-[calc(100dvh-2rem)] w-[4.75rem] shrink-0 lg:block">
+    <aside className="fixed inset-y-0 left-0 z-30 hidden w-[4.75rem] lg:block">
       <div
         data-abierta={abierta}
         onMouseEnter={() => programar(true, ESPERA_ABRIR_MS)}
@@ -130,22 +130,19 @@ export function BarraLateral() {
         onBlur={alDesenfocar}
         onKeyDown={alTeclear}
         className={
-          "vidrio absolute inset-y-0 left-0 flex flex-col gap-6 overflow-hidden rounded-3xl px-3 py-4 " +
+          "absolute inset-y-0 left-0 flex flex-col gap-4 overflow-hidden border-r border-borde bg-superficie px-3 pb-4 " +
           "transition-[width,box-shadow] duration-300 ease-out motion-reduce:transition-none " +
-          (abierta ? "w-64 shadow-2xl" : "w-[4.75rem]")
+          (abierta ? "w-60 shadow-[16px_0_40px_-20px_rgb(0_0_0/0.35)]" : "w-[4.75rem]")
         }
       >
-        <div className="flex items-center gap-2.5 pt-2 pl-[9px]">
-          <SimboloNexabit tamano={34} className="shrink-0" />
-          <span
-            aria-hidden
-            className={`font-titulo text-xl font-semibold tracking-wide ${textoOculto(abierta)}`}
-          >
-            <span className="texto-oro">Nexa</span>
+        <div className="-mx-3 flex h-14 shrink-0 items-center gap-2.5 border-b border-borde pl-[21px]">
+          <SimboloNexabit tamano={30} className="shrink-0" />
+          <span aria-hidden className={`text-lg font-semibold tracking-tight ${textoOculto(abierta)}`}>
+            <span className="text-oro">Nexa</span>
             <span className="text-texto">bit</span>
           </span>
         </div>
-        <nav aria-label="Secciones" className="flex flex-col gap-1.5">
+        <nav aria-label="Secciones" className="flex flex-col gap-1">
           {SECCIONES.map((s) => (
             <ElementoLateral key={s.ruta} seccion={s} activa={s === activa} abierta={abierta} />
           ))}
@@ -158,7 +155,7 @@ export function BarraLateral() {
 /** Un elemento de la barra inferior del teléfono: icono con su nombre debajo. */
 function ElementoInferior({ seccion, activa }: { seccion: Seccion; activa: boolean }) {
   const base =
-    "flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-xl text-[11px] font-medium";
+    "flex min-h-13 flex-1 flex-col items-center justify-center gap-1 rounded-md text-[11px] font-medium";
   if (!seccion.lista) {
     return (
       <span aria-disabled="true" className={`${base} cursor-not-allowed text-texto-atenuado/70`}>
@@ -173,7 +170,7 @@ function ElementoInferior({ seccion, activa }: { seccion: Seccion; activa: boole
       aria-current={activa ? "page" : undefined}
       className={
         `${base} transition ` +
-        (activa ? "bg-oro/12 text-oro" : "text-texto-secundario hover:bg-superficie-alta hover:text-texto")
+        (activa ? "bg-oro/10 text-oro" : "text-texto-secundario hover:bg-superficie-alta hover:text-texto")
       }
     >
       <Icono nombre={seccion.icono} tamano={20} />
@@ -191,7 +188,7 @@ export function BarraInferior() {
     <>
       <nav
         aria-label="Secciones"
-        className="vidrio fixed inset-x-2 bottom-2 z-40 flex gap-1 rounded-2xl p-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))] lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 flex gap-1 border-t border-borde bg-superficie px-1.5 pt-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] lg:hidden"
       >
         {SECCIONES.filter((s) => s.enTelefono).map((s) => (
           <ElementoInferior key={s.ruta} seccion={s} activa={s === activa} />
@@ -201,9 +198,9 @@ export function BarraInferior() {
           onClick={() => setMas(true)}
           aria-haspopup="dialog"
           className={
-            "flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-xl text-[11px] font-medium transition " +
+            "flex min-h-13 flex-1 flex-col items-center justify-center gap-1 rounded-md text-[11px] font-medium transition " +
             (activaEnMas
-              ? "bg-oro/12 text-oro"
+              ? "bg-oro/10 text-oro"
               : "text-texto-secundario hover:bg-superficie-alta hover:text-texto")
           }
         >
@@ -221,8 +218,8 @@ export function BarraInferior() {
                   onClick={() => setMas(false)}
                   aria-current={s === activa ? "page" : undefined}
                   className={
-                    "flex items-start gap-3 rounded-xl px-3 py-2.5 transition " +
-                    (s === activa ? "bg-oro/12 text-oro" : "hover:bg-superficie-alta")
+                    "flex items-start gap-3 rounded-md px-3 py-2.5 transition " +
+                    (s === activa ? "bg-oro/10 text-oro" : "hover:bg-superficie-alta")
                   }
                 >
                   <Icono nombre={s.icono} className="mt-0.5" />

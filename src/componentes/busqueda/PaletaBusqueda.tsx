@@ -121,7 +121,7 @@ export function PaletaBusqueda() {
       <button
         type="button"
         onClick={abrir}
-        className="flex min-h-10 items-center gap-2 rounded-xl border border-borde px-3 text-sm text-texto-atenuado hover:border-oro/50 hover:text-texto"
+        className="flex min-h-10 items-center gap-2 rounded-md border border-borde px-3 text-sm text-texto-atenuado hover:border-oro/50 hover:text-texto"
         aria-keyshortcuts="Control+K Meta+K"
       >
         <span aria-hidden>⌕</span>
@@ -141,7 +141,7 @@ export function PaletaBusqueda() {
             role="dialog"
             aria-modal="true"
             aria-label="Buscar en Nexabit"
-            className="vidrio borde-oro w-full max-w-xl overflow-hidden rounded-2xl"
+            className="w-full max-w-xl overflow-hidden rounded-lg border border-borde bg-superficie shadow-[0_24px_48px_-24px_rgb(0_0_0/0.45)]"
           >
             <div className="flex items-center gap-3 border-b border-borde px-4">
               <span aria-hidden className="text-oro">
@@ -190,7 +190,7 @@ export function PaletaBusqueda() {
                   onMouseEnter={() => setActivo(i)}
                   onClick={() => ir(r)}
                   className={
-                    "flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 " +
+                    "flex cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 " +
                     (i === indice ? "bg-oro/10 text-texto" : "text-texto-secundario")
                   }
                 >

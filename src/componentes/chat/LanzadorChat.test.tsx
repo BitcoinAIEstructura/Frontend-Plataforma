@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { abrirChat } from "@/lib/chat";
 import { renderizar, servidorFalso } from "@/test/utilidades";
 
-import { LanzadorChat } from "./LanzadorChat";
+import { BotonChat, LanzadorChat } from "./LanzadorChat";
 
 const push = vi.hoisted(() => vi.fn());
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push, replace: vi.fn() }) }));
@@ -53,8 +53,13 @@ describe("LanzadorChat", () => {
       "GET /api/bot/estado": { estado: 200, cuerpo: BOT },
       "POST /api/asistente": respuesta(),
     });
-    renderizar(<LanzadorChat nombre="Ana" />);
-    await userEvent.click(screen.getByRole("button", { name: /Pregúntale al bot/ }));
+    renderizar(
+      <>
+        <BotonChat />
+        <LanzadorChat nombre="Ana" />
+      </>,
+    );
+    await userEvent.click(screen.getByRole("button", { name: /pregúntale al bot/i }));
     const panel = screen.getByRole("dialog", { name: "Habla con tu bot" });
     expect(within(panel).getByRole("log")).toHaveTextContent("¡Hola, Ana!");
     const casilla = screen.getByLabelText("Escribe tu pregunta para el bot");
@@ -76,8 +81,13 @@ describe("LanzadorChat", () => {
       "GET /api/bot/estado": { estado: 200, cuerpo: BOT },
       "POST /api/asistente": respuesta({ respuesta: "Con 10.000 USDT de práctica podrías…", fuente: "ia" }),
     });
-    renderizar(<LanzadorChat nombre="Ana" />);
-    await userEvent.click(screen.getByRole("button", { name: /Pregúntale al bot/ }));
+    renderizar(
+      <>
+        <BotonChat />
+        <LanzadorChat nombre="Ana" />
+      </>,
+    );
+    await userEvent.click(screen.getByRole("button", { name: /pregúntale al bot/i }));
     const panel = screen.getByRole("dialog", { name: "Habla con tu bot" });
     const casilla = screen.getByLabelText("Escribe tu pregunta para el bot");
     await userEvent.type(casilla, "Quiero invertir{Enter}");
@@ -106,7 +116,12 @@ describe("LanzadorChat", () => {
       }),
       "POST /api/bot/iniciar": { estado: 200, cuerpo: { ...BOT, activo: true } },
     });
-    renderizar(<LanzadorChat nombre="Ana" />);
+    renderizar(
+      <>
+        <BotonChat />
+        <LanzadorChat nombre="Ana" />
+      </>,
+    );
     act(() => abrirChat("enciéndete"));
     const boton = await screen.findByRole("button", { name: "Sí, enciéndete" });
     expect(fetch.mock.calls.some(([ruta]) => ruta === "/api/bot/iniciar")).toBe(false);
@@ -123,14 +138,21 @@ describe("LanzadorChat", () => {
         accion: { tipo: "IR", etiqueta: "Ver mi cartera", ruta: "/cartera" },
       }),
     });
-    renderizar(<LanzadorChat nombre="Ana" />);
+    renderizar(
+      <>
+        <BotonChat />
+        <LanzadorChat nombre="Ana" />
+      </>,
+    );
+    // Como al tocar «Asistente»: el foco está en ese botón cuando se abre el chat.
+    screen.getByRole("button", { name: /pregúntale al bot/i }).focus();
     act(() => abrirChat("mi saldo"));
     await userEvent.click(await screen.findByRole("button", { name: "Ver mi cartera →" }));
     expect(push).toHaveBeenCalledWith("/cartera");
     screen.getByLabelText("Escribe tu pregunta para el bot").focus();
     await userEvent.keyboard("{Escape}");
     expect(screen.queryByRole("dialog")).toBeNull();
-    const lanzador = screen.getByRole("button", { name: /Pregúntale al bot/ });
+    const lanzador = screen.getByRole("button", { name: /pregúntale al bot/i });
     expect(lanzador).toHaveFocus();
     await userEvent.click(lanzador);
     expect(screen.getByText("Vas ganando 10,00 USDT.")).toBeInTheDocument();
@@ -138,7 +160,12 @@ describe("LanzadorChat", () => {
 
   it("si el backend falla lo dice en la conversación", async () => {
     servidorFalso({ "POST /api/asistente": { estado: 500, cuerpo: { error: "Error interno" } } });
-    renderizar(<LanzadorChat nombre="Ana" />);
+    renderizar(
+      <>
+        <BotonChat />
+        <LanzadorChat nombre="Ana" />
+      </>,
+    );
     act(() => abrirChat("hola"));
     expect(await screen.findByText(/No pude responder/)).toBeInTheDocument();
   });

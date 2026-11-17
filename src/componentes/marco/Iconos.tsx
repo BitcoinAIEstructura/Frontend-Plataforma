@@ -68,6 +68,13 @@ const TRAZOS: Record<string, ReactNode> = {
     </>
   ),
   mas: <path d="M4.5 7h15M4.5 12h15M4.5 17h15" />,
+  salir: <path d="M12 3.5v7M7.2 6.3a7 7 0 1 0 9.6 0" />,
+  chat: (
+    <>
+      <path d="M4.5 6.5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-4 3.5v-3.5h0a2 2 0 0 1-1.5-2v-8Z" />
+      <path d="M8.5 9.5h7M8.5 12.5h4.5" />
+    </>
+  ),
 };
 
 /** Un icono por nombre; si no existe, un punto (para secciones futuras sin icono propio). */

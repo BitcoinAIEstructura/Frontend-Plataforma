@@ -25,7 +25,8 @@ describe("MarcoApp", () => {
     );
     expect(await screen.findByText("contenido privado")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 1, name: "Seguridad" })).toBeInTheDocument();
-    expect(screen.getByText(/Protege tu cuenta/)).toBeInTheDocument();
+    // Ya no hay párrafo de descripción bajo el título: la barra superior trae las herramientas.
+    expect(screen.getByRole("button", { name: "Asistente: pregúntale al bot" })).toBeInTheDocument();
     expect(screen.getByText("Ana Pérez")).toBeInTheDocument();
     expect(screen.getByRole("note")).toHaveTextContent("no se usa dinero real");
   });

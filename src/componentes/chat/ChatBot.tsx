@@ -167,7 +167,7 @@ export function ChatBot({ mensajes, setMensajes, preguntaInicial, alIr }: Props)
           <div key={m.id} className={`flex flex-col gap-2 ${m.de === "tu" ? "items-end" : "items-start"}`}>
             <p
               className={
-                "max-w-[88%] rounded-2xl px-4 py-2.5 text-[15px] leading-relaxed " +
+                "max-w-[88%] rounded-lg px-4 py-2.5 text-[15px] leading-relaxed " +
                 (m.de === "tu"
                   ? "rounded-br-md bg-oro/15 text-texto"
                   : m.error
@@ -180,9 +180,6 @@ export function ChatBot({ mensajes, setMensajes, preguntaInicial, alIr }: Props)
             </p>
             {m.deIA && (
               <span className="-mt-1 px-2 text-[11px] text-texto-atenuado">
-                <span aria-hidden className="text-violeta">
-                  ✦{" "}
-                </span>
                 Respondido por IA · puede equivocarse
               </span>
             )}
@@ -245,7 +242,7 @@ export function ChatBot({ mensajes, setMensajes, preguntaInicial, alIr }: Props)
           maxLength={LARGO_MAXIMO_MENSAJE}
           autoComplete="off"
           placeholder="Escribe tu pregunta…"
-          className="min-h-11 min-w-0 flex-1 rounded-xl border border-borde-fuerte/70 bg-superficie-alta/70 px-4 text-base text-texto placeholder:text-texto-atenuado focus:ring-2 focus:ring-oro/60 focus:outline-none"
+          className="min-h-11 min-w-0 flex-1 rounded-md border border-borde-fuerte/70 bg-superficie-alta/70 px-4 text-base text-texto placeholder:text-texto-atenuado focus:ring-2 focus:ring-oro/60 focus:outline-none"
         />
         <Boton type="submit" disabled={!texto.trim()} cargando={pregunta.isPending}>
           Enviar
