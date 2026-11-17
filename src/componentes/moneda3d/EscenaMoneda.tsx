@@ -1,86 +1,95 @@
 "use client";
 
-import { Environment, Float, Lightformer, Sparkles } from "@react-three/drei";
+import { ContactShadows, Environment, Float, Lightformer, Sparkles } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
-import { CanvasTexture, MathUtils, SRGBColorSpace, type Group, type Mesh } from "three";
+import { CanvasTexture, MathUtils, RepeatWrapping, SRGBColorSpace, type Group } from "three";
+
+import { useTema, type Tema } from "@/componentes/ui/InterruptorTema";
 
 import { AJUSTES, type Calidad } from "./calidad";
-import { coloresDeLaPaleta, dibujarCara, type ColoresMoneda } from "./textura";
+import { coloresDeLaPaleta, dibujarCanto, dibujarCara, type ColoresMoneda } from "./textura";
 
 const RADIO = 1.6;
-const GROSOR = 0.22;
-const GIRO_POR_SEGUNDO = 0.45;
-const INCLINACION_MAXIMA = 0.45;
+const GROSOR = 0.2;
+const GIRO_POR_SEGUNDO = 0.32;
+const INCLINACION_MAXIMA = 0.4;
 
-function leerVioleta(): string {
-  if (typeof document === "undefined") return "#9b7dff";
-  return getComputedStyle(document.documentElement).getPropertyValue("--violeta").trim() || "#9b7dff";
+/** Luz de estudio de cada tema: cálida y con contraluz en el oscuro, de día en el claro. */
+const LUCES: Record<Tema, { ambiente: number; principal: number; contraluz: number; sombra: number }> = {
+  oscuro: { ambiente: 0.35, principal: 3.4, contraluz: 26, sombra: 0.55 },
+  claro: { ambiente: 1.0, principal: 2.6, contraluz: 10, sombra: 0.32 },
+};
+
+function textura(lienzo: HTMLCanvasElement | null, girar: boolean): CanvasTexture | null {
+  if (!lienzo) return null;
+  const t = new CanvasTexture(lienzo);
+  t.colorSpace = SRGBColorSpace;
+  t.anisotropy = 8;
+  if (girar) {
+    // Las tapas del cilindro giran la textura 90°; esto deja el ₿ derecho.
+    t.center.set(0.5, 0.5);
+    t.rotation = Math.PI / 2;
+  } else {
+    t.wrapS = RepeatWrapping;
+  }
+  return t;
 }
 
-/** `brillo`: luz propia de las caras; más alta cuando no hay reflejos (versión liviana). */
-function Moneda({ colores, brillo }: { colores: ColoresMoneda; brillo: number }) {
+/**
+ * `reflejos`: sin paneles de luz que reflejar (versión liviana) el metal puro se ve negro,
+ * así que se baja lo metálico y se sube la luz propia para que siempre se vea dorada.
+ */
+function Moneda({ colores, reflejos }: { colores: ColoresMoneda; reflejos: boolean }) {
+  const metal = reflejos ? 1 : 0.45;
   const grupo = useRef<Group>(null);
-  const halo = useRef<Mesh>(null);
-
-  const cara = useMemo(() => {
-    const lienzo = dibujarCara(colores);
-    if (!lienzo) return null;
-    const textura = new CanvasTexture(lienzo);
-    textura.colorSpace = SRGBColorSpace;
-    textura.anisotropy = 8;
-    // Las tapas del cilindro giran la textura 90°; esto deja el ₿ derecho.
-    textura.center.set(0.5, 0.5);
-    textura.rotation = Math.PI / 2;
-    return textura;
-  }, [colores]);
-
-  useEffect(() => () => cara?.dispose(), [cara]);
+  const cara = useMemo(() => textura(dibujarCara(colores), true), [colores]);
+  const canto = useMemo(() => textura(dibujarCanto(colores), false), [colores]);
+  useEffect(
+    () => () => {
+      cara?.dispose();
+      canto?.dispose();
+    },
+    [cara, canto],
+  );
 
   useFrame((estado, delta) => {
     const g = grupo.current;
     if (!g) return;
-    // Gira sola y se inclina suavemente hacia donde está el mouse (o el dedo).
+    // Gira despacio y se inclina suavemente hacia donde está el mouse (o el dedo).
     g.rotation.y += delta * GIRO_POR_SEGUNDO;
     g.rotation.x = MathUtils.damp(g.rotation.x, -estado.pointer.y * INCLINACION_MAXIMA, 3, delta);
     g.rotation.z = MathUtils.damp(g.rotation.z, estado.pointer.x * INCLINACION_MAXIMA * 0.5, 3, delta);
-    if (halo.current) halo.current.rotation.z -= delta * 0.6;
   });
+
+  const caraMaterial = {
+    map: cara,
+    color: cara ? "#ffffff" : colores.medio,
+    metalness: reflejos ? 0.75 : 0.35,
+    roughness: 0.28,
+    emissive: colores.sombra,
+    emissiveIntensity: reflejos ? 0.08 : 0.3,
+  };
 
   return (
     <group ref={grupo}>
-      {/* Cuerpo: el cilindro de lado y las dos caras con la textura. */}
+      {/* Cuerpo: canto estriado y las dos caras acuñadas. */}
       <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[RADIO, RADIO, GROSOR, 128, 1]} />
-        <meshStandardMaterial attach="material-0" color={colores.oro} metalness={1} roughness={0.32} />
+        <cylinderGeometry args={[RADIO, RADIO, GROSOR, 160, 1]} />
         <meshStandardMaterial
-          attach="material-1"
-          map={cara}
-          color={cara ? "#ffffff" : colores.oro}
-          metalness={0.55}
-          roughness={0.3}
-          emissive={colores.oroProfundo}
-          emissiveIntensity={brillo}
+          attach="material-0"
+          map={canto}
+          color={canto ? "#ffffff" : colores.medio}
+          metalness={metal}
+          roughness={0.35}
         />
-        <meshStandardMaterial
-          attach="material-2"
-          map={cara}
-          color={cara ? "#ffffff" : colores.oro}
-          metalness={0.55}
-          roughness={0.3}
-          emissive={colores.oroProfundo}
-          emissiveIntensity={brillo}
-        />
+        <meshStandardMaterial attach="material-1" {...caraMaterial} />
+        <meshStandardMaterial attach="material-2" {...caraMaterial} />
       </mesh>
-      {/* Canto naranja Bitcoin. */}
+      {/* Bisel del borde: un filo redondeado que atrapa la luz. */}
       <mesh>
-        <torusGeometry args={[RADIO, 0.07, 24, 180]} />
-        <meshStandardMaterial color={colores.bitcoin} metalness={1} roughness={0.2} />
-      </mesh>
-      {/* Anillo holográfico que gira alrededor. */}
-      <mesh ref={halo} scale={1.32}>
-        <torusGeometry args={[RADIO, 0.012, 8, 220, Math.PI * 1.6]} />
-        <meshBasicMaterial color={leerVioleta()} transparent opacity={0.85} toneMapped={false} />
+        <torusGeometry args={[RADIO, GROSOR / 2, 24, 200]} />
+        <meshStandardMaterial color={colores.medio} metalness={metal} roughness={0.22} />
       </mesh>
     </group>
   );
@@ -88,53 +97,61 @@ function Moneda({ colores, brillo }: { colores: ColoresMoneda; brillo: number })
 
 export default function EscenaMoneda({ calidad }: { calidad: Exclude<Calidad, "estatica"> }) {
   const ajustes = AJUSTES[calidad];
-  const colores = useMemo(() => coloresDeLaPaleta(), []);
-  const violeta = useMemo(() => leerVioleta(), []);
+  const tema = useTema();
+  const luces = LUCES[tema];
+  // Los colores se vuelven a leer al cambiar de tema: three.js no entiende variables CSS.
+  const colores = useMemo(() => {
+    void tema;
+    return coloresDeLaPaleta();
+  }, [tema]);
 
   return (
     <Canvas
       aria-hidden
       dpr={[1, ajustes.dprMaximo]}
-      // A 7,6 de distancia con 35° se ven ±2,4 de alto: cabe el anillo (radio 1,6 × 1,32 ≈ 2,1)
-      // aunque flote. A 6,2 se veían solo ±1,96 y el anillo salía cortado arriba y abajo.
+      // A 7,6 de distancia con 35° se ven ±2,4 de alto: cabe la moneda aunque flote, y la sombra.
       camera={{ position: [0, 0, 7.6], fov: 35 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
     >
-      <ambientLight intensity={0.7} />
-      <directionalLight position={[3, 4, 5]} intensity={3.2} color={colores.oroClaro} />
-      <pointLight position={[-3, -1.5, 2.5]} intensity={18} color={violeta} />
-      <pointLight position={[3.2, -2, 2]} intensity={14} color={colores.bitcoin} />
+      <ambientLight intensity={luces.ambiente} />
+      <directionalLight position={[3, 4, 5]} intensity={luces.principal} color="#fff4dc" />
+      {/* Contraluz: dibuja el filo de la moneda contra el fondo. */}
+      <pointLight position={[-3.5, 2, -2]} intensity={luces.contraluz} color="#ffffff" />
+      <pointLight position={[3.2, -2, 2.5]} intensity={luces.contraluz * 0.4} color={colores.canto} />
       {ajustes.reflejos && (
-        // Reflejos de "estudio" hechos con paneles de luz: no se descarga ningún archivo HDR.
+        // Reflejos de estudio hechos con paneles de luz: no se descarga ningún archivo HDR.
         <Environment resolution={256}>
-          <Lightformer intensity={6} color={colores.oroClaro} position={[0, 5, -2]} scale={[10, 2, 1]} />
-          <Lightformer intensity={1.4} color="white" position={[0, 0, 6]} scale={[6, 6, 1]} />
+          <Lightformer intensity={5} color="#fff1d0" position={[0, 5, -2]} scale={[10, 1.5, 1]} />
+          <Lightformer intensity={1.6} color="#ffffff" position={[0, 0, 6]} scale={[6, 6, 1]} />
           <Lightformer
-            intensity={4}
-            color={violeta}
+            intensity={3}
+            color="#ffffff"
             position={[-5, 0, 2]}
             rotation-y={Math.PI / 2}
-            scale={[2, 8, 1]}
+            scale={[1.2, 8, 1]}
           />
           <Lightformer
-            intensity={4}
-            color={colores.bitcoin}
+            intensity={2.5}
+            color={colores.claro}
             position={[5, -1, 2]}
             rotation-y={-Math.PI / 2}
-            scale={[2, 6, 1]}
+            scale={[1.2, 6, 1]}
           />
         </Environment>
       )}
-      <Float speed={1.6} rotationIntensity={0.25} floatIntensity={0.9}>
-        <Moneda colores={colores} brillo={ajustes.reflejos ? 0.18 : 0.42} />
+      <Float speed={1.2} rotationIntensity={0.15} floatIntensity={0.6}>
+        <Moneda key={tema} colores={colores} reflejos={ajustes.reflejos} />
       </Float>
+      {ajustes.reflejos && (
+        <ContactShadows position={[0, -2.15, 0]} opacity={luces.sombra} scale={7} blur={2.6} far={3} />
+      )}
       <Sparkles
         count={ajustes.particulas}
-        scale={[7, 5, 3]}
-        size={2.4}
-        speed={0.35}
-        color={colores.oroClaro}
-        opacity={0.8}
+        scale={[6, 4, 2]}
+        size={1.4}
+        speed={0.2}
+        color={colores.claro}
+        opacity={tema === "oscuro" ? 0.5 : 0.35}
       />
     </Canvas>
   );

@@ -3,7 +3,7 @@
  *
  * - "estatica": sin WebGL, o la persona pidió menos movimiento → imagen fija de la moneda.
  * - "liviana": teléfono modesto o ahorro de datos → menos partículas, sin reflejos ni sombras.
- * - "completa": todo el efecto holográfico.
+ * - "completa": reflejos de estudio, sombra en el piso y polvo dorado.
  */
 export type Calidad = "estatica" | "liviana" | "completa";
 
@@ -33,8 +33,8 @@ export interface Ajustes {
 }
 
 export const AJUSTES: Record<Exclude<Calidad, "estatica">, Ajustes> = {
-  liviana: { particulas: 40, reflejos: false, dprMaximo: 1.5 },
-  completa: { particulas: 140, reflejos: true, dprMaximo: 2 },
+  liviana: { particulas: 18, reflejos: false, dprMaximo: 1.5 },
+  completa: { particulas: 48, reflejos: true, dprMaximo: 2 },
 };
 
 /** Lee el dispositivo real (solo en el navegador). */

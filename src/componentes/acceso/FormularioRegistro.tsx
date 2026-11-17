@@ -111,7 +111,7 @@ export function FormularioRegistro() {
   return (
     <form onSubmit={alEnviar} className="flex flex-col gap-5" noValidate>
       <header className="flex flex-col gap-1.5">
-        <h1 className="text-2xl font-semibold">
+        <h1 className="text-3xl">
           Crea tu cuenta <span className="texto-oro">Nexabit</span>
         </h1>
         <p className="text-texto-secundario">

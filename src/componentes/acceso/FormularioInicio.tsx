@@ -88,7 +88,7 @@ export function FormularioInicio() {
     return (
       <form onSubmit={alEnviarCodigo} className="flex flex-col gap-5" noValidate>
         <header className="flex flex-col gap-1.5">
-          <h1 className="text-2xl font-semibold">Verificación en dos pasos</h1>
+          <h1 className="text-3xl">Verificación en dos pasos</h1>
           <p className="text-texto-secundario">
             {usarRespaldo
               ? "Escribe uno de tus códigos de respaldo. Cada uno sirve una sola vez."
@@ -130,7 +130,7 @@ export function FormularioInicio() {
     // method="post": si se envía antes de que cargue JavaScript, nada viaja en la dirección.
     <form method="post" onSubmit={alEnviarCredenciales} className="flex flex-col gap-5" noValidate>
       <header className="flex flex-col gap-1.5">
-        <h1 className="text-2xl font-semibold">Bienvenido de vuelta</h1>
+        <h1 className="text-3xl">Bienvenido de vuelta</h1>
         <p className="text-texto-secundario">
           Entra para ver tu cartera, tus órdenes y lo que la IA ve en el mercado.
         </p>

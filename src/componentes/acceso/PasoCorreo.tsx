@@ -73,7 +73,7 @@ export function PasoCorreo({ correo, alEntrar, alVolver, titulo = "Revisa tu cor
   return (
     <form method="post" onSubmit={alEnviar} className="flex flex-col gap-5" noValidate>
       <header className="flex flex-col gap-1.5">
-        <h1 className="text-2xl font-semibold">{titulo}</h1>
+        <h1 className="text-3xl">{titulo}</h1>
         <p className="leading-relaxed text-texto-secundario">
           Te enviamos un código de 6 números a <strong className="font-semibold text-texto">{correo}</strong>.
           Escríbelo aquí para activar tu cuenta. Vence en 15 minutos.

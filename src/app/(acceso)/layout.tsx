@@ -6,39 +6,64 @@ import { AvisoSimulacion } from "@/componentes/ui/AvisoSimulacion";
 import { InterruptorTema } from "@/componentes/ui/InterruptorTema";
 
 const BENEFICIOS = [
-  { icono: "◆", texto: "10.000 USDT de práctica al crear tu cuenta" },
-  { icono: "✦", texto: "Una IA que te explica cada señal del mercado" },
-  { icono: "⬢", texto: "Cuenta protegida: datos cifrados y verificación en dos pasos" },
+  { numero: "I", titulo: "10.000 USDT de práctica", texto: "Los recibes al crear tu cuenta." },
+  { numero: "II", titulo: "Una IA que explica", texto: "Te cuenta el porqué de cada señal del mercado." },
+  { numero: "III", titulo: "Cuenta blindada", texto: "Datos cifrados y verificación en dos pasos." },
 ];
 
-/** Inicio de sesión y registro: la moneda 3D a un lado y el formulario al otro. */
+/**
+ * Inicio de sesión y registro, como la portada de una revista financiera: cabecera con
+ * filete, el titular en serif con la moneda acuñada y el formulario en una lámina.
+ */
 export default function AccesoLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="fondo-aurora relative min-h-dvh">
-      <InterruptorTema className="absolute top-4 right-4 z-10" />
-      <div className="mx-auto grid max-w-7xl content-start lg:min-h-dvh lg:grid-cols-[1.1fr_1fr] lg:content-stretch">
+    <div className="fondo-aurora relative flex min-h-dvh flex-col">
+      <header className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 border-b border-borde px-4 py-3 sm:px-8">
+        <Logo tamano={32} />
+        <p className="rotulo hidden md:block">Edición de práctica · Precios reales de Binance</p>
+        <InterruptorTema />
+      </header>
+
+      <div className="mx-auto grid w-full max-w-7xl flex-1 content-start lg:grid-cols-[1.15fr_1fr] lg:content-stretch">
         <section
           aria-label="Bienvenida a Nexabit"
-          className="flex flex-col items-center justify-center gap-4 px-4 pt-6 sm:px-8 lg:items-start lg:gap-6 lg:px-12 lg:py-12"
+          className="flex flex-col items-center justify-center gap-5 px-4 pt-6 sm:px-8 lg:items-start lg:gap-8 lg:border-r lg:border-borde lg:px-12 lg:py-12"
         >
-          <Logo tamano={40} />
-          <MonedaBitcoin className="aspect-square w-56 sm:w-72 lg:w-full lg:max-w-[34rem]" />
-          <div className="hidden max-w-lg flex-col gap-4 lg:flex">
-            <p className="font-titulo text-3xl leading-tight font-semibold xl:text-4xl">
-              <span className="texto-oro">Invierte como un experto.</span>{" "}
-              <span className="text-texto">Practica sin arriesgar un peso.</span>
+          <div className="hidden max-w-xl flex-col gap-4 lg:flex">
+            <p className="rotulo text-oro">Bóveda de práctica</p>
+            <p className="font-titulo text-5xl leading-[1.04] tracking-tight text-texto xl:text-6xl">
+              Invierte como un experto.{" "}
+              <em className="texto-oro font-normal">Practica sin arriesgar un peso.</em>
             </p>
-            <ul className="flex flex-col gap-2.5 text-texto-secundario">
-              {BENEFICIOS.map((b) => (
-                <li key={b.texto} className="flex items-center gap-3">
-                  <span aria-hidden className="text-oro">
-                    {b.icono}
-                  </span>
-                  {b.texto}
-                </li>
-              ))}
-            </ul>
           </div>
+
+          {/* La moneda dentro de un sello: dos filetes finos, como el troquel de una casa de moneda. */}
+          <div className="relative grid aspect-square w-52 place-items-center sm:w-64 lg:w-full lg:max-w-[26rem]">
+            <span
+              aria-hidden
+              className="absolute inset-[4%] rounded-full border border-oro/25 lg:inset-[2%]"
+            />
+            <span
+              aria-hidden
+              className="absolute inset-[9%] rounded-full border border-dashed border-oro/20"
+            />
+            <MonedaBitcoin className="size-full" />
+          </div>
+
+          <ol className="hidden w-full max-w-xl grid-cols-3 border-t border-borde lg:grid">
+            {BENEFICIOS.map((b, i) => (
+              <li
+                key={b.numero}
+                className={`flex flex-col gap-1 pt-4 pr-4 ${i > 0 ? "border-l border-borde pl-4" : ""}`}
+              >
+                <span aria-hidden className="font-titulo text-xl text-oro italic">
+                  {b.numero}
+                </span>
+                <span className="font-semibold text-texto">{b.titulo}</span>
+                <span className="text-sm leading-snug text-texto-secundario">{b.texto}</span>
+              </li>
+            ))}
+          </ol>
         </section>
 
         <main className="flex flex-col items-center justify-center gap-6 px-4 pt-2 pb-8 sm:px-8 lg:py-12">
