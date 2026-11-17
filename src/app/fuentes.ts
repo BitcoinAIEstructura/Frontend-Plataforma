@@ -1,7 +1,13 @@
-import { JetBrains_Mono, Manrope, Unbounded } from "next/font/google";
+import { Fraunces, JetBrains_Mono, Manrope } from "next/font/google";
 
-/** Títulos: ancha y geométrica, con aire futurista. */
-export const fuenteTitulo = Unbounded({ subsets: ["latin"], variable: "--fuente-titulo", display: "swap" });
+/** Títulos: serif editorial con tamaño óptico (más fina y elegante cuanto más grande). */
+export const fuenteTitulo = Fraunces({
+  subsets: ["latin"],
+  variable: "--fuente-titulo",
+  display: "swap",
+  style: ["normal", "italic"],
+  axes: ["opsz"],
+});
 
 /** Texto general: legible en pantallas pequeñas. */
 export const fuenteTexto = Manrope({ subsets: ["latin"], variable: "--fuente-texto", display: "swap" });

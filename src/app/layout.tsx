@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   icons: { apple: "/iconos/nexabit-192.png" },
 };
 
-export const viewport: Viewport = { themeColor: "#07060b", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#0e0c09", width: "device-width", initialScale: 1 };
 
 export default function RaizLayout({ children }: { children: ReactNode }) {
   return (

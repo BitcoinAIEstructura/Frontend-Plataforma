@@ -1,75 +1,103 @@
 @import "tailwindcss";
 
 /*
- * Tema de Nexabit: lujo y glamour.
- * Oscuro: ónix profundo con oro champán como color principal, naranja Bitcoin para las
- * acciones y violeta real para los detalles.
- * Claro: blanco perla con texto azul marino, el mismo oro (más oscuro, para que se lea),
- * naranja Bitcoin para las acciones y azul marino para los detalles (la variable sigue
- * llamándose "violeta" para no cambiar los componentes).
+ * Tema de Nexabit: «bóveda editorial». Lujo sobrio, como una revista financiera o un
+ * banco privado: papel, tinta, latón y esmeralda; líneas finas en vez de vidrio y
+ * títulos con serif.
+ * Oscuro: café espresso con latón champán como color principal, naranja Bitcoin para
+ * las acciones y esmeralda para los detalles.
+ * Claro: gris piedra frío con paneles blancos y tinta grafito; el mismo latón (más
+ * oscuro, para que se lea), naranja Bitcoin tostado y esmeralda profundo. La variable de los detalles sigue
+ * llamándose "violeta" para no cambiar los componentes.
  *
- * Contrastes comprobados (WCAG) sobre "fondo" y "superficie":
+ * Contrastes comprobados (WCAG, ver paleta.test.ts) sobre "fondo", "superficie" y "superficie-alta":
  * - textos (texto, texto-secundario, texto-atenuado, oro, bitcoin, violeta, sube, baja, error) ≥ 4,5:1;
- * - "sobre-oro" sobre "oro" ≥ 4,5:1 (texto de los botones dorados; en el tema oscuro, más de 9:1).
+ * - "sobre-oro" sobre "oro" ≥ 4,5:1 (texto de los botones de latón).
+ * - "oro-claro" solo va en títulos grandes con degradado (≥ 3:1 en el claro).
  * Sube = turquesa y baja = rosa; además siempre llevan icono o texto (daltonismo).
+ * Los colores van en hex de 6 cifras en minúscula: así los lee la prueba de contraste.
  */
 :root,
 [data-theme="oscuro"] {
   color-scheme: dark;
-  --fondo: #07060b;
-  --superficie: #12101a;
-  --superficie-alta: #1b1826;
-  --borde: #2a2638;
-  --borde-fuerte: #4a4360;
-  --texto: #f5f1e8;
-  --texto-secundario: #c9c1b0;
-  --texto-atenuado: #9a927f;
-  --oro: #d9b65c;
-  --oro-claro: #f3dc9a;
-  --oro-profundo: #a8822e;
-  --sobre-oro: #1a1406;
+  --fondo: #0e0c09;
+  --superficie: #17140f;
+  --superficie-alta: #211d16;
+  --borde: #2e281e;
+  --borde-fuerte: #574c39;
+  --texto: #f3ecdf;
+  --texto-secundario: #cdc1aa;
+  --texto-atenuado: #a0937c;
+  --oro: #d4b06a;
+  --oro-claro: #ecd6a0;
+  --oro-profundo: #a07f3c;
+  --sobre-oro: #1a1408;
   --bitcoin: #f7931a;
-  --violeta: #9b7dff;
-  --sube: #4fd1c5;
-  --baja: #ff8095;
+  --violeta: #6cc4a1;
+  --sube: #4fc9c0;
+  --baja: #ff8a9b;
   --error: #ff7b7b;
-  --exito: #4fd1c5;
+  --exito: #4fc9c0;
   /* Gráficas (marcas, no texto): validadas con el validador de paletas, banda OKLCH L 0,48–0,67. */
-  --grafica-sube: #139c8e;
+  --grafica-sube: #17a093;
   --grafica-baja: #d9506b;
-  --grafica-serie-1: #b08a2c;
-  --grafica-serie-2: #8a6cf0;
-  --grafica-neutra: #6e6788;
-  --grafica-rejilla: #221f2e;
+  --grafica-serie-1: #b58f3a;
+  --grafica-serie-2: #5b82e0;
+  --grafica-neutra: #7a705e;
+  --grafica-rejilla: #26211a;
+  /* Láminas (tarjetas), fondo y moneda: lo que cambia de un tema a otro además del color. */
+  --lamina: color-mix(in oklab, var(--superficie) 94%, transparent);
+  --lamina-borde: var(--borde);
+  --lamina-filo: color-mix(in oklab, var(--oro-claro) 9%, transparent);
+  --lamina-sombra: 0 24px 48px -28px rgb(0 0 0 / 0.7);
+  --aurora-oro: 9%;
+  --aurora-detalle: 6%;
+  --veta: rgb(255 255 255 / 0.018);
+  /* Metal de la moneda: oro de verdad en los dos temas (no el latón de los textos). */
+  --moneda-claro: #f7e4ae;
+  --moneda: #d6ab4f;
+  --moneda-sombra: #7d5a17;
+  --moneda-canto: #e8962a;
 }
 
-/* Claro: perla, azul marino y oro. */
+/* Claro: gris piedra frío, paneles blancos, tinta grafito; latón y esmeralda solo de acento. */
 [data-theme="claro"] {
   color-scheme: light;
-  --fondo: #f4f6fa;
+  --fondo: #eceef1;
   --superficie: #ffffff;
-  --superficie-alta: #e9eef5;
-  --borde: #dbe2ed;
-  --borde-fuerte: #9aa6ba;
-  --texto: #0e1b33;
-  --texto-secundario: #34415a;
-  --texto-atenuado: #4f5b73;
-  --oro: #765a17;
-  --oro-claro: #b8912f;
-  --oro-profundo: #6b5015;
+  --superficie-alta: #f1f3f5;
+  --borde: #d9dde3;
+  --borde-fuerte: #9ba3ae;
+  --texto: #15181d;
+  --texto-secundario: #3a414b;
+  --texto-atenuado: #545c67;
+  --oro: #7a5a12;
+  --oro-claro: #9c7a24;
+  --oro-profundo: #5a420c;
   --sobre-oro: #ffffff;
-  --bitcoin: #a85600;
-  --violeta: #1e3a8a;
-  --sube: #0f766e;
-  --baja: #b42340;
-  --error: #b42318;
-  --exito: #0f766e;
+  --bitcoin: #a14f00;
+  --violeta: #11573f;
+  --sube: #0b5f73;
+  --baja: #a3243f;
+  --error: #a8261b;
+  --exito: #0b5f73;
   --grafica-sube: #008a7b;
-  --grafica-baja: #c23a57;
-  --grafica-serie-1: #a07a1e;
+  --grafica-baja: #c03a55;
+  --grafica-serie-1: #a07a22;
   --grafica-serie-2: #2f55c8;
-  --grafica-neutra: #78839a;
-  --grafica-rejilla: #e6ebf2;
+  --grafica-neutra: #7d8590;
+  --grafica-rejilla: #e8ebef;
+  --lamina: var(--superficie);
+  --lamina-borde: var(--borde);
+  --lamina-filo: transparent;
+  --lamina-sombra: 0 1px 2px rgb(16 24 40 / 0.05);
+  --aurora-oro: 0%;
+  --aurora-detalle: 0%;
+  --veta: transparent;
+  --moneda-claro: #f4dc9c;
+  --moneda: #c99a3c;
+  --moneda-sombra: #6e4c10;
+  --moneda-canto: #d9861c;
 }
 
 /* ---------- tokens expuestos a Tailwind (bg-fondo, text-oro, etc.) ---------- */
@@ -114,7 +142,16 @@ h1,
 h2,
 h3 {
   font-family: var(--font-titulo);
-  letter-spacing: -0.01em;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  font-optical-sizing: auto;
+}
+
+/* Dentro de la app (terminal) los títulos van en la letra de texto: la serif es de la portada. */
+.app-terminal :is(h1, h2, h3) {
+  font-family: var(--font-texto);
+  font-weight: 600;
+  letter-spacing: -0.005em;
 }
 
 /* Precios y cantidades: monoespaciada con números tabulares (no "bailan" al cambiar). */
@@ -140,68 +177,73 @@ input[type="password"]::-ms-clear {
   outline-offset: 2px;
 }
 
-/* ---------- efectos de lujo ---------- */
+/* ---------- efectos de la bóveda ---------- */
 
-/* Tarjeta de vidrio: superficie translúcida con desenfoque y un filo de luz arriba. */
+/*
+ * Lámina: la tarjeta de la bóveda. Plana, con borde fino y una sombra muy suave
+ * (el nombre "vidrio" se conserva para no tocar los componentes).
+ */
 @utility vidrio {
-  background: color-mix(in oklab, var(--superficie) 72%, transparent);
-  border: 1px solid color-mix(in oklab, var(--oro) 18%, var(--borde));
+  background: var(--lamina);
+  border: 1px solid var(--lamina-borde);
   box-shadow:
-    inset 0 1px 0 color-mix(in oklab, var(--oro-claro) 14%, transparent),
-    0 24px 60px -24px rgb(0 0 0 / 0.55);
-  backdrop-filter: blur(18px) saturate(1.2);
+    inset 0 1px 0 var(--lamina-filo),
+    var(--lamina-sombra);
 }
 
-/* Texto con degradado dorado (para títulos y cifras destacadas). */
+/* Texto con degradado de latón (solo títulos grandes y cifras destacadas). */
 @utility texto-oro {
-  background: linear-gradient(
-    100deg,
-    var(--oro-profundo),
-    var(--oro-claro) 45%,
-    var(--oro) 70%,
-    var(--bitcoin)
-  );
+  background: linear-gradient(100deg, var(--oro-profundo), var(--oro) 40%, var(--oro-claro) 75%, var(--oro));
   background-clip: text;
   color: transparent;
 }
 
-/* Borde dorado en degradado (con un pseudo-elemento, para no tapar el contenido). */
+/*
+ * Lo más importante de la pantalla: borde de latón y, arriba a la izquierda, una regla
+ * corta como la de las revistas financieras.
+ */
 @utility borde-oro {
   position: relative;
+  border-color: color-mix(in oklab, var(--oro) 40%, var(--lamina-borde));
   &::before {
     content: "";
     position: absolute;
-    inset: 0;
-    padding: 1px;
-    border-radius: inherit;
-    background: linear-gradient(135deg, var(--oro-claro), transparent 40%, transparent 60%, var(--bitcoin));
-    mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    mask-composite: exclude;
+    top: -1px;
+    left: 1.5rem;
+    width: 3rem;
+    height: 2px;
+    border-radius: 0 0 2px 2px;
+    background: var(--oro);
     pointer-events: none;
   }
 }
 
-/* Fondo de aurora: halos dorado, violeta (azul marino en el claro) y naranja muy suaves sobre el fondo. */
+/* Rótulo: la etiqueta pequeña en mayúsculas sobre un título o una cifra. */
+@utility rotulo {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--texto-atenuado);
+}
+
+/*
+ * Fondo de papel: un brillo de latón arriba, un toque de esmeralda abajo y unas vetas
+ * horizontales finísimas, como papel de valores.
+ */
 @utility fondo-aurora {
   background:
     radial-gradient(
-      60rem 40rem at 10% -10%,
-      color-mix(in oklab, var(--violeta) 22%, transparent),
-      transparent 60%
+      70rem 38rem at 0% -12%,
+      color-mix(in oklab, var(--oro) var(--aurora-oro), transparent),
+      transparent 62%
     ),
     radial-gradient(
-      50rem 35rem at 110% 10%,
-      color-mix(in oklab, var(--oro) 16%, transparent),
+      50rem 34rem at 105% 112%,
+      color-mix(in oklab, var(--violeta) var(--aurora-detalle), transparent),
       transparent 60%
     ),
-    radial-gradient(
-      40rem 30rem at 50% 120%,
-      color-mix(in oklab, var(--bitcoin) 12%, transparent),
-      transparent 60%
-    ),
-    var(--fondo);
+    repeating-linear-gradient(0deg, var(--veta) 0 1px, transparent 1px 7px), var(--fondo);
 }
 
 /* Los avisos entran subiendo un poco (solo si no se pidió menos movimiento: motion-safe). */
