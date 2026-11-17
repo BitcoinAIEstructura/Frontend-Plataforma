@@ -69,15 +69,15 @@ export function TarjetaModelo({ modelo }: { modelo: ModeloIA }) {
       </div>
 
       <dl className="my-4 grid grid-cols-3 gap-2 text-center">
-        <div className="rounded-xl bg-superficie-alta/60 p-2">
+        <div className="rounded-md bg-superficie-alta/60 p-2">
           <dt className="text-[11px] text-texto-atenuado">Acertó</dt>
           <dd className="cifra font-semibold text-texto">{porcentaje(m.exactitud)}</dd>
         </div>
-        <div className="rounded-xl bg-superficie-alta/60 p-2">
+        <div className="rounded-md bg-superficie-alta/60 p-2">
           <dt className="text-[11px] text-texto-atenuado">Base</dt>
           <dd className="cifra font-semibold text-texto-secundario">{porcentaje(m.base)}</dd>
         </div>
-        <div className="rounded-xl bg-superficie-alta/60 p-2">
+        <div className="rounded-md bg-superficie-alta/60 p-2">
           <dt className="text-[11px] text-texto-atenuado">Frente a la base</dt>
           <dd className={`cifra font-semibold ${m.ventaja > 0 ? "text-sube" : "text-baja"}`}>
             {puntos(m.ventaja)}
@@ -87,7 +87,7 @@ export function TarjetaModelo({ modelo }: { modelo: ModeloIA }) {
 
       <p className="mb-3 text-sm text-texto">{modelo.explicacion.resumen}</p>
       <Factores modelo={modelo} />
-      <details className="mt-3 rounded-xl border border-borde px-3 py-2 text-sm">
+      <details className="mt-3 rounded-md border border-borde px-3 py-2 text-sm">
         <summary className="cursor-pointer font-medium text-oro">Paso a paso</summary>
         <ol className="mt-2 flex list-decimal flex-col gap-1 pl-5 text-texto-secundario">
           {modelo.explicacion.pasos.map((p) => (

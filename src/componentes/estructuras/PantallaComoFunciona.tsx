@@ -64,11 +64,11 @@ function EnVivo({ ficha }: { ficha: FichaEstructura }) {
 
 function Seccion({ ficha }: { ficha: FichaEstructura }) {
   return (
-    <Tarjeta id={ficha.id} titulo={ficha.nombre} className="scroll-mt-24">
+    <Tarjeta id={ficha.id} titulo={ficha.nombre} className="scroll-mt-20 lg:scroll-mt-36">
       <div className="grid gap-5 lg:grid-cols-5">
         <div className="flex flex-col gap-4 lg:col-span-2">
           <p className="text-texto">{ficha.idea}</p>
-          <div className="rounded-xl border border-oro/30 bg-oro/5 px-4 py-3 text-sm text-texto-secundario">
+          <div className="rounded-md border border-oro/30 bg-oro/5 px-4 py-3 text-sm text-texto-secundario">
             <p className="mb-1 text-xs font-semibold tracking-wide text-oro uppercase">En Nexabit</p>
             {ficha.enNexabit}
           </div>
@@ -93,30 +93,25 @@ function Seccion({ ficha }: { ficha: FichaEstructura }) {
 /** "Cómo funciona": cada estructura de datos con su uso real, lo que guarda ahora y un laboratorio. */
 export function PantallaComoFunciona() {
   return (
-    <div className="flex flex-col gap-5">
-      <Tarjeta destacada como="div" className="flex flex-col gap-3 sm:p-8">
-        <p className="text-sm font-medium tracking-wide text-oro uppercase">Hecho a mano</p>
-        <h2 className="text-2xl leading-tight font-semibold sm:text-3xl">
-          Las estructuras de datos de <span className="texto-oro">Nexabit</span>, en vivo
-        </h2>
-        <p className="max-w-3xl text-texto-secundario">
-          Todas están programadas a mano en el backend (Python), con nodos enlazados o sobre un arreglo de
-          tamaño fijo, sin las listas ni los diccionarios de Python. Lo que ves aquí no es una animación
-          inventada: el laboratorio corre ese mismo código y «En vivo» muestra lo que guardan ahora con tus
-          datos.
+    <div className="flex flex-col gap-4">
+      {/* Índice fijo bajo la barra superior: salta a cada estructura, como las pestañas de un manual. */}
+      <div className="-mx-3 flex flex-col gap-2 border-b border-borde bg-fondo px-3 py-3 sm:-mx-4 sm:px-4 lg:sticky lg:top-14 lg:z-10 lg:-mx-6 lg:flex-row lg:items-center lg:justify-between lg:px-6">
+        <p className="max-w-2xl text-sm text-texto-secundario">
+          Programadas a mano en el backend (Python), sin las listas ni los diccionarios del lenguaje. El
+          laboratorio corre ese mismo código y «En vivo» muestra lo que guardan ahora con tus datos.
         </p>
-        <nav aria-label="Estructuras" className="mt-2 flex flex-wrap gap-2">
+        <nav aria-label="Estructuras" className="flex flex-wrap gap-1">
           {FICHAS.map((f) => (
             <a
               key={f.id}
               href={`#${f.id}`}
-              className="rounded-full border border-borde px-3 py-1 text-sm text-texto-secundario hover:border-oro/50 hover:text-texto"
+              className="rounded-md border border-borde bg-superficie px-2.5 py-1 text-xs font-medium text-texto-secundario hover:border-oro/50 hover:text-texto"
             >
               {f.nombre}
             </a>
           ))}
         </nav>
-      </Tarjeta>
+      </div>
 
       {FICHAS.map((f) => (
         <Seccion key={f.id} ficha={f} />

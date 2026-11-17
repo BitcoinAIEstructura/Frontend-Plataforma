@@ -15,7 +15,7 @@ export const ACCION: Record<
 > = {
   COMPRAR: { icono: "▲", palabra: "Comprar", clase: "text-sube", borde: "border-sube/40 bg-sube/10" },
   VENDER: { icono: "▼", palabra: "Vender", clase: "text-baja", borde: "border-baja/40 bg-baja/10" },
-  MANTENER: { icono: "◆", palabra: "Mantener", clase: "text-oro", borde: "border-oro/40 bg-oro/10" },
+  MANTENER: { icono: "●", palabra: "Mantener", clase: "text-oro", borde: "border-oro/40 bg-oro/10" },
   ESPERAR: {
     icono: "●",
     palabra: "Esperar",
@@ -86,14 +86,7 @@ interface Props {
  */
 export function ConsejoIA({ compacto = false }: Props) {
   const consejo = useConsejoIA();
-  const titulo = (
-    <span className="flex items-center gap-2">
-      <span aria-hidden className="text-violeta">
-        ✦
-      </span>
-      Consejo de la IA
-    </span>
-  );
+  const titulo = <span className="flex items-center gap-2">Consejo de la IA</span>;
   const enlace = (
     <Link href="/ia" className="text-sm font-medium text-oro hover:underline">
       Ver por qué →
@@ -126,7 +119,7 @@ export function ConsejoIA({ compacto = false }: Props) {
       <div className="flex flex-col gap-4">
         <div className="flex flex-wrap items-start gap-4">
           <span
-            className={`inline-flex shrink-0 items-center gap-2 rounded-xl border px-3 py-2 text-lg font-semibold ${aspecto.borde} ${aspecto.clase}`}
+            className={`inline-flex shrink-0 items-center gap-2 rounded-md border px-3 py-2 text-lg font-semibold ${aspecto.borde} ${aspecto.clase}`}
           >
             <span aria-hidden>{aspecto.icono}</span> {aspecto.palabra}
           </span>

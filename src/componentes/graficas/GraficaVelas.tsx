@@ -238,7 +238,7 @@ export function GraficaVelas({ velas, capas = [], alto = 420, titulo, marcas = [
       />
 
       {comoTabla && (
-        <div className="max-h-[420px] overflow-auto rounded-xl border border-borde">
+        <div className="max-h-[420px] overflow-auto rounded-md border border-borde">
           <table className="cifra w-full text-right text-sm">
             <caption className="sr-only">{titulo}</caption>
             <thead className="sticky top-0 bg-superficie-alta text-xs text-texto-atenuado">

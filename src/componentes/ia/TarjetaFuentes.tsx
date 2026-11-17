@@ -32,7 +32,7 @@ export function TarjetaFuentes({
       ) : (
         <ul className="grid gap-3 sm:grid-cols-2" aria-label="Fuentes externas ahora">
           {fuentes.lecturas.map((l) => (
-            <li key={l.id} className="flex flex-col gap-1 rounded-xl border border-borde p-4">
+            <li key={l.id} className="flex flex-col gap-1 rounded-md border border-borde p-4">
               <p className="flex items-baseline justify-between gap-2">
                 <span className="font-semibold text-texto">{l.nombre}</span>
                 <span className="text-xs text-texto-atenuado">{l.fuente}</span>
@@ -49,7 +49,7 @@ export function TarjetaFuentes({
         </p>
       )}
 
-      <div className="mt-5 rounded-xl bg-superficie-alta/60 p-4">
+      <div className="mt-5 rounded-md bg-superficie-alta/60 p-4">
         <p className="text-sm font-semibold text-texto">¿Ayudan a acertar?</p>
         {c ? (
           <>

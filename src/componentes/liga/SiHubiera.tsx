@@ -26,7 +26,7 @@ function ResultadoSiHubiera({ r }: { r: Resultado }) {
   const color = s === "sube" ? "text-sube" : s === "baja" ? "text-baja" : "text-texto";
   return (
     <div aria-live="polite" className="flex flex-col gap-4">
-      <div className="rounded-2xl border border-oro/30 bg-oro/5 p-5">
+      <div className="rounded-lg border border-oro/30 bg-oro/5 p-5">
         <p className="text-sm text-texto-secundario">
           Con {usdt(r.monto)} USDT el {dia(r.vela.tiempoApertura)} habrías comprado{" "}
           <span className="cifra text-texto">{btc(r.btc)} BTC</span> a {usdt(r.vela.apertura)}. Hoy valdrían:
@@ -37,13 +37,13 @@ function ResultadoSiHubiera({ r }: { r: Resultado }) {
         </p>
       </div>
       <dl className="grid gap-3 text-sm sm:grid-cols-2">
-        <div className="rounded-xl border border-borde p-3">
+        <div className="rounded-md border border-borde p-3">
           <dt className="text-texto-atenuado">Mejor momento para haber vendido</dt>
           <dd className="cifra text-texto">
             <span className="text-sube">▲</span> {usdt(r.mejor.precio)} el {dia(r.mejor.tiempo)}
           </dd>
         </div>
-        <div className="rounded-xl border border-borde p-3">
+        <div className="rounded-md border border-borde p-3">
           <dt className="text-texto-atenuado">Peor momento</dt>
           <dd className="cifra text-texto">
             <span className="text-baja">▼</span> {usdt(r.peor.precio)} el {dia(r.peor.tiempo)}

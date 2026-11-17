@@ -56,15 +56,15 @@ export interface ColoresGrafica {
 }
 
 const RESPALDO: ColoresGrafica = {
-  sube: "#139c8e",
+  sube: "#17a093",
   baja: "#d9506b",
-  serie1: "#b08a2c",
-  serie2: "#8a6cf0",
-  neutra: "#6e6788",
-  rejilla: "#221f2e",
-  texto: "#c9c1b0",
-  textoAtenuado: "#9a927f",
-  superficie: "#12101a",
+  serie1: "#b58f3a",
+  serie2: "#5b82e0",
+  neutra: "#7a705e",
+  rejilla: "#26211a",
+  texto: "#cdc1aa",
+  textoAtenuado: "#a0937c",
+  superficie: "#17140f",
 };
 
 /** Colores actuales de la paleta (cambian con el tema). */

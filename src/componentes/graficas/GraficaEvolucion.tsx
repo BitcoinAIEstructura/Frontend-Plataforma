@@ -149,7 +149,7 @@ export function GraficaEvolucion({ titulo, puntos, base, alto = 240 }: Props) {
       />
 
       {comoTabla && (
-        <div className="max-h-[320px] overflow-auto rounded-xl border border-borde">
+        <div className="max-h-[320px] overflow-auto rounded-md border border-borde">
           <table className="cifra w-full text-right text-sm">
             <caption className="sr-only">{titulo}</caption>
             <thead className="sticky top-0 bg-superficie-alta text-xs text-texto-atenuado">

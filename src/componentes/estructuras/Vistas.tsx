@@ -19,7 +19,7 @@ function Caja({ valor, destacada = false }: { valor: number | string; destacada?
 
 function Vacia({ texto = "Vacía" }: { texto?: string }) {
   return (
-    <p className="grid h-24 place-items-center rounded-xl border border-dashed border-borde text-sm text-texto-atenuado">
+    <p className="grid h-24 place-items-center rounded-md border border-dashed border-borde text-sm text-texto-atenuado">
       {texto}
     </p>
   );

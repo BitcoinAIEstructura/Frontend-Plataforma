@@ -40,6 +40,6 @@ describe("PantallaComoFunciona", () => {
     expect(screen.getByRole("link", { name: "Árbol AVL" })).toHaveAttribute("href", "#avl");
     expect(await screen.findByText("#9 ▲")).toBeInTheDocument();
     expect(await screen.findByText(/Todavía nadie ha operado/)).toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: "✦ Ejemplo" })).toHaveLength(7);
+    expect(screen.getAllByRole("button", { name: "Ejemplo" })).toHaveLength(7);
   });
 });

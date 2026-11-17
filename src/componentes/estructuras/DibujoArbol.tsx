@@ -18,7 +18,7 @@ interface Props {
 export function DibujoArbol({ dibujo, titulo, resaltados, vacio = "Vacío" }: Props) {
   if (dibujo.nodos.length === 0) {
     return (
-      <p className="grid h-32 place-items-center rounded-xl border border-dashed border-borde text-sm text-texto-atenuado">
+      <p className="grid h-32 place-items-center rounded-md border border-dashed border-borde text-sm text-texto-atenuado">
         {vacio}
       </p>
     );

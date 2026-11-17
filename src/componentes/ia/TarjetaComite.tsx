@@ -50,7 +50,7 @@ export function Veredicto({ modelo }: { modelo: ModeloIA }) {
   return (
     <p
       className={
-        "rounded-xl border px-4 py-3 text-sm text-texto-secundario " +
+        "rounded-md border px-4 py-3 text-sm text-texto-secundario " +
         (v.gana ? "border-exito/40 bg-exito/10" : "border-bitcoin/50 bg-bitcoin/10")
       }
     >
@@ -73,8 +73,8 @@ export function TarjetaComite({ comite, velas }: { comite: ModeloIA; velas: stri
           <ul className="flex flex-col gap-1 text-sm text-texto-secundario">
             {comite.explicacion.pasos.map((p) => (
               <li key={p} className="flex gap-2">
-                <span aria-hidden className="text-violeta">
-                  ✦
+                <span aria-hidden className="text-texto-atenuado">
+                  –
                 </span>
                 {p}
               </li>

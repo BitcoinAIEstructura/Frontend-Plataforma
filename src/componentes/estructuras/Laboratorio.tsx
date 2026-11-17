@@ -77,7 +77,7 @@ export function Laboratorio({ ficha }: { ficha: FichaEstructura }) {
             onChange={(e) => setTexto(e.target.value)}
             inputMode={ficha.valor === "palabra" ? "text" : "numeric"}
             maxLength={ficha.valor === "palabra" ? 12 : 6}
-            className="min-h-11 w-32 rounded-xl border border-borde-fuerte/70 bg-superficie-alta/70 px-3 text-texto focus:ring-2 focus:ring-oro/60 focus:outline-none"
+            className="min-h-11 w-32 rounded-md border border-borde-fuerte/70 bg-superficie-alta/70 px-3 text-texto focus:ring-2 focus:ring-oro/60 focus:outline-none"
             aria-describedby={`aviso-${ficha.id}`}
           />
         </label>
@@ -93,7 +93,7 @@ export function Laboratorio({ ficha }: { ficha: FichaEstructura }) {
           </Boton>
         ))}
         <Boton variante="fantasma" onClick={() => cambiar(ficha.ejemplo)}>
-          ✦ Ejemplo
+          Ejemplo
         </Boton>
         <Boton variante="fantasma" onClick={() => cambiar([])} disabled={operaciones.length === 0}>
           Reiniciar
@@ -105,8 +105,8 @@ export function Laboratorio({ ficha }: { ficha: FichaEstructura }) {
       </p>
 
       {operaciones.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-borde px-4 py-8 text-center text-sm text-texto-atenuado">
-          Agrega valores o toca <strong className="text-oro">✦ Ejemplo</strong> para verla trabajar.
+        <p className="rounded-md border border-dashed border-borde px-4 py-8 text-center text-sm text-texto-atenuado">
+          Agrega valores o toca <strong className="text-oro">Ejemplo</strong> para verla trabajar.
         </p>
       ) : demo.isError ? (
         <p role="alert" className="text-error">
@@ -118,7 +118,7 @@ export function Laboratorio({ ficha }: { ficha: FichaEstructura }) {
         </p>
       ) : (
         <>
-          <div className="min-h-40 rounded-2xl border border-borde bg-superficie/50 p-4">
+          <div className="min-h-40 rounded-lg border border-borde bg-superficie/50 p-4">
             <VistaEstado estructura={ficha.id} estado={paso.estado} />
           </div>
           <div aria-live="polite" className="flex flex-wrap items-baseline gap-x-3 gap-y-1">

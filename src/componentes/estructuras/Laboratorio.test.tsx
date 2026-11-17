@@ -66,7 +66,7 @@ describe("Laboratorio", () => {
   it("se puede volver a un paso anterior", async () => {
     backendDeCola();
     renderizar(<Laboratorio ficha={COLA} />);
-    await userEvent.click(screen.getByRole("button", { name: "✦ Ejemplo" }));
+    await userEvent.click(screen.getByRole("button", { name: "Ejemplo" }));
     expect(await screen.findByText("Paso 4 de 4")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Paso anterior" }));
     expect(screen.getByText("Paso 3 de 4")).toBeInTheDocument();
@@ -84,7 +84,7 @@ describe("Laboratorio", () => {
   it("reiniciar vuelve a empezar", async () => {
     backendDeCola();
     renderizar(<Laboratorio ficha={COLA} />);
-    await userEvent.click(screen.getByRole("button", { name: "✦ Ejemplo" }));
+    await userEvent.click(screen.getByRole("button", { name: "Ejemplo" }));
     await screen.findByText("Paso 4 de 4");
     await userEvent.click(screen.getByRole("button", { name: "Reiniciar" }));
     expect(screen.getByText(/toca/)).toBeInTheDocument();

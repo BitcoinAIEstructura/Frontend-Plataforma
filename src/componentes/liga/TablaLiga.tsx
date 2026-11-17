@@ -67,11 +67,11 @@ export function TablaLiga() {
           Cargando la liga…
         </p>
       ) : datos.mejores.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-borde py-8 text-center text-sm text-texto-atenuado">
+        <p className="rounded-md border border-dashed border-borde py-8 text-center text-sm text-texto-atenuado">
           Todavía nadie ha ejecutado una orden. ¡Puedes ser el primero!
         </p>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-borde">
+        <div className="overflow-hidden rounded-md border border-borde">
           <table className="w-full text-sm">
             <caption className="sr-only">Los 10 mejores por rentabilidad</caption>
             <thead className="bg-superficie-alta text-xs text-texto-atenuado">

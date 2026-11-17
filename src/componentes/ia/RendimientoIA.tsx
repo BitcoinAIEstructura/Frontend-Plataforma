@@ -115,14 +115,7 @@ export function TarjetaRendimientoIA({ prediccion }: { prediccion: PrediccionIA 
 
   return (
     <Tarjeta
-      titulo={
-        <span className="flex items-center gap-2">
-          <span aria-hidden className="text-violeta">
-            ✦
-          </span>
-          Si hubieras seguido a la IA
-        </span>
-      }
+      titulo={<span className="flex items-center gap-2">Si hubieras seguido a la IA</span>}
       aria-label="Si hubieras seguido a la IA"
     >
       <p className="mb-3 text-sm leading-relaxed text-texto-secundario">

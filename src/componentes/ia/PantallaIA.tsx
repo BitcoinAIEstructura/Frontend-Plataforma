@@ -29,20 +29,19 @@ export function PantallaIA() {
   const pedido = p?.intervalos.find((i) => i.codigo === intervalo)?.nombre;
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-4">
       {p && (
-        <Tarjeta como="div" className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm font-medium tracking-wide text-oro uppercase">{p.encabezado.etiqueta}</p>
-            <p className="max-w-2xl leading-relaxed text-texto-secundario">{p.encabezado.texto}</p>
-          </div>
+        <div className="flex flex-col gap-3 border-b border-borde pb-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-3xl text-sm leading-relaxed text-texto-secundario">
+            <span className="font-semibold text-texto">{p.encabezado.etiqueta}.</span> {p.encabezado.texto}
+          </p>
           <Segmentado
             etiqueta="Velas que analiza"
             opciones={opciones}
             valor={intervalo}
             alCambiar={setIntervalo}
           />
-        </Tarjeta>
+        </div>
       )}
 
       {prediccion.isError && !p ? (
@@ -63,7 +62,7 @@ export function PantallaIA() {
       ) : (
         <>
           <TarjetaComite comite={p.comite} velas={p.nombreIntervalo} />
-          <div className="grid gap-5 lg:grid-cols-3">
+          <div className="grid gap-4 lg:grid-cols-3">
             {p.modelos.map((m) => (
               <TarjetaModelo key={m.nombre} modelo={m} />
             ))}
@@ -71,7 +70,7 @@ export function PantallaIA() {
           <TarjetaRendimientoIA prediccion={p} />
           <TarjetaFuentes fuentes={fuentes.data} externos={p.fuentesExternas} />
           <TarjetaEvaluacion prediccion={p} />
-          <div className="grid gap-5 lg:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-2">
             <ArbolIA arbol={p.arbol} />
             <Caracteristicas caracteristicas={p.caracteristicas} />
           </div>
