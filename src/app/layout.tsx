@@ -18,7 +18,8 @@ export const metadata: Metadata = {
   title: "Nexabit",
   description: "Trading simulado de Bitcoin con inteligencia artificial. Sin dinero real.",
   appleWebApp: { capable: true, title: "Nexabit", statusBarStyle: "black-translucent" },
-  icons: { apple: "/iconos/nexabit-192.png" },
+  // El ícono va explícito: si solo se declara el de Apple, Next deja de enlazar src/app/icon.svg.
+  icons: { icon: [{ url: "/icon.svg", type: "image/svg+xml" }], apple: "/iconos/nexabit-192.png" },
 };
 
 export const viewport: Viewport = { themeColor: "#0e0c09", width: "device-width", initialScale: 1 };

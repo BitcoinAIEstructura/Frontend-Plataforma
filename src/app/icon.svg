@@ -1,13 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- La N de Nexabit acuñada: serif de latón sobre espresso, con el filete de la moneda. -->
   <defs>
-    <linearGradient id="oro" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#f3dc9a"/>
-      <stop offset="0.5" stop-color="#d9b65c"/>
-      <stop offset="1" stop-color="#f7931a"/>
+    <linearGradient id="laton" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0" stop-color="#f7e4ae"/>
+      <stop offset="0.55" stop-color="#d6ab4f"/>
+      <stop offset="1" stop-color="#9c7a24"/>
     </linearGradient>
+    <radialGradient id="fondo" cx="0.3" cy="0.25" r="0.9">
+      <stop offset="0" stop-color="#2a2318"/>
+      <stop offset="1" stop-color="#0e0c09"/>
+    </radialGradient>
   </defs>
-  <path d="M32 3 57 17.5v29L32 61 7 46.5v-29Z" fill="#07060b" stroke="url(#oro)" stroke-width="3"/>
-  <path d="M22 44V20l20 24V20" fill="none" stroke="url(#oro)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="22" cy="20" r="3" fill="#f3dc9a"/>
-  <circle cx="42" cy="44" r="3" fill="#f7931a"/>
+  <rect width="64" height="64" rx="15" fill="url(#fondo)"/>
+  <rect x="3.5" y="3.5" width="57" height="57" rx="12" fill="none" stroke="#d4b06a" stroke-opacity="0.55" stroke-width="1.5"/>
+  <g fill="url(#laton)">
+    <!-- Astas finas, diagonal gruesa y remates, como una N en serif de revista. -->
+    <rect x="18.5" y="16" width="3" height="32"/>
+    <rect x="42.5" y="16" width="3" height="32.5"/>
+    <path d="M18.5 16H26.5L45.5 48.5H37.5Z"/>
+    <rect x="13" y="14.5" width="13" height="2.6" rx="0.6"/>
+    <rect x="13" y="46.4" width="14" height="2.6" rx="0.6"/>
+    <rect x="37" y="14.5" width="14" height="2.6" rx="0.6"/>
+  </g>
+  <circle cx="51" cy="48" r="2.2" fill="#e8962a"/>
 </svg>
