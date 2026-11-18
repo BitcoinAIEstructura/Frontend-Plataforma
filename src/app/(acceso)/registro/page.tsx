@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Crear cuenta · Nexabit" };
 
 export default function PaginaRegistro() {
   return (
-    <div className="vidrio borde-oro rounded-xl p-6 sm:p-9">
+    <div className="vidrio borde-oro rounded-xl p-6 sm:p-9 lg:px-8 lg:py-6">
       <FormularioRegistro />
     </div>
   );

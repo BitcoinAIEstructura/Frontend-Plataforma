@@ -86,7 +86,7 @@ export function FormularioInicio() {
 
   if (paso === "codigo") {
     return (
-      <form onSubmit={alEnviarCodigo} className="flex flex-col gap-5" noValidate>
+      <form onSubmit={alEnviarCodigo} className="flex flex-col gap-5 lg:gap-4" noValidate>
         <header className="flex flex-col gap-1.5">
           <h1 className="text-3xl">Verificación en dos pasos</h1>
           <p className="text-texto-secundario">
@@ -128,7 +128,7 @@ export function FormularioInicio() {
 
   return (
     // method="post": si se envía antes de que cargue JavaScript, nada viaja en la dirección.
-    <form method="post" onSubmit={alEnviarCredenciales} className="flex flex-col gap-5" noValidate>
+    <form method="post" onSubmit={alEnviarCredenciales} className="flex flex-col gap-5 lg:gap-4" noValidate>
       <header className="flex flex-col gap-1.5">
         <h1 className="text-3xl">Bienvenido de vuelta</h1>
         <p className="text-texto-secundario">
@@ -177,8 +177,8 @@ export function FormularioInicio() {
       </p>
 
       {/* Acceso rápido para demo */}
-      <div className="mt-2 border-t border-borde pt-4">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-texto-secundario">
+      <div className="mt-2 border-t border-borde pt-4 lg:mt-0 lg:pt-3">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-widest lg:mb-2 text-texto-secundario">
           Acceso rápido · Demo
         </p>
         <button
@@ -187,7 +187,7 @@ export function FormularioInicio() {
             setCorreo("jonathan.mideros@nexabit.test");
             setContrasena("NxCINpD4jPpZYR#3");
           }}
-          className="w-full rounded-xl border border-borde-fuerte/70 bg-superficie-alta/70 px-4 py-3 text-left transition hover:border-oro/50 hover:bg-superficie-alta"
+          className="w-full rounded-xl border border-borde-fuerte/70 bg-superficie-alta/70 px-4 py-3 lg:py-2 text-left transition hover:border-oro/50 hover:bg-superficie-alta"
         >
           <span className="block text-sm font-semibold">Jonathan Mideros</span>
           <span className="block text-xs text-texto-secundario">

@@ -17,28 +17,28 @@ const BENEFICIOS = [
  */
 export default function AccesoLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="fondo-aurora relative flex min-h-dvh flex-col">
-      <header className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 border-b border-borde px-4 py-3 sm:px-8">
+    <div className="fondo-aurora relative flex min-h-dvh flex-col lg:h-dvh lg:overflow-hidden">
+      <header className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 border-b border-borde px-4 py-3 sm:px-8 lg:shrink-0">
         <Logo tamano={32} />
         <p className="rotulo hidden md:block">Edición de práctica · Precios reales de Binance</p>
         <InterruptorTema />
       </header>
 
-      <div className="mx-auto grid w-full max-w-7xl flex-1 content-start lg:grid-cols-[1.15fr_1fr] lg:content-stretch">
+      <div className="mx-auto grid w-full max-w-7xl flex-1 content-start lg:min-h-0 lg:grid-cols-[1.15fr_1fr] lg:content-stretch">
         <section
           aria-label="Bienvenida a Nexabit"
-          className="flex flex-col items-center justify-center gap-5 px-4 pt-6 sm:px-8 lg:items-start lg:gap-8 lg:border-r lg:border-borde lg:px-12 lg:py-12"
+          className="flex flex-col items-center justify-center gap-5 px-4 pt-6 sm:px-8 lg:min-h-0 lg:items-start lg:gap-[3dvh] lg:overflow-hidden lg:border-r lg:border-borde lg:px-12 lg:py-[4dvh]"
         >
           <div className="hidden max-w-xl flex-col gap-4 lg:flex">
             <p className="rotulo text-oro">Bóveda de práctica</p>
-            <p className="font-titulo text-5xl leading-[1.04] tracking-tight text-texto xl:text-6xl">
+            <p className="font-titulo text-5xl leading-[1.04] tracking-tight text-texto xl:text-[min(3.75rem,6.5dvh)]">
               Invierte como un experto.{" "}
               <em className="texto-oro font-normal">Practica sin arriesgar un peso.</em>
             </p>
           </div>
 
           {/* La moneda dentro de un sello: dos filetes finos, como el troquel de una casa de moneda. */}
-          <div className="relative grid aspect-square w-52 place-items-center sm:w-64 lg:w-full lg:max-w-[26rem]">
+          <div className="relative grid aspect-square w-52 place-items-center sm:w-64 lg:w-[min(26rem,34dvh)] lg:shrink">
             <span
               aria-hidden
               className="absolute inset-[4%] rounded-full border border-oro/25 lg:inset-[2%]"
@@ -66,8 +66,8 @@ export default function AccesoLayout({ children }: { children: ReactNode }) {
           </ol>
         </section>
 
-        <main className="flex flex-col items-center justify-center gap-6 px-4 pt-2 pb-8 sm:px-8 lg:py-12">
-          <div className="w-full max-w-md">{children}</div>
+        <main className="flex flex-col items-center justify-center gap-6 px-4 pt-2 pb-8 sm:px-8 lg:min-h-0 lg:justify-start lg:overflow-y-auto lg:py-[4dvh] lg:[scrollbar-width:thin]">
+          <div className="w-full max-w-md lg:my-auto">{children}</div>
           <AvisoSimulacion className="max-w-md text-center" />
         </main>
       </div>
