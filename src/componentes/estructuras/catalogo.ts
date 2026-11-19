@@ -63,7 +63,7 @@ export const FICHAS: readonly FichaEstructura[] = [
     nombre: "Montículo",
     idea: "Un árbol donde cada padre es menor que sus hijos: el menor siempre está arriba, listo para sacarlo.",
     enNexabit:
-      "La liga de inversores: con un montículo de 10 se quedan los 10 mejores sin ordenar a todos (O(n log 10)).",
+      "La liga de inversores: con un montículo de 10 se quedan los 10 mejores sin ordenar a todos.",
     complejidades: [
       ["insertar", "O(log n)"],
       ["extraer el menor", "O(log n)"],
@@ -101,7 +101,7 @@ export const FICHAS: readonly FichaEstructura[] = [
     nombre: "Tabla hash",
     idea: "El hash de la clave dice en qué cubeta está: se llega directo, sin buscar.",
     enNexabit:
-      "Encuentra tu simulación (cartera, órdenes y bot) por tu id en O(1), haya los usuarios que haya.",
+      "Encuentra tu simulación (cartera, órdenes y bot) por tu id al instante, haya los usuarios que haya.",
     complejidades: [
       ["poner", "O(1) promedio"],
       ["buscar", "O(1) promedio"],

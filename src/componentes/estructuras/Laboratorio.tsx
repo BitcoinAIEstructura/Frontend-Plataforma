@@ -122,9 +122,6 @@ export function Laboratorio({ ficha }: { ficha: FichaEstructura }) {
             <VistaEstado estructura={ficha.id} estado={paso.estado} />
           </div>
           <div aria-live="polite" className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span className="cifra rounded-full border border-violeta/50 px-2 py-0.5 text-xs text-violeta">
-              {paso.complejidad}
-            </span>
             <p className="text-sm text-texto">
               <strong className="font-semibold">
                 {paso.operacion}

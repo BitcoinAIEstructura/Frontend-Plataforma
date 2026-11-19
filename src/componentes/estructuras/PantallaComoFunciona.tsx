@@ -72,14 +72,6 @@ function Seccion({ ficha }: { ficha: FichaEstructura }) {
             <p className="mb-1 text-xs font-semibold tracking-wide text-oro uppercase">En Nexabit</p>
             {ficha.enNexabit}
           </div>
-          <dl className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-1 text-sm">
-            {ficha.complejidades.map(([operacion, costo]) => (
-              <div key={operacion} className="contents">
-                <dt className="text-texto-secundario">{operacion}</dt>
-                <dd className="cifra text-right font-semibold text-violeta">{costo}</dd>
-              </div>
-            ))}
-          </dl>
           <EnVivo ficha={ficha} />
         </div>
         <div className="lg:col-span-3">
