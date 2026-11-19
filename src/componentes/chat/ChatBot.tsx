@@ -51,6 +51,18 @@ export function historialDe(mensajes: readonly Mensaje[]): TurnoChat[] {
 }
 
 /** La orden de la propuesta, como la recibe POST /api/ordenes. */
+/**
+ * El chat muestra texto plano. Si la IA escribe Markdown, se quitan las marcas para que no
+ * se vean asteriscos ni almohadillas sueltos.
+ */
+export function sinMarkdown(texto: string): string {
+  return texto
+    .replace(/\*\*(.+?)\*\*/g, "$1")
+    .replace(/__(.+?)__/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^\s*\*\s+/gm, "- ");
+}
+
 export function ordenDe(accion: AccionAsistente): NuevaOrden | null {
   const o = accion.orden;
   if (!o) return null;
@@ -110,7 +122,7 @@ export function ChatBot({ mensajes, setMensajes, preguntaInicial, alIr }: Props)
         onSuccess: (r) =>
           agregar({
             de: "bot",
-            texto: r.respuesta,
+            texto: r.fuente === "ia" ? sinMarkdown(r.respuesta) : r.respuesta,
             accion: r.accion,
             sugerencias: r.sugerencias,
             deIA: r.fuente === "ia",

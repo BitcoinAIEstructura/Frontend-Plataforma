@@ -2,7 +2,6 @@
 
 import { ConsejoIA } from "@/componentes/ia/ConsejoIA";
 
-import { AvisoDosPasos } from "./Bienvenida";
 import { GraficaPanel } from "./GraficaPanel";
 import { TarjetaSenal } from "./MedidorSenal";
 import { ResumenCartera } from "./ResumenCartera";
@@ -18,7 +17,6 @@ import { UltimasOrdenes } from "./UltimasOrdenes";
 export function PantallaPanel() {
   return (
     <div className="flex flex-col gap-4">
-      <AvisoDosPasos />
       <ResumenCartera />
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_24rem]">
         <GraficaPanel />

@@ -6,7 +6,7 @@ import type { AccionAsistente } from "@/lib/api/asistente";
 import { abrirChat } from "@/lib/chat";
 import { renderizar, servidorFalso } from "@/test/utilidades";
 
-import { historialDe, ordenDe } from "./ChatBot";
+import { historialDe, ordenDe, sinMarkdown } from "./ChatBot";
 import { BotonChat, LanzadorChat } from "./LanzadorChat";
 
 const push = vi.hoisted(() => vi.fn());
@@ -315,5 +315,11 @@ describe("LanzadorChat", () => {
         motivo: "propuesta de la IA del chat",
       });
     });
+  });
+
+  it("a las respuestas de la IA se les quitan las marcas de Markdown", () => {
+    expect(sinMarkdown("## Plan\n**La IA dice MANTENER.** Da un 54 %.\n* uno")).toBe(
+      "Plan\nLa IA dice MANTENER. Da un 54 %.\n- uno",
+    );
   });
 });
