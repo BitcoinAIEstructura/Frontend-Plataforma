@@ -8,12 +8,23 @@ export const LARGO_MAXIMO_MENSAJE = 300;
 export const esquemaRespuestaAsistente = z.object({
   intencion: z.string(),
   respuesta: z.string(),
-  /** Algo que la persona puede hacer con un toque. El asistente nunca lo hace solo. */
+  /**
+   * Algo que la persona puede hacer con un toque. El asistente nunca lo hace solo: la IA lo
+   * propone, el backend lo revisa y la persona lo confirma con el botón.
+   */
   accion: z
     .object({
-      tipo: z.enum(["INICIAR_BOT", "DETENER_BOT", "IR"]),
+      tipo: z.enum(["INICIAR_BOT", "DETENER_BOT", "IR", "ORDEN", "ALERTA"]),
       etiqueta: z.string(),
       ruta: z.string().nullable(),
+      /** Solo en ORDEN: `monto` en USDT, o `todo` para vender todo el BTC. */
+      orden: z
+        .object({ tipo: z.enum(["COMPRA", "VENTA"]), monto: z.number().positive().nullable(), todo: z.boolean() })
+        .nullish(),
+      /** Solo en ALERTA. */
+      alerta: z.object({ tipo: z.enum(["SUBE_A", "BAJA_A"]), precio: z.number().positive() }).nullish(),
+      /** Solo en INICIAR_BOT: con qué modo encenderlo (null: el que ya tiene). */
+      modo: z.enum(["ia", "reglas"]).nullish(),
     })
     .nullable(),
   sugerencias: z.array(z.string()),
