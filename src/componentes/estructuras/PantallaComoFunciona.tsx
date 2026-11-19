@@ -97,8 +97,8 @@ export function PantallaComoFunciona() {
       {/* Índice fijo bajo la barra superior: salta a cada estructura, como las pestañas de un manual. */}
       <div className="-mx-3 flex flex-col gap-2 border-b border-borde bg-fondo px-3 py-3 sm:-mx-4 sm:px-4 lg:sticky lg:top-14 lg:z-10 lg:-mx-6 lg:flex-row lg:items-center lg:justify-between lg:px-6">
         <p className="max-w-2xl text-sm text-texto-secundario">
-          Programadas a mano en el backend (Python), sin las listas ni los diccionarios del lenguaje. El
-          laboratorio corre ese mismo código y «En vivo» muestra lo que guardan ahora con tus datos.
+          Así se organizan por dentro tus órdenes, tu historial y los precios. Elige una para ver qué
+          guarda ahora con tus datos y pruébala en el laboratorio.
         </p>
         <nav aria-label="Estructuras" className="flex flex-wrap gap-1">
           {FICHAS.map((f) => (
@@ -120,9 +120,8 @@ export function PantallaComoFunciona() {
       <Tarjeta titulo="Y además: listas enlazadas">
         <p className="text-sm text-texto-secundario">
           Una <strong className="text-texto">lista simple</strong> guarda el registro de órdenes terminadas, y
-          una <strong className="text-texto">lista doble</strong> la ventana de velas de los indicadores
-          (entran por un extremo y salen por el otro en O(1)) y los clientes conectados al tiempo real, que se
-          quitan por su nodo en O(1) al desconectarse.
+          una <strong className="text-texto">lista doble</strong> las velas que usan los indicadores: la nueva
+          entra por un lado y la más vieja sale por el otro, al instante.
         </p>
       </Tarjeta>
     </div>

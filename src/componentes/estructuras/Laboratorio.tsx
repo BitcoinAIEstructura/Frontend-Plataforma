@@ -114,7 +114,7 @@ export function Laboratorio({ ficha }: { ficha: FichaEstructura }) {
         </p>
       ) : !paso ? (
         <p role="status" className="text-texto-secundario">
-          Corriendo en el servidor…
+          Procesando…
         </p>
       ) : (
         <>

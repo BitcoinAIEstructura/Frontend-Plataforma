@@ -120,7 +120,7 @@ export const FICHAS: readonly FichaEstructura[] = [
     nombre: "Cola circular",
     idea: "Una cola de tamaño fijo que da la vuelta: al llenarse, lo nuevo pisa a lo más viejo.",
     enNexabit:
-      "Los últimos 120 precios del mercado (unos 10 minutos), sin que la memoria crezca aunque el servidor lleve días encendido.",
+      "Los últimos 120 precios del mercado (unos 10 minutos), sin que la memoria crezca con el tiempo.",
     complejidades: [
       ["agregar", "O(1)"],
       ["desencolar", "O(1)"],

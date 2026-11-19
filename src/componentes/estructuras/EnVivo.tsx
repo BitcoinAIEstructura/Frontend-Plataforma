@@ -100,7 +100,7 @@ export function EnVivoTabla({ tabla }: { tabla: EstructurasActuales["tablaHash"]
   return (
     <div>
       <Titulo>
-        La tabla del servidor · {tabla.tamanio} simulaciones en {tabla.capacidad} cubetas
+        La tabla de Nexabit · {tabla.tamanio} simulaciones en {tabla.capacidad} cubetas
       </Titulo>
       <div
         className="flex h-16 items-end gap-0.5"
