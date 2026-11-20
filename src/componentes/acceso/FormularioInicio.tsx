@@ -176,7 +176,7 @@ export function FormularioInicio() {
         </Link>
       </p>
 
-      {/* Acceso rápido para demo */}
+      {/* Acceso rápido para la demo: llena solo el correo; la contraseña nunca va en el código. */}
       <div className="mt-2 border-t border-borde pt-4 lg:mt-0 lg:pt-3">
         <p className="mb-3 text-xs font-semibold uppercase tracking-widest lg:mb-2 text-texto-secundario">
           Acceso rápido · Demo
@@ -184,14 +184,13 @@ export function FormularioInicio() {
         <button
           type="button"
           onClick={() => {
-            setCorreo("jonathan.mideros@nexabit.test");
-            setContrasena("NxCINpD4jPpZYR#3");
+            setCorreo("santiagoargoti76@gmail.com");
           }}
           className="w-full rounded-xl border border-borde-fuerte/70 bg-superficie-alta/70 px-4 py-3 lg:py-2 text-left transition hover:border-oro/50 hover:bg-superficie-alta"
         >
           <span className="block text-sm font-semibold">Jonathan Mideros</span>
           <span className="block text-xs text-texto-secundario">
-            jonathan.mideros@nexabit.test
+            santiagoargoti76@gmail.com
           </span>
         </button>
       </div>
