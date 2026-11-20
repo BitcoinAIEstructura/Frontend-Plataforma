@@ -5,6 +5,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ErrorApi } from "@/lib/api/cliente";
 import {
   cerrarSesion,
+  demoDisponible,
+  entrarDemo,
   enviarCodigo,
   iniciarSesion,
   obtenerUsuarioActual,
@@ -52,6 +54,19 @@ export function useIniciarSesion() {
     onSuccess: (resultado) => {
       if ("usuario" in resultado) cliente.setQueryData(CLAVE_USUARIO, resultado.usuario);
     },
+  });
+}
+
+/** Si hay demo en el servidor; si no responde, no se muestra el botón. */
+export function useDemoDisponible() {
+  return useQuery({ queryKey: ["cuentas", "demo"], queryFn: demoDisponible, staleTime: Infinity, retry: false });
+}
+
+export function useEntrarDemo() {
+  const cliente = useQueryClient();
+  return useMutation({
+    mutationFn: entrarDemo,
+    onSuccess: (usuario) => cliente.setQueryData(CLAVE_USUARIO, usuario),
   });
 }
 

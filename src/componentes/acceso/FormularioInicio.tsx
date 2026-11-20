@@ -7,7 +7,7 @@ import { useState, type FormEvent } from "react";
 import { Boton } from "@/componentes/ui/Boton";
 import { Campo } from "@/componentes/ui/Campo";
 import { ErrorApi } from "@/lib/api/cliente";
-import { useEnviarCodigo, useIniciarSesion } from "@/lib/hooks/useSesion";
+import { useDemoDisponible, useEntrarDemo, useEnviarCodigo, useIniciarSesion } from "@/lib/hooks/useSesion";
 import { destinoSeguro } from "@/lib/navegacion";
 
 import { PasoCorreo } from "./PasoCorreo";
@@ -28,6 +28,8 @@ export function FormularioInicio() {
   const porInactividad = parametros.get("motivo") === "inactividad";
   const iniciar = useIniciarSesion();
   const enviarCodigo = useEnviarCodigo();
+  const demo = useDemoDisponible();
+  const entrarDemo = useEntrarDemo();
   const [paso, setPaso] = useState<"credenciales" | "codigo" | "correo">("credenciales");
   // Si la cuenta aún no confirmó el correo: a cuál llegó el código (enmascarado).
   const [correoPendiente, setCorreoPendiente] = useState("");
@@ -56,6 +58,16 @@ export function FormularioInicio() {
       // No dejarla en memoria más de lo necesario: ni en la casilla ni en la mutación.
       setContrasena("");
       iniciar.reset();
+    }
+  }
+
+  async function alEntrarDemo() {
+    setError(null);
+    try {
+      await entrarDemo.mutateAsync();
+      router.replace(destino);
+    } catch (e) {
+      setError(mensajeDe(e));
     }
   }
 
@@ -176,24 +188,27 @@ export function FormularioInicio() {
         </Link>
       </p>
 
-      {/* Acceso rápido para la demo: llena solo el correo; la contraseña nunca va en el código. */}
-      <div className="mt-2 border-t border-borde pt-4 lg:mt-0 lg:pt-3">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-widest lg:mb-2 text-texto-secundario">
-          Acceso rápido · Demo
-        </p>
-        <button
-          type="button"
-          onClick={() => {
-            setCorreo("santiagoargoti76@gmail.com");
-          }}
-          className="w-full rounded-xl border border-borde-fuerte/70 bg-superficie-alta/70 px-4 py-3 lg:py-2 text-left transition hover:border-oro/50 hover:bg-superficie-alta"
-        >
-          <span className="block text-sm font-semibold">Jonathan Mideros</span>
-          <span className="block text-xs text-texto-secundario">
-            santiagoargoti76@gmail.com
-          </span>
-        </button>
-      </div>
+      {demo.data && (
+        // La demo entra sin contraseña: el servidor abre su cuenta de demostración.
+        <div className="mt-2 border-t border-borde pt-4 lg:mt-0 lg:pt-3">
+          <p className="mb-3 text-xs font-semibold tracking-widest text-texto-secundario uppercase lg:mb-2">
+            ¿Solo quieres mirar?
+          </p>
+          <button
+            type="button"
+            onClick={alEntrarDemo}
+            disabled={entrarDemo.isPending}
+            className="w-full rounded-xl border border-borde-fuerte/70 bg-superficie-alta/70 px-4 py-3 text-left transition hover:border-oro/50 hover:bg-superficie-alta disabled:opacity-60 lg:py-2"
+          >
+            <span className="block text-sm font-semibold">
+              {entrarDemo.isPending ? "Entrando…" : "Entrar a la demo →"}
+            </span>
+            <span className="block text-xs text-texto-secundario">
+              Cuenta de Jonathan Mideros con historial, sin contraseña
+            </span>
+          </button>
+        </div>
+      )}
     </form>
   );
 }

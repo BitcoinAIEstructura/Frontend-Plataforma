@@ -49,7 +49,10 @@ describe("FormularioInicio", () => {
     renderizar(<FormularioInicio />);
     await escribirCredenciales();
     await waitFor(() => expect(navegacion.replace).toHaveBeenCalledWith("/cartera"));
-    const [, opciones] = servidor.mock.calls[0] as unknown as [string, RequestInit];
+    const [, opciones] = servidor.mock.calls.find(([ruta]) => ruta === "/api/sesion") as unknown as [
+      string,
+      RequestInit,
+    ];
     expect(JSON.parse(String(opciones.body))).toEqual({
       correo: "ana@correo.co",
       contrasena: "Luna-Roja-2026",
@@ -150,5 +153,23 @@ describe("FormularioInicio", () => {
     await userEvent.click(screen.getByRole("button", { name: "Verificar y entrar" }));
     expect(await screen.findByLabelText("Contraseña")).toHaveValue("");
     expect(screen.getByRole("alert")).toHaveTextContent("vuelve a escribir tu contraseña");
+  });
+  it("con demo en el servidor, «Entrar a la demo» abre la cuenta sin contraseña", async () => {
+    const fetch = servidorFalso({
+      "GET /api/cuentas/demo": { estado: 200, cuerpo: { disponible: true } },
+      "POST /api/cuentas/demo": { estado: 200, cuerpo: { usuario: USUARIO_PRUEBA } },
+    });
+    renderizar(<FormularioInicio />);
+    await userEvent.click(await screen.findByRole("button", { name: /Entrar a la demo/ }));
+    await waitFor(() => expect(navegacion.replace).toHaveBeenCalledWith("/panel"));
+    const llamada = fetch.mock.calls.find(([r, o]) => r === "/api/cuentas/demo" && o?.method === "POST")!;
+    expect(llamada[1]?.body).toBeUndefined(); // no manda correo ni contraseña
+  });
+
+  it("sin demo en el servidor no muestra el botón", async () => {
+    servidorFalso({ "GET /api/cuentas/demo": { estado: 200, cuerpo: { disponible: false } } });
+    renderizar(<FormularioInicio />);
+    await screen.findByRole("button", { name: "Entrar" });
+    expect(screen.queryByRole("button", { name: /Entrar a la demo/ })).toBeNull();
   });
 });

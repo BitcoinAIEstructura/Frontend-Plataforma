@@ -96,6 +96,16 @@ export function iniciarSesion(correo: string, contrasena: string): Promise<Resul
   return pedir("/api/sesion", esquemaInicio, { metodo: "POST", cuerpo: { correo, contrasena } });
 }
 
+/** Si el servidor tiene cuenta de demostración (para mostrar el botón «Entrar a la demo»). */
+export async function demoDisponible(): Promise<boolean> {
+  return (await pedir("/api/cuentas/demo", z.object({ disponible: z.boolean() }))).disponible;
+}
+
+/** Abre la cuenta de demostración sin contraseña: la cuenta la decide el servidor. */
+export async function entrarDemo(): Promise<Usuario> {
+  return (await pedir("/api/cuentas/demo", esquemaConUsuario, { metodo: "POST" })).usuario;
+}
+
 export async function enviarCodigo(codigo: string): Promise<Usuario> {
   return (await pedir("/api/sesion/codigo", esquemaConUsuario, { metodo: "POST", cuerpo: { codigo } }))
     .usuario;
